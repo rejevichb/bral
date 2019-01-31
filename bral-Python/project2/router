@@ -47,7 +47,7 @@ class Router:
     updates = None
     relations = None
     sockets = None
-    fwd_table = None
+    fwd_table = {}
 
     def __init__(self, networks):
         self.routes = {}
