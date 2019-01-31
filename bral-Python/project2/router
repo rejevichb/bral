@@ -209,7 +209,7 @@ class Router:
             for conn in socks:
                 try:
                     k = conn.recv(65535)
-                    print(k)
+                    #print(k)
                 except:
                     # either died on a connection reset, or was SIGTERM's by parent
                     return
