@@ -50,26 +50,41 @@ class Router:
 
     def __init__(self, networks):
         self.routes = {}
-        self.updates = {}
-        self.relations = {}
-        self.sockets = {}
+        self.updates = {} # save update annoucements as { src : annoucement_msg }
+        self.relations = {} # {"192.168.0.2" : "peer"}
+        self.sockets = {} #socket.socket() for "192.168.0.2"
+
         for relationship in networks:
-            network, relation = relationship.split("-")
+            #Ex: 192.168.0.2-peer
+            network, relation = relationship.split("-") #network = "192.168.0.2", relation = "peer"
             if DEBUG: 
                 print("Starting socket for", network, relation)
             self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
             self.sockets[network].setblocking(0)
             self.sockets[network].connect(network)
+
             self.relations[network] = relation
 
         return
 
+
     def lookup_routes(self, daddr):
         """ Lookup all valid routes for an address """
-        #bitwise-OR using subnet mask
-        # TODO
+        # perform DFS for the router at IP address == daddr
+        #
+        # return list of lists representing possible paths
         outroutes = []
+
+        for k in self.relations.keys():
+            if daddr == k:
+                return [k]
+            else:
+                outroutes.append(self.lookup_helper(daddr, k))
+
         return outroutes
+
+#    def lookup_helper(self, daddr, seen):
+
 
     def get_shortest_as_path(self, routes):
         """ select the route with the shortest AS Path """
@@ -85,8 +100,11 @@ class Router:
          
     def get_self_origin(self, routes):
         """ select self originating routes """
-        # TODO
         outroutes = []
+
+        if routes['selfOrigin'] == "True":
+            outroutes.append(routes)
+
         return outroutes
 
     def get_origin_routes(self, routes):
@@ -123,7 +141,7 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-        # TODO
+        srcif.send(packet["msg"])
         return False
 
     def coalesce(self):
@@ -133,7 +151,10 @@ class Router:
 
     def update(self, srcif, packet):
         """	handle update packets	"""
+        self.updates[packet["src"]] = packet["msg"]
         if srcif == CUST:
+            for sock in self.sockets.keys():
+                self.forward(sock, packet)
             #update all neighbors
             pass
         else:
@@ -147,10 +168,10 @@ class Router:
         rev_msg = packet["msg"]
 
         for each in self.networks:
+            pass
 
-
-        # TODO
-        return True
+            # TODO
+            return True
 
     def dump(self, packet):
         """	handles dump table requests	"""
@@ -158,8 +179,17 @@ class Router:
         return True
 
     def handle_packet(self, srcif, packet):
-        """	dispatches a packet """
-        # TODO
+        if packet["type"] == UPDT:
+            self.update(srcif, packet)
+        if packet["type"] == DATA:
+            pass
+        if packet["type"] == DUMP:
+            self.dump(packet)
+        if packet["type"] == RVKE:
+            self.revoke(packet)
+        if packet["type"] == NRTE:
+            self.send_error(srcif, "No route found")
+
         return False
 
     def send_error(self, conn, msg):
@@ -167,12 +197,19 @@ class Router:
         # TODO
         return
 
+    def map_ports(self):
+        list_of_ports = []
+        for index, each in enumerate(self.relations.keys(), 1):
+            list_of_ports.append({index : each[:-1] + "1"})
+
+
     def run(self):
         while True:
             socks = select.select(self.sockets.values(), [], [], 0.1)[0]
             for conn in socks:
                 try:
                     k = conn.recv(65535)
+                    print(k)
                 except:
                     # either died on a connection reset, or was SIGTERM's by parent
                     return
@@ -186,6 +223,18 @@ class Router:
                 else:
                     return
         return
+
+
+
+
+
+def subnet_binary(a, b):
+    a = a.split(".")
+    b = b.split(".")
+    new = []
+    for index, each in enumerate(a):
+        new.append(str(int(each) & int(b[index])))
+    print(".".join(new))
 
 if __name__ == "__main__":
     router = Router(args.networks)
