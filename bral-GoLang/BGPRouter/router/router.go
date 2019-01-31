@@ -13,13 +13,12 @@ type IRouter interface {
 
 //left types as string for now
 type Router struct {
-	FwdTable [4][]string
+	FwdTable ForwardingTable
 	Routes [][]net.IPAddr
 	updates [] Packet
 	relations string //FIXME type
 	sockets []net.Conn
 }
-
 
 // Lookup all valid routes for an address
 func (r Router) lookupRoutes(destaddr IP) [][]IP {
@@ -29,12 +28,12 @@ func (r Router) lookupRoutes(destaddr IP) [][]IP {
 }
 
 //select the route with the shortest AS path
-func (r Router) shortestASPath(routes [][]IP ) IP {
+func (r Router) shortestASPath(routes [][]IP ) [][]IP {
 	//TODO multiple return types or just 1?
 }
 
 //select the route with the shortest AS Path """
-func (r Router) highestPreference(routes [][]IP) IP {
+func (r Router) highestPreference(routes [][]IP) [][]IP {
 	//TODO
 }
 
@@ -125,6 +124,7 @@ func (r Router) Run() {
 		for i, conn := range sockets {
 			var data []byte
 			_, e := conn.Read(data)
+			a, x := net.Dial("unix", "filepath")
 			//FIXME UNMARSHALL/READ
 			if e != nil {
 				panic("cannot read from socket")
