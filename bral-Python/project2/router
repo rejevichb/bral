@@ -40,6 +40,15 @@ PROV = "prov"
 
 
 ##########################################################################################
+class IPAddress:
+    pass
+
+class FTEntry:
+
+    def __init__(self, dest, sock):
+
+
+
 
 class Router:
 
@@ -47,13 +56,14 @@ class Router:
     updates = None
     relations = None
     sockets = None
-    fwd_table = {}
+    fwd_table = None
 
     def __init__(self, networks):
         self.routes = {}
         self.updates = {} # save update annoucements as { src : annoucement_msg }
         self.relations = {} # {"192.168.0.2" : "peer"}
         self.sockets = {} #socket.socket() for "192.168.0.2"
+        self.fwd_table = {} #
 
         for relationship in networks:
             #Ex: 192.168.0.2-peer
@@ -142,9 +152,9 @@ class Router:
 
     def forward(self, sock, packet):
         """	Forward a data packet	"""
-        if sock.sendmsg(json.dump(packet["msg"]), address=packet["dst"]) > 0:
-            print("sent")
-            return
+        sock.send(json.dump(packet), address=packet["dst"])
+            #print("sent")
+            #return
 
         #sock.send(json.dump(packet["msg"]))
         return False
@@ -156,13 +166,14 @@ class Router:
 
     def update(self, srcif, packet):
         """	handle update packets	"""
-        self.updates[packet["src"]] = packet["msg"]
+        self.updates[packet["src"]] = packet
 
-        self.fwd_table[packet["src"]] = packet["dst"]
+        self.fwd_table[packet["src"]] = packet
 
-        if srcif == CUST:
-            for sock in self.sockets.keys():
-                self.forward(sock, packet)
+        #if self.relations[self.sockets[srcif]] == CUST:
+        for sock_pair in self.sockets:
+            if sock_pair.key() != srcif:
+                self.forward(sock_pair, packet)
             #update all neighbors
             pass
         else:
