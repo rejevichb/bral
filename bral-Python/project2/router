@@ -171,9 +171,9 @@ class Router:
         self.fwd_table[packet["src"]] = packet
 
         #if self.relations[self.sockets[srcif]] == CUST:
-        for sock_pair in self.sockets:
-            if sock_pair.key() != srcif:
-                self.forward(sock_pair, packet)
+        for sock in self.sockets:
+            if sock != srcif:
+                self.forward(sock, packet)
             #update all neighbors
             pass
         else:
