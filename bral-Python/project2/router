@@ -141,7 +141,7 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-        srcif.send(packet["msg"])
+        srcif.send(json.dump(packet["msg"]))
         return False
 
     def coalesce(self):
