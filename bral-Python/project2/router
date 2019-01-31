@@ -152,7 +152,8 @@ class Router:
 
     def forward(self, sock, packet):
         """	Forward a data packet	"""
-        sock.send(json.dump(packet), address=packet["dst"])
+	print(sock)
+        sock.send(json.dumps(packet))
         print("sent")
         return
             #print("sent")
@@ -173,8 +174,10 @@ class Router:
         self.fwd_table[packet["src"]] = packet
 
         #if self.relations[self.sockets[srcif]] == CUST:
-        for sock in self.sockets:
+        for sock in self.sockets.values():
+	    print(sock)
             if sock != srcif:
+		#print(sock)
                 self.forward(sock, packet)
             #update all neighbors
             pass
