@@ -2,7 +2,6 @@ package router
 
 import (
 	"encoding/json"
-	"github.com/CS3700-S19/bral/bral-GoLang/BGPRouter/router/data"
 	"net"
 )
 
@@ -16,46 +15,46 @@ type IRouter interface {
 type Router struct {
 	FwdTable [4][]string
 	Routes [][]net.IPAddr
-	updates string
-	relations string
+	updates [] Packet
+	relations string //FIXME type
 	sockets []net.Conn
 }
 
 
 // Lookup all valid routes for an address
-func (r Router) lookupRoutes(destaddr net.IPAddr) [][]net.IPAddr {
-	return make([][]net.IPAddr, 0)
+func (r Router) lookupRoutes(destaddr IP) [][]IP {
+	return make([][]IP, 0)
 	//bitwise-OR using subnet mask
 	//TODO
 }
 
 //select the route with the shortest AS path
-func (r Router) shortestASPath(routes [][]net.IPAddr ) net.IPAddr {
-	//TODO
+func (r Router) shortestASPath(routes [][]IP ) IP {
+	//TODO multiple return types or just 1?
 }
 
 //select the route with the shortest AS Path """
-func (r Router) highestPreference(routes [][]net.IPAddr) net.IPAddr {
+func (r Router) highestPreference(routes [][]IP) IP {
 	//TODO
 }
 
 //select self originating routes
-func (r Router) selfOrigin(routes [][]net.IPAddr) [][]net.IPAddr {
+func (r Router) selfOrigin(routes [][]IP) [][]IP {
 	//TODO
 }
 
 //select origin routes: EGP > IGP > UNK
-func (r Router) originRoutes(routes [][]net.IPAddr) [][]net.IPAddr {
+func (r Router) originRoutes(routes [][]IP) [][]IP {
 	//TODO
 }
 
 // Don't allow Peer->Peer, Peer->Prov, or Prov->Peer forwards
-func (r Router) filterRelationships(srcif string, routes [][]net.IPAddr) [][]net.IPAddr {
+func (r Router) filterRelationships(srcif string, routes [][]IP) [][]IP {
 	//TODO
 }
 
 //Select the best route for a given address
-func (r Router) BestRoute(srcif string, daddr net.IPAddr) {
+func (r Router) BestRoute(srcif string, daddr [][]IP) {
 	peer := "none" //edit for type
 	routes := r.lookupRoutes(daddr)
 
@@ -76,7 +75,7 @@ func lowestIP(routes [][]net.IPAddr) net.IPAddr {
 }
 
 //forward the given data packet
-func (r Router) forward(srcif string, p data.Packet) {
+func (r Router) forward(srcif string, p Packet) {
 
 }
 
@@ -86,8 +85,8 @@ func (r Router) coalesce() {
 }
 
 //handle update packets
-func (r Router) update(srcif string, p data.Packet) {
-	if srcif == data.CUST {
+func (r Router) update(srcif string, p Packet) {
+	if srcif == CUST {
 		//update all neighbors
 	} else {
 		//update only customers
@@ -95,7 +94,7 @@ func (r Router) update(srcif string, p data.Packet) {
 }
 
 //handles revoke packets
-func (r Router) revoke(p data.Packet) {
+func (r Router) revoke(p Packet) {
 	revMsg := string(p.Msg)
 
 	//for each in self.networks:
@@ -103,12 +102,12 @@ func (r Router) revoke(p data.Packet) {
 }
 
 //handles dump table requests
-func (r Router) dump(p data.Packet) {
+func (r Router) dump(p Packet) {
 
 }
 
 //dispatches a packet
-func (r Router) handlePacket(srcif string, p data.Packet) {
+func (r Router) handlePacket(srcif string, p Packet) {
 
 }
 
@@ -136,8 +135,8 @@ func (r Router) Run() {
 					if r.sockets(i) == conn {
 						srcif = s
 					}
-					var msg data.Packet
-					  json.Unmarshal(data, msg)
+					var msg Packet
+					json.Unmarshal(data, &msg)
 					//FIXME UNMARSHALL/READ
 					//if r.handlePacket(srcif, msg) { }
 				}
