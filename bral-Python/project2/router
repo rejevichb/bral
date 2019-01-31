@@ -153,6 +153,8 @@ class Router:
     def forward(self, sock, packet):
         """	Forward a data packet	"""
         sock.send(json.dump(packet), address=packet["dst"])
+        print("sent")
+        return
             #print("sent")
             #return
 
