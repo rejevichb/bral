@@ -43,9 +43,9 @@ PROV = "prov"
 class IPAddress:
     pass
 
-class FTEntry:
-
-    def __init__(self, dest, sock):
+#class FTEntry:
+#
+#    def __init__(self, dest, sock):
 
 
 
