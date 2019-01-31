@@ -10,7 +10,6 @@ type IRouter interface {
 	//TODO finalize what we want in the interface
 }
 
-
 //left types as string for now
 type Router struct {
 	FwdTable ForwardingTable
