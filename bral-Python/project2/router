@@ -168,7 +168,7 @@ class Router:
         """	handle update packets	"""
         self.updates[packet["src"]] = packet
 
-<<<<<<< HEAD
+
         self.fwd_table[packet["src"]] = packet
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets:
@@ -178,23 +178,11 @@ class Router:
 		packet_copy = copy.deepcopy(packet)
                 self.forward(sock, packet_copy)
             #update all neighbors
-=======
-        self.fwd_table[packet["dst"]] = packet
-
-        #if self.relations[self.sockets[srcif]] == CUST:
-        for sock in self.sockets.values():
-            print(sock)
-            if sock != srcif:
-                #print(sock)
-                self.forward(sock, packet)
-                #update all neighbors
->>>>>>> 2b56e0937fc1dccfa448026fc44e0e782f3c72e4
-            pass
-        else:
+       	    else:
             #update only customers
-            pass
+           	 pass
         # TODO 
-        return False
+        return
     
     def revoke(self, packet):
         """	handle revoke packets	"""
@@ -222,6 +210,8 @@ class Router:
             self.revoke(packet)
         if packet["type"] == NRTE:
             self.send_error(srcif, "No route found")
+	if packet["type"] == "wait":
+	    pass
 
         return False
 
