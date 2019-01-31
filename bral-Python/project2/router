@@ -168,6 +168,7 @@ class Router:
         """	handle update packets	"""
         self.updates[packet["src"]] = packet
 
+<<<<<<< HEAD
         self.fwd_table[packet["src"]] = packet
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets:
@@ -177,6 +178,17 @@ class Router:
 		packet_copy = copy.deepcopy(packet)
                 self.forward(sock, packet_copy)
             #update all neighbors
+=======
+        self.fwd_table[packet["dst"]] = packet
+
+        #if self.relations[self.sockets[srcif]] == CUST:
+        for sock in self.sockets.values():
+            print(sock)
+            if sock != srcif:
+                #print(sock)
+                self.forward(sock, packet)
+                #update all neighbors
+>>>>>>> 2b56e0937fc1dccfa448026fc44e0e782f3c72e4
             pass
         else:
             #update only customers
@@ -230,7 +242,7 @@ class Router:
             for conn in socks:
                 try:
                     k = conn.recv(65535)
-                    #print(k)
+                    print(k)
                 except:
                     # either died on a connection reset, or was SIGTERM's by parent
                     return
@@ -238,7 +250,7 @@ class Router:
                     for sock in self.sockets:
                         if self.sockets[sock] == conn:
                             srcif = sock
-                    msg = json.loads(k)
+                            msg = json.loads(k)
                     if not self.handle_packet(srcif, msg):
                         self.send_error(conn, msg)
                 else:
