@@ -47,6 +47,7 @@ class Router:
     updates = None
     relations = None
     sockets = None
+    fwd_table = None
 
     def __init__(self, networks):
         self.routes = {}
@@ -141,9 +142,11 @@ class Router:
 
     def forward(self, sock, packet):
         """	Forward a data packet	"""
-        sock.sendmsg(json.dump(packet))
+        if sock.sendmsg(json.dump(packet["msg"]), address=packet["dst"]) > 0:
+            print("sent")
+            return
 
-        sock.send(json.dump(packet["msg"]))
+        #sock.send(json.dump(packet["msg"]))
         return False
 
     def coalesce(self):
@@ -154,6 +157,9 @@ class Router:
     def update(self, srcif, packet):
         """	handle update packets	"""
         self.updates[packet["src"]] = packet["msg"]
+
+        self.fwd_table[packet["src"]] = packet["dst"]
+
         if srcif == CUST:
             for sock in self.sockets.keys():
                 self.forward(sock, packet)
