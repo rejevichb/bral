@@ -171,7 +171,7 @@ class Router:
         """	handle update packets	"""
         self.updates[packet["src"]] = packet
 
-        self.fwd_table[packet["src"]] = packet
+        self.fwd_table[packet["dst"]] = packet
 
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets.values():
