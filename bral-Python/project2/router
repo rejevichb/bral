@@ -135,8 +135,8 @@ class Router:
         """ select origin routes: EGP > IGP > UNK """
         # TODO
         outroutes = []
-        origin_ranks = {"EGP" : 1,
-                        "IGP" : 2,
+        origin_ranks = {"IGP" : 1,
+                        "EGP" : 2,
                         "UNK" : 3}
 
         #curr_best_origin = origin_ranks[routes[0]["origin"]]
