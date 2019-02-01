@@ -277,6 +277,7 @@ def handle_packet(self, srcif, packet):
     if packet["type"] == DATA:
         print("Checking for possible routes")
         self.forward(srcif, packet)
+
     if packet["type"] == DUMP:
         print("Dumping forwarding table")
         self.dump(packet)
