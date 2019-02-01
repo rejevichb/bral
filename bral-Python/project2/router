@@ -85,6 +85,7 @@ class Router:
         for each in self.fwd_table:
             if self.get_subnet(daddr["dst"], each["netmask"]) == self.get_subnet(each["network"], each["netmask"]):
                 count_of_routes += 1
+		outroutes.append(each["peer"])
 
         # Sends appopriate message based on count_of_routes
         if count_of_routes == 0:
@@ -104,8 +105,8 @@ class Router:
             print("1 route found, forwarding packet to {}\n".format(packet_copy["dst"]))
 
             # Forwards message using only available path
-            self.forward([s for s in self.sockets if s != daddr["dst"]][0],
-                         packet_copy)
+	    self.forward(outroutes[0], packet_copy)
+            #self.forward([s for s in self.sockets if s != daddr["dst"]][0], packet_copy)
 
         return outroutes
 
