@@ -88,12 +88,25 @@ class Router:
         # return list of lists representing possible paths
         outroutes = []
 
-        for k in self.relations.keys():
-            if daddr == k:
-                return [k]
-            else:
-                outroutes.append(self.lookup_helper(daddr, k))
+	if [d["peer"] for d in self.fwd_table].count(daddr["dst"]) == 0:
+		print("No Routes Found")	
+		return {"src": daddr["src"],
+			 "dst":   daddr["dst"],
+			 "type":   "no route",
+			 "msg": {}} 
+	elif [d["peer"] for d in self.fwd_table].count(daddr["dst"]) == 1:
+		packet_copy = copy.deepcopy(daddr)
+		self.forward(daddr["src"], packet_copy)
+		print("1 route found, forwarding packet")	
 
+	#for each in self.fwd_table:
+	#	if subnet_binary(each['network'], each['netmask') == subnet_binary
+        #for k in self.relations.keys():
+        #    if daddr == k:
+        #        return [k]
+        #    else:
+        #        outroutes.append(self.lookup_helper(daddr, k))
+	#if len(outroutes) == 0:
         return outroutes
 
 #    def lookup_helper(self, daddr, seen):
@@ -156,10 +169,10 @@ class Router:
         """	Forward a data packet	"""
 	#if packet["dst"] in self.fwd_table
 	#packet["src"], packet["dst"] = packet["dst"], packet["src"] 
-	print("sending update to {}".format(packet["dst"]))
+	print("sending {} to {}".format(packet["type"], packet["dst"]))
 	
 	self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-	#print(packet)
+	print(self.fwd_table)
 	return
             
         return False
@@ -186,9 +199,9 @@ class Router:
 		
         	if sock != packet["src"]:
 			packet_copy = copy.deepcopy(packet)
+			packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 			#packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-			packet["src"], packet["dst"] = self.port_addrs[sock], sock
-        		self.forward(srcif, packet_copy)
+        		self.forward(sock, packet_copy)
             #update all neighbors
        	  
             #update only customers
@@ -207,7 +220,10 @@ class Router:
 
     def dump(self, packet):
         """	handles dump table requests	"""
-        return json.dumps({"src": packet["dst"],
+	print(packet)
+	print("\n\n")
+        self.forward([s for s in self.sockets if s != packet["src"]][0],
+			 {"src": packet["dst"],
                            "dst": packet["src"],
                            "type": "table",
                            "msg": self.fwd_table})
@@ -217,7 +233,8 @@ class Router:
     	    print("Handling update")    
 	    self.update(srcif, packet)
         if packet["type"] == DATA:
-            pass
+            print("Checking for possible routes")
+	    self.lookup_routes(packet)	
         if packet["type"] == DUMP:
             self.dump(packet)
         if packet["type"] == RVKE:
