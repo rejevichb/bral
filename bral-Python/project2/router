@@ -42,7 +42,6 @@ PROV = "prov"
 ##########################################################################################
 
 class Router:
-<<<<<<< HEAD
     routes = None
     updates = None
     relations = None
@@ -124,6 +123,7 @@ class Router:
     def get_self_origin(self, routes):
         """ select self originating routes """
         outroutes = []
+<<<<<<< HEAD
 	if len(routes) <= 1:
 		return routes
 	
@@ -134,6 +134,19 @@ class Router:
            		if route['selfOrigin'].decode('utf-8') == "True":
 				print("Route added: {}".format(route))
                 		outroutes.append(route)
+=======
+
+        if len(routes) <= 1:
+            return routes
+
+        if "True" not in [d["selfOrigin"].decode('utf-8') for d in routes]:
+            return routes
+
+        else:
+            for route in routes:
+                if route['selfOrigin']:
+                    print("Route with selfOrigin of True added")
+                    outroutes.append(route)
 
         return outroutes
 
@@ -141,6 +154,7 @@ class Router:
         """ select origin routes: EGP > IGP > UNK """
         # TODO
         outroutes = []
+<<<<<<< HEAD
 
 	if len(routes) <= 1:
 		return routes
@@ -149,6 +163,12 @@ class Router:
                         "EGP" : 2,
                         "UNK" : 3}
 
+=======
+        origin_ranks = {"IGP": 1,
+                        "EGP": 2,
+                        "UNK": 3}
+
+        # curr_best_origin = origin_ranks[routes[0]["origin"]]
         curr_best_origin = None
         for route in routes:
             if curr_best_origin is None:
@@ -167,13 +187,17 @@ class Router:
 
     def get_min_ip(self, routes):
         temp = {}
-	if len(routes) <= 1:
-		return routes[0]["peer"]
 
         for route in routes:
             temp[int("".join(route["peer"].split(".")))] = route
 
+<<<<<<< HEAD
         return temp[min(list(temp.keys()))]["peer"]
+=======
+            rts = min(list(temp.keys()))
+
+        return temp[rts]["peer"]
+
 
     def get_route(self, srcif, daddr):
         """	Select the best route for a given address	"""
@@ -188,8 +212,8 @@ class Router:
             # Forwards message back to sender
             self.forward(self.sockets[daddr["src"]],
                          {"src": packet_copy["dst"],
-                          "dst":   packet_copy["src"],
-                          "type":   "no route",
+                          "dst": packet_copy["src"],
+                          "type": "no route",
                           "msg": {}})
             return
 
@@ -200,8 +224,6 @@ class Router:
             self.forward(routes[0]["peer"], packet_copy)
 
             return
-
-
 
         # Rules go here
         else:
@@ -226,12 +248,9 @@ class Router:
 
         return self.forward(peer, daddr) if peer else None
 
+
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
-
-        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
-
         print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
         self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
@@ -240,10 +259,12 @@ class Router:
 
         return
 
+
     def coalesce(self):
         """	coalesce any routes that are right next to each other	"""
         # TODO (this is the most difficult task, save until last)
         return False
+
 
     def update(self, srcif, packet):
         """	handle update packets	"""
@@ -255,10 +276,10 @@ class Router:
         # TODO: Add functionality to prevent duplicate entries
         self.fwd_table.append({"network": packet["msg"]["network"],
                                "netmask": packet["msg"]["netmask"],
-                               "localpref"  :  packet["msg"]["localpref"],
+                               "localpref": packet["msg"]["localpref"],
                                "selfOrigin": packet["msg"]["selfOrigin"],
-                               "ASPath"    :  packet["msg"]["ASPath"],
-                               "origin"    : packet["msg"]["origin"],
+                               "ASPath": packet["msg"]["ASPath"],
+                               "origin": packet["msg"]["origin"],
                                "peer": packet["src"]})
 
         print("Got update from {}".format(srcif))
@@ -279,6 +300,7 @@ class Router:
 
         return
 
+
     def revoke(self, packet):
         """	handle revoke packets	"""
         rev_msg = packet["msg"]
@@ -289,18 +311,20 @@ class Router:
             # TODO
             return True
 
+
     def dump(self, packet):
         """	handles dump table requests	"""
         print(packet)
 
         # Forward the current forwarding table for comparison.
         # Filters socket list to exclude socket that sent the packet then takes first of list
-        #self.forward([s for s in self.sockets if s != packet["src"]][0],
+        # self.forward([s for s in self.sockets if s != packet["src"]][0],
         self.forward(packet["src"],
                      {"src": packet["dst"],
                       "dst": packet["src"],
                       "type": "table",
                       "msg": self.fwd_table})
+
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
@@ -322,10 +346,12 @@ class Router:
 
         return False
 
+
     def send_error(self, conn, msg):
         """ Send a no_route error message """
         # TODO
         return
+
 
     # returns subnet of IP based on netmask
     def get_subnet(self, ip, netmask):
@@ -338,9 +364,11 @@ class Router:
             temp.append(str(int(each) & int(split_nm[index])))
 
         return ".".join(temp)
-            
+
+
     def run(self):
-	    socks = select.select(self.sockets.values(), [], [], 0.1)[0]
+        while True:
+            socks = select.select(self.sockets.values(), [], [], 0.1)[0]
             for conn in socks:
                 try:
                     k = conn.recv(65535)
@@ -356,9 +384,10 @@ class Router:
                         self.send_error(conn, msg)
                 else:
                     return
+
         return
 
 
 if __name__ == "__main__":
-	router = Router(args.networks)
-	router.run()
+    router = Router(args.networks)
+    router.run()
