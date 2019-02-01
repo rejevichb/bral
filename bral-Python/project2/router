@@ -2,8 +2,8 @@
 
 import argparse, socket, time, json, select, struct, math, copy
 
-DEBUG = True
-# DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
@@ -58,15 +58,15 @@ class Router:
         for relationship in networks:
             # Ex: 192.168.0.2-peer
             network, relation = relationship.split("-")  # network = "192.168.0.2", relation = "peer"
-            if DEBUG:
-                print("Starting socket for {} - {}".format(network, relation))
+            #if DEBUG:
+                #print("Starting socket for {} - {}".format(network, relation))
             self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
             self.sockets[network].setblocking(0)
             self.sockets[network].connect(network)
 
             self.relations[network] = relation
 
-            print("\n")
+            #print("\n")
 
         return
 
@@ -94,11 +94,11 @@ class Router:
         for route in routes:
             if curr_shortest_as is None:
                 curr_shortest_as = len(route["ASPath"])
-                print("CSA set to {}".format(len(route["ASPath"])))
+                #print("CSA set to {}".format(len(route["ASPath"])))
             if len(route["ASPath"]) <= curr_shortest_as:
                 outroutes.append(route)
-        print("{} routes with shortest_path".format(len(outroutes)))
-        print(outroutes)
+        #print("{} routes with shortest_path".format(len(outroutes)))
+        #print(outroutes)
         return outroutes
 
     def get_highest_preference(self, routes):
@@ -123,7 +123,7 @@ class Router:
     def get_self_origin(self, routes):
         """ select self originating routes """
         outroutes = []
-<<<<<<< HEAD
+
 	if len(routes) <= 1:
 		return routes
 	
@@ -132,21 +132,8 @@ class Router:
 	else:
         	for route in routes:
            		if route['selfOrigin'].decode('utf-8') == "True":
-				print("Route added: {}".format(route))
+				#print("Route added: {}".format(route))
                 		outroutes.append(route)
-=======
-
-        if len(routes) <= 1:
-            return routes
-
-        if "True" not in [d["selfOrigin"].decode('utf-8') for d in routes]:
-            return routes
-
-        else:
-            for route in routes:
-                if route['selfOrigin']:
-                    print("Route with selfOrigin of True added")
-                    outroutes.append(route)
 
         return outroutes
 
@@ -154,7 +141,6 @@ class Router:
         """ select origin routes: EGP > IGP > UNK """
         # TODO
         outroutes = []
-<<<<<<< HEAD
 
 	if len(routes) <= 1:
 		return routes
@@ -162,11 +148,6 @@ class Router:
 	origin_ranks = {"IGP" : 1,
                         "EGP" : 2,
                         "UNK" : 3}
-
-=======
-        origin_ranks = {"IGP": 1,
-                        "EGP": 2,
-                        "UNK": 3}
 
         # curr_best_origin = origin_ranks[routes[0]["origin"]]
         curr_best_origin = None
@@ -191,12 +172,7 @@ class Router:
         for route in routes:
             temp[int("".join(route["peer"].split(".")))] = route
 
-<<<<<<< HEAD
         return temp[min(list(temp.keys()))]["peer"]
-=======
-            rts = min(list(temp.keys()))
-
-        return temp[rts]["peer"]
 
 
     def get_route(self, srcif, daddr):
@@ -204,10 +180,10 @@ class Router:
         # TODO
         peer = None
         routes = self.lookup_routes(daddr)
-        print(routes)
+        #print(routes)
         if len(routes) == 0 or routes is None:
             packet_copy = copy.deepcopy(daddr)
-            print("No Routes Found\n")
+            #print("No Routes Found\n")
 
             # Forwards message back to sender
             self.forward(self.sockets[daddr["src"]],
@@ -219,7 +195,7 @@ class Router:
 
         elif len(routes) == 1:
             packet_copy = copy.deepcopy(daddr)
-            print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
+            #print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
             # Forwards message using only available path
             self.forward(routes[0]["peer"], packet_copy)
 
@@ -227,19 +203,19 @@ class Router:
 
         # Rules go here
         else:
-            print("{} routes found, finding best route".format(len(routes)))
+            #print("{} routes found, finding best route".format(len(routes)))
             # 1. Highest Preference
             routes = self.get_highest_preference(routes)
-            print("Route list after get_highest_preference: {}".format(routes))
+            #print("Route list after get_highest_preference: {}".format(routes))
             # 2. Self Origin
             routes = self.get_self_origin(routes)
-            print("Route list after get_self_origin: {}".format(routes))
+            #print("Route list after get_self_origin: {}".format(routes))
             # 3. Shortest ASPath
             routes = self.get_shortest_as_path(routes)
-            print("Route list after get_shortest_as_path: {}".format(routes))
+            #print("Route list after get_shortest_as_path: {}".format(routes))
             # 4. EGP > IGP > UNK
             routes = self.get_origin_routes(routes)
-            print("Route list after get_origin_routes: {}".format(routes))
+            #print("Route list after get_origin_routes: {}".format(routes))
             # 5. Lowest IP Address
             # TODO
             peer = self.get_min_ip(routes)
@@ -251,11 +227,11 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+        #print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
         self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-        print(self.fwd_table)
-        print("\n")
+        #print(self.fwd_table)
+        #print("\n")
 
         return
 
@@ -282,7 +258,7 @@ class Router:
                                "origin": packet["msg"]["origin"],
                                "peer": packet["src"]})
 
-        print("Got update from {}".format(srcif))
+        #print("Got update from {}".format(srcif))
 
         # Update all neighbors if srcif is CUST
         if self.relations[srcif] == CUST:
@@ -314,7 +290,7 @@ class Router:
 
     def dump(self, packet):
         """	handles dump table requests	"""
-        print(packet)
+        #print(packet)
 
         # Forward the current forwarding table for comparison.
         # Filters socket list to exclude socket that sent the packet then takes first of list
@@ -328,14 +304,14 @@ class Router:
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
-            print("Handling update")
+            #print("Handling update")
             self.update(srcif, packet)
         if packet["type"] == DATA:
-            print("Checking for possible routes")
+            #print("Checking for possible routes")
             self.get_route(srcif, packet)
 
         if packet["type"] == DUMP:
-            print("Dumping forwarding table")
+            #print("Dumping forwarding table")
             self.dump(packet)
         if packet["type"] == RVKE:
             self.revoke(packet)
