@@ -85,27 +85,27 @@ class Router:
         for each in self.fwd_table:
             if self.get_subnet(daddr["dst"], each["netmask"]) == self.get_subnet(each["network"], each["netmask"]):
                 count_of_routes += 1
-		outroutes.append(each["peer"])
+                outroutes.append(each["peer"])
 
         # Sends appopriate message based on count_of_routes
         if count_of_routes == 0:
             packet_copy = copy.deepcopy(daddr)
-            #print("No Routes Found\n")
+            print("No Routes Found\n")
 
             # Forwards message back to sender
             # TODO: Rewrite to make socket selection cleaner and less arbitrary
             self.forward([s for s in self.sockets if s != daddr["dst"]][0],
                          {"src": packet_copy["dst"],
-                        "dst":   packet_copy["src"],
-                        "type":   "no route",
-                        "msg": {}})
+                          "dst":   packet_copy["src"],
+                          "type":   "no route",
+                          "msg": {}})
 
         elif count_of_routes == 1:
             packet_copy = copy.deepcopy(daddr)
-            #print("1 route found, forwarding packet to {}\n".format(packet_copy["dst"]))
+            print("1 route found, forwarding packet to {}\n".format(packet_copy["dst"]))
 
             # Forwards message using only available path
-	    self.forward(outroutes[0], packet_copy)
+            self.forward(outroutes[0], packet_copy)
             #self.forward([s for s in self.sockets if s != daddr["dst"]][0], packet_copy)
 
         return outroutes
@@ -165,11 +165,11 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-        #print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
         self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-        #print(self.fwd_table)
-        #print("\n")
+        print(self.fwd_table)
+        print("\n")
 
         return
 
@@ -192,7 +192,7 @@ class Router:
                                "netmask": packet["msg"]["netmask"],
                                "peer": packet["src"]})
 
-        #print("Got update from {}\n".format(srcif))
+        print("Got update from {}\n".format(srcif))
 
         # Update all neighbors if srcif is CUST
         if self.relations[srcif] == CUST:
@@ -222,7 +222,7 @@ class Router:
 
     def dump(self, packet):
         """	handles dump table requests	"""
-        #print(packet)
+        print(packet)
 
         # Forward the current forwarding table for comparison.
         # Filters socket list to exclude socket that sent the packet then takes first of list
@@ -235,13 +235,13 @@ class Router:
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
-            #print("Handling update")
+            print("Handling update")
             self.update(srcif, packet)
         if packet["type"] == DATA:
-            #print("Checking for possible routes")
+            print("Checking for possible routes")
             self.lookup_routes(packet)
         if packet["type"] == DUMP:
-            #print("Dumping forwarding table")
+            print("Dumping forwarding table")
             self.dump(packet)
         if packet["type"] == RVKE:
             self.revoke(packet)
