@@ -9,23 +9,23 @@ parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
 args = parser.parse_args()
 
- ##########################################################################################
+##########################################################################################
 
- # Message Fields
+# Message Fields
 TYPE = "type"
 SRCE = "src"
 DEST = "dst"
 MESG = "msg"
 TABL = "table"
 
- # Message Types
+# Message Types
 DATA = "data"
 DUMP = "dump"
 UPDT = "update"
 RVKE = "revoke"
 NRTE = "no route"
 
- # Update Message Fields
+# Update Message Fields
 NTWK = "network"
 NMSK = "netmask"
 ORIG = "origin"
@@ -33,7 +33,7 @@ LPRF = "localpref"
 APTH = "ASPath"
 SORG = "selfOrigin"
 
- # internal route info
+# internal route info
 CUST = "cust"
 PEER = "peer"
 PROV = "prov"
@@ -42,6 +42,7 @@ PROV = "prov"
 ##########################################################################################
 
 class Router:
+<<<<<<< HEAD
     routes = None
     updates = None
     relations = None
@@ -357,6 +358,7 @@ class Router:
                     return
         return
 
+
 if __name__ == "__main__":
-    router = Router(args.networks)
-    router.run()
+	router = Router(args.networks)
+	router.run()
