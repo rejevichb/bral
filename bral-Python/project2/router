@@ -2,8 +2,8 @@
 
 import argparse, socket, time, json, select, struct, math, copy
 
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
@@ -152,8 +152,8 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-	packet["src"] = srcif
 	#if packet["dst"] in self.fwd_table
+	print(srcif)
         self.sockets[srcif].send(json.dumps(packet))
         print("sent")
 	return
@@ -167,17 +167,14 @@ class Router:
 
     def update(self, srcif, packet):
         """	handle update packets	"""
-        self.updates[packet["src"]] = packet
-
-	
+        self.updates[packet["src"]] = packet	
 
         self.fwd_table.append({"network": packet["msg"]["network"],
 				"netmask": packet["msg"]["netmask"],
 				"peer": packet["src"]})
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets:
-	    print(sock)
-            if sock != srcif:
+            if sock == packet["src"]:
 		packet_copy = copy.deepcopy(packet)
                 self.forward(sock, packet_copy)
             #update all neighbors
