@@ -61,13 +61,14 @@ class Router:
             # Ex: 192.168.0.2-peer
             network, relation = relationship.split("-") # network = "192.168.0.2", relation = "peer"
             if DEBUG:
-                print("Starting socket for", network, relation)
+                print("Starting socket for {} - {}".format(network, relation))
             self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
             self.sockets[network].setblocking(0)
             self.sockets[network].connect(network)
 
             self.relations[network] = relation
             self.port_addrs[network] = network[:-1] + "1"
+	print("\n")
 
         return
 
@@ -93,8 +94,7 @@ class Router:
             print("No Routes Found\n")
 
             # Forwards message back to sender
-            # TODO: Rewrite to make socket selection cleaner and less arbitrary
-            self.forward([s for s in self.sockets if s != daddr["dst"]][0],
+            self.forward(self.socket[daddr["dst"]],
                          {"src": packet_copy["dst"],
                           "dst":   packet_copy["src"],
                           "type":   "no route",
@@ -102,11 +102,10 @@ class Router:
 
         elif count_of_routes == 1:
             packet_copy = copy.deepcopy(daddr)
-            print("1 route found, forwarding packet to {}\n".format(packet_copy["dst"]))
+            print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 
             # Forwards message using only available path
             self.forward(outroutes[0], packet_copy)
-            #self.forward([s for s in self.sockets if s != daddr["dst"]][0], packet_copy)
 
         return outroutes
 
@@ -192,7 +191,7 @@ class Router:
                                "netmask": packet["msg"]["netmask"],
                                "peer": packet["src"]})
 
-        print("Got update from {}\n".format(srcif))
+        print("Got update from {}".format(srcif))
 
         # Update all neighbors if srcif is CUST
         if self.relations[srcif] == CUST:
@@ -226,8 +225,8 @@ class Router:
 
         # Forward the current forwarding table for comparison.
         # Filters socket list to exclude socket that sent the packet then takes first of list
-        # TODO: Rewrite to make socket selection cleaner and less arbitrary
-        self.forward([s for s in self.sockets if s != packet["src"]][0],
+        #self.forward([s for s in self.sockets if s != packet["src"]][0],
+        self.forward(packet["src"],
                      {"src": packet["dst"],
                       "dst": packet["src"],
                       "type": "table",
