@@ -57,6 +57,7 @@ class Router:
     relations = None
     sockets = None
     fwd_table = None
+    port_addrs = None
 
     def __init__(self, networks):
         self.routes = {}
@@ -64,7 +65,7 @@ class Router:
         self.relations = {} # {"192.168.0.2" : "peer"}
         self.sockets = {} #socket.socket() for "192.168.0.2"
         self.fwd_table = [] #
-
+	self.port_addrs = {}
         for relationship in networks:
             #Ex: 192.168.0.2-peer
             network, relation = relationship.split("-") #network = "192.168.0.2", relation = "peer"
@@ -75,6 +76,7 @@ class Router:
             self.sockets[network].connect(network)
 
             self.relations[network] = relation
+	    self.port_addrs[network] = network[:-1] + "1"
 
         return
 
@@ -153,9 +155,11 @@ class Router:
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
 	#if packet["dst"] in self.fwd_table
-	print(srcif)
-        self.sockets[srcif].send(json.dumps(packet))
-        print("sent")
+	#packet["src"], packet["dst"] = packet["dst"], packet["src"] 
+	print("sending update to {}".format(packet["dst"]))
+	
+	self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+	#print(packet)
 	return
             
         return False
@@ -167,20 +171,27 @@ class Router:
 
     def update(self, srcif, packet):
         """	handle update packets	"""
-        self.updates[packet["src"]] = packet	
+    	self.updates[packet["src"]] = packet	
 
         self.fwd_table.append({"network": packet["msg"]["network"],
 				"netmask": packet["msg"]["netmask"],
 				"peer": packet["src"]})
+
+	print("Got update from {}".format(srcif))
         #if self.relations[self.sockets[srcif]] == CUST:
+
+	passed = [packet["src"]]
+	
         for sock in self.sockets:
-            if sock == packet["src"]:
-		packet_copy = copy.deepcopy(packet)
-                self.forward(sock, packet_copy)
+		
+        	if sock != packet["src"]:
+			packet_copy = copy.deepcopy(packet)
+			#packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+			packet["src"], packet["dst"] = self.port_addrs[sock], sock
+        		self.forward(srcif, packet_copy)
             #update all neighbors
-       	    else:
+       	  
             #update only customers
-           	 pass
         # TODO 
         return
     
@@ -203,7 +214,8 @@ class Router:
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
-            self.update(srcif, packet)
+    	    print("Handling update")    
+	    self.update(srcif, packet)
         if packet["type"] == DATA:
             pass
         if packet["type"] == DUMP:
@@ -230,7 +242,7 @@ class Router:
 
     def run(self):
         while True:
-            socks = select.select(self.sockets.values(), [], [], 0.1)[0]
+            socks = select.select(self.sockets.values(), [], [], 0.1)[0]	
             for conn in socks:
                 try:
                     k = conn.recv(65535)
@@ -244,9 +256,6 @@ class Router:
                             msg = json.loads(k)
                     if not self.handle_packet(srcif, msg):
                         self.send_error(conn, msg)
-		    else:
-			print(self.fwd_table)
-			print("\n\n\n")
                 else:
                     return
        
