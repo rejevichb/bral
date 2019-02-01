@@ -74,17 +74,15 @@ class Router:
 
     def lookup_routes(self, daddr):
         """ Lookup all valid routes for an address """
+	# !!! DADDR IS A FULL PACKET, NOT JUST ADDRESS !!!
         # Perform DFS for the router at IP address == daddr
         # Return list of lists representing possible paths
         outroutes = []
-
-        count_of_routes = 2
 
         # Simple count of valid paths by checking forwarding table.
         # For each entry in fwd_table, checks equality of subnets of fwd_table entry and dst
         for entry in self.fwd_table:
             if self.get_subnet(daddr["dst"], entry["netmask"]) == self.get_subnet(entry["network"], entry["netmask"]):
-                count_of_routes += 1
                 outroutes.append(entry)
 
         return outroutes
@@ -93,14 +91,16 @@ class Router:
         """ select the route with the shortest AS Path """
         # TODO
         outroutes = []
-        #curr_shortest_as = len(routes[0]["ASPath"])
+  
         curr_shortest_as = None
 	for route in routes:
 	    if curr_shortest_as is None:
-		curr_shortest_as = route["ASPath"]
+		curr_shortest_as = len(route["ASPath"])
+		print("CSA set to {}".format(len(route["ASPath"])))
             if len(route["ASPath"]) <= curr_shortest_as:
                 outroutes.append(route)
-
+	print("{} routes with shortest_path".format(len(outroutes)))
+	print(outroutes)	
         return outroutes
 
     def get_highest_preference(self, routes):
@@ -116,6 +116,7 @@ class Router:
 	    if curr_max_lp is None:
 		curr_max_lp = route["localpref"]
             if route["localpref"] >= curr_max_lp:
+		curr_max_lp = route["localpref"]
                 outroutes.append(route)
 
         return outroutes
@@ -124,7 +125,8 @@ class Router:
         """ select self originating routes """
         outroutes = []
         for route in routes:
-            if route['selfOrigin'] == "True":
+            if route['selfOrigin']:
+		print("Route with selfOrigin of True added")
                 outroutes.append(route)
 
         return outroutes
@@ -143,6 +145,7 @@ class Router:
 	    if curr_best_origin is None:
 		curr_best_origin = origin_ranks[route["origin"]]
             if origin_ranks[route["origin"]] <= curr_best_origin:
+		curr_best_origin = origin_ranks[route["origin"]]
                 outroutes.append(route)
 
         return outroutes
@@ -163,6 +166,7 @@ class Router:
         # TODO
         peer = None
         routes = self.lookup_routes(daddr)
+	print(routes)
         if len(routes) == 0 or routes is None:
             packet_copy = copy.deepcopy(daddr)
             print("No Routes Found\n")
@@ -187,14 +191,19 @@ class Router:
 
         # Rules go here
         else:
+	    print("{} routes found, finding best route".format(len(routes)))
             # 1. Highest Preference
             routes = self.get_highest_preference(routes)
+	    print("Route list after get_highest_preference: {}".format(routes))
             # 2. Self Origin
             routes = self.get_self_origin(routes)
+	    print("Route list after get_self_origin: {}".format(routes))
             # 3. Shortest ASPath
             routes = self.get_shortest_as_path(routes)
+	    print("Route list after get_shortest_as_path: {}".format(routes))
             # 4. EGP > IGP > UNK
             routes = self.get_origin_routes(routes)
+	    print("Route list after get_origin_routes: {}".format(routes))
             # 5. Lowest IP Address
             # TODO
             peer = self.get_min_ip(routes)
