@@ -84,7 +84,7 @@ class Router:
         # For each entry in fwd_table, checks equality of subnets of fwd_table entry and dst
         for entry in self.fwd_table:
             if self.get_subnet(daddr["dst"], entry["netmask"]) == self.get_subnet(entry["network"], entry["netmask"]):
-                count_of_routes += 1
+                #count_of_routes += 1
                 outroutes.append(entry)
 
         # Sends appopriate message based on count_of_routes
@@ -98,7 +98,7 @@ class Router:
                           "dst":   packet_copy["src"],
                           "type":   "no route",
                           "msg": {}})
-	    return
+            return
 
         elif count_of_routes == 1:
             packet_copy = copy.deepcopy(daddr)
@@ -106,8 +106,8 @@ class Router:
 
             # Forwards message using only available path
             self.forward(outroutes[0]["peer"], packet_copy)
-	    
-	    return
+
+            return
 
         return outroutes
 
@@ -115,31 +115,31 @@ class Router:
         """ select the route with the shortest AS Path """
         # TODO
         outroutes = []
-	curr_shortest_as = len(routes[0]["ASPath"])
-	for route in routes:
-		if len(route["ASPath"]) <= curr_shortest_as:
-			outroutes.append(route)
-	
+        curr_shortest_as = len(routes[0]["ASPath"])
+        for route in routes:
+            if len(route["ASPath"]) <= curr_shortest_as:
+                outroutes.append(route)
+
         return outroutes
 
     def get_highest_preference(self, routes):
         """ select the route with the highest localpref """
         # TODO
-	curr_max_lp = routes[0]["localpref"]
-			
+        curr_max_lp = routes[0]["localpref"]
+
         outroutes = []
-	for route in routes:
-		if route["localpref"] >= curr_max_lp:
-			outroutes.append(route)
-			
+        for route in routes:
+            if route["localpref"] >= curr_max_lp:
+                outroutes.append(route)
+
         return outroutes
 
     def get_self_origin(self, routes):
         """ select self originating routes """
         outroutes = []
-	for route in routes:
-       		if route['selfOrigin'] == "True":
-           		outroutes.append(route)
+        for route in routes:
+            if route['selfOrigin'] == "True":
+                outroutes.append(route)
 
         return outroutes
 
@@ -147,16 +147,16 @@ class Router:
         """ select origin routes: EGP > IGP > UNK """
         # TODO
         outroutes = []
-	origin_ranks = {"EGP" : 1,
-			"IGP" : 2,
-			"UNK" : 3}
+        origin_ranks = {"EGP" : 1,
+                        "IGP" : 2,
+                        "UNK" : 3}
 
-	curr_best_origin = origin_ranks[routes[0]["origin"]]
+        curr_best_origin = origin_ranks[routes[0]["origin"]]
 
-	for route in routes:
-		if origin_ranks[route["origin"]] <= curr_best_origin:
-			outroutes.append(route)
- 
+        for route in routes:
+            if origin_ranks[route["origin"]] <= curr_best_origin:
+                outroutes.append(route)
+
         return outroutes
 
     def filter_relationships(self, srcif, routes):
@@ -189,7 +189,8 @@ class Router:
         """	Forward a data packet	"""
         print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
-        self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+        #self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+        self.get_route(srcif, packet["dst"]).sendto(json.dumps(packet), packet["dst"])
         print(self.fwd_table)
         print("\n")
 
@@ -212,10 +213,10 @@ class Router:
         # TODO: Add functionality to prevent duplicate entries
         self.fwd_table.append({"network": packet["msg"]["network"],
                                "netmask": packet["msg"]["netmask"],
-				"localpref"  :  packet["msg"]["localpref"],
-                    		"selfOrigin": packet["msg"]["selfOrigin"],
-                    		"ASPath"    :  packet["msg"]["ASPath"],
-                    		"origin"    : packet["msg"]["origin"],
+                               "localpref"  :  packet["msg"]["localpref"],
+                               "selfOrigin": packet["msg"]["selfOrigin"],
+                               "ASPath"    :  packet["msg"]["ASPath"],
+                               "origin"    : packet["msg"]["origin"],
                                "peer": packet["src"]})
 
         print("Got update from {}".format(srcif))
