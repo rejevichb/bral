@@ -48,7 +48,6 @@ class Router:
     relations = None
     sockets = None
     fwd_table = None
-    port_addrs = None
 
     def __init__(self, networks):
         self.routes = {}
@@ -56,7 +55,7 @@ class Router:
         self.relations = {} # {"192.168.0.2" : "peer"}
         self.sockets = {} # socket.socket() for "192.168.0.2"
         self.fwd_table = [] #
-        self.port_addrs = {}
+
         for relationship in networks:
             # Ex: 192.168.0.2-peer
             network, relation = relationship.split("-") # network = "192.168.0.2", relation = "peer"
@@ -67,8 +66,8 @@ class Router:
             self.sockets[network].connect(network)
 
             self.relations[network] = relation
-            self.port_addrs[network] = network[:-1] + "1"
-	print("\n")
+
+            print("\n")
 
         return
 
