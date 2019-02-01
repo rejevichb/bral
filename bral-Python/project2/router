@@ -155,7 +155,8 @@ class Router:
 	packet["src"] = srcif
 	#if packet["dst"] in self.fwd_table
         self.sockets[srcif].send(json.dumps(packet))
-        return
+        print("sent")
+	return
             
         return False
 
@@ -176,8 +177,7 @@ class Router:
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets:
 	    print(sock)
-            if sock != srcif and sock == packet["dst"]:
-		#print(sock)
+            if sock != srcif:
 		packet_copy = copy.deepcopy(packet)
                 self.forward(sock, packet_copy)
             #update all neighbors
