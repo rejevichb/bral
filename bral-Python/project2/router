@@ -192,142 +192,142 @@ class Router:
             routes = self.filter_relationships(srcif, routes)
         return self.sockets[peer] if peer else None
 
-def forward(self, srcif, packet):
-    """	Forward a data packet	"""
-    print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+    def forward(self, srcif, packet):
+        """	Forward a data packet	"""
+        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
-    if packet["type"] == UPDT:
-        self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-    else:
-        self.get_route(srcif, packet).sendto(json.dumps(packet), packet["dst"])
+        if packet["type"] == UPDT:
+            self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+        else:
+            self.get_route(srcif, packet).sendto(json.dumps(packet), packet["dst"])
 
-    print(self.fwd_table)
-    print("\n")
+        print(self.fwd_table)
+        print("\n")
 
-    return
+        return
 
-    return False
+        return False
 
-def coalesce(self):
-    """	coalesce any routes that are right next to each other	"""
-    # TODO (this is the most difficult task, save until last)
-    return False
+    def coalesce(self):
+        """	coalesce any routes that are right next to each other	"""
+        # TODO (this is the most difficult task, save until last)
+        return False
 
-def update(self, srcif, packet):
-    """	handle update packets	"""
+    def update(self, srcif, packet):
+        """	handle update packets	"""
 
-    # Save update message for later
-    self.updates[packet["src"]] = packet
+        # Save update message for later
+        self.updates[packet["src"]] = packet
 
-    # Add an entry to the forwarding table
-    # TODO: Add functionality to prevent duplicate entries
-    self.fwd_table.append({"network": packet["msg"]["network"],
-                           "netmask": packet["msg"]["netmask"],
-                           "localpref"  :  packet["msg"]["localpref"],
-                           "selfOrigin": packet["msg"]["selfOrigin"],
-                           "ASPath"    :  packet["msg"]["ASPath"],
-                           "origin"    : packet["msg"]["origin"],
-                           "peer": packet["src"]})
+        # Add an entry to the forwarding table
+        # TODO: Add functionality to prevent duplicate entries
+        self.fwd_table.append({"network": packet["msg"]["network"],
+                               "netmask": packet["msg"]["netmask"],
+                               "localpref"  :  packet["msg"]["localpref"],
+                               "selfOrigin": packet["msg"]["selfOrigin"],
+                               "ASPath"    :  packet["msg"]["ASPath"],
+                               "origin"    : packet["msg"]["origin"],
+                               "peer": packet["src"]})
 
-    print("Got update from {}".format(srcif))
+        print("Got update from {}".format(srcif))
 
-    # Update all neighbors if srcif is CUST
-    if self.relations[srcif] == CUST:
-        for sock in self.sockets:
+        # Update all neighbors if srcif is CUST
+        if self.relations[srcif] == CUST:
+            for sock in self.sockets:
 
-            # Prevent self-sending
-            if sock != packet["src"]:
-                packet_copy = copy.deepcopy(packet)
+                # Prevent self-sending
+                if sock != packet["src"]:
+                    packet_copy = copy.deepcopy(packet)
 
-                # Update is received at the router and passed to other sockets
-                # so old dst becomes new src and sock becomes new dst
-                packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+                    # Update is received at the router and passed to other sockets
+                    # so old dst becomes new src and sock becomes new dst
+                    packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
-                self.forward(sock, packet_copy)
+                    self.forward(sock, packet_copy)
 
-    return
+        return
 
-def revoke(self, packet):
-    """	handle revoke packets	"""
-    rev_msg = packet["msg"]
+    def revoke(self, packet):
+        """	handle revoke packets	"""
+        rev_msg = packet["msg"]
 
-    for each in self.networks:
-        pass
+        for each in self.networks:
+            pass
 
+            # TODO
+            return True
+
+    def dump(self, packet):
+        """	handles dump table requests	"""
+        print(packet)
+
+        # Forward the current forwarding table for comparison.
+        # Filters socket list to exclude socket that sent the packet then takes first of list
+        #self.forward([s for s in self.sockets if s != packet["src"]][0],
+        self.forward(packet["src"],
+                     {"src": packet["dst"],
+                      "dst": packet["src"],
+                      "type": "table",
+                      "msg": self.fwd_table})
+
+    def handle_packet(self, srcif, packet):
+        if packet["type"] == UPDT:
+            print("Handling update")
+            self.update(srcif, packet)
+        if packet["type"] == DATA:
+            print("Checking for possible routes")
+            self.forward(srcif, packet)
+
+        if packet["type"] == DUMP:
+            print("Dumping forwarding table")
+            self.dump(packet)
+        if packet["type"] == RVKE:
+            self.revoke(packet)
+        if packet["type"] == NRTE:
+            self.send_error(srcif, "No route found")
+        if packet["type"] == "wait":
+            pass
+
+        return False
+
+    def send_error(self, conn, msg):
+        """ Send a no_route error message """
         # TODO
-        return True
+        return
 
-def dump(self, packet):
-    """	handles dump table requests	"""
-    print(packet)
+    # returns subnet of IP based on netmask
+    def get_subnet(self, ip, netmask):
+        split_ip = ip.split(".")
+        split_nm = netmask.split(".")
+        temp = []
 
-    # Forward the current forwarding table for comparison.
-    # Filters socket list to exclude socket that sent the packet then takes first of list
-    #self.forward([s for s in self.sockets if s != packet["src"]][0],
-    self.forward(packet["src"],
-                 {"src": packet["dst"],
-                  "dst": packet["src"],
-                  "type": "table",
-                  "msg": self.fwd_table})
+        # For each chunk of IP, bitwise-AND with netmask and append to temp
+        for index, each in enumerate(split_ip):
+            temp.append(str(int(each) & int(split_nm[index])))
 
-def handle_packet(self, srcif, packet):
-    if packet["type"] == UPDT:
-        print("Handling update")
-        self.update(srcif, packet)
-    if packet["type"] == DATA:
-        print("Checking for possible routes")
-        self.forward(srcif, packet)
-
-    if packet["type"] == DUMP:
-        print("Dumping forwarding table")
-        self.dump(packet)
-    if packet["type"] == RVKE:
-        self.revoke(packet)
-    if packet["type"] == NRTE:
-        self.send_error(srcif, "No route found")
-    if packet["type"] == "wait":
-        pass
-
-    return False
-
-def send_error(self, conn, msg):
-    """ Send a no_route error message """
-    # TODO
-    return
-
-# returns subnet of IP based on netmask
-def get_subnet(self, ip, netmask):
-    split_ip = ip.split(".")
-    split_nm = netmask.split(".")
-    temp = []
-
-    # For each chunk of IP, bitwise-AND with netmask and append to temp
-    for index, each in enumerate(split_ip):
-        temp.append(str(int(each) & int(split_nm[index])))
-
-    return ".".join(temp)
+        return ".".join(temp)
 
 
-def run(self):
-    while True:
-        socks = select.select(self.sockets.values(), [], [], 0.1)[0]
-        for conn in socks:
-            try:
-                k = conn.recv(65535)
-            except:
-                # either died on a connection reset, or was SIGTERM's by parent
-                return
-            if k:
-                for sock in self.sockets:
-                    if self.sockets[sock] == conn:
-                        srcif = sock
-                        msg = json.loads(k)
-                if not self.handle_packet(srcif, msg):
-                    self.send_error(conn, msg)
-            else:
-                return
+    def run(self):
+        while True:
+            socks = select.select(self.sockets.values(), [], [], 0.1)[0]
+            for conn in socks:
+                try:
+                    k = conn.recv(65535)
+                except:
+                    # either died on a connection reset, or was SIGTERM's by parent
+                    return
+                if k:
+                    for sock in self.sockets:
+                        if self.sockets[sock] == conn:
+                            srcif = sock
+                            msg = json.loads(k)
+                    if not self.handle_packet(srcif, msg):
+                        self.send_error(conn, msg)
+                else:
+                    return
 
-    return
+        return
 
 
 if __name__ == "__main__":
