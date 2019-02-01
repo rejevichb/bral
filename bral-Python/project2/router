@@ -40,15 +40,6 @@ PROV = "prov"
 
 
 ##########################################################################################
-class IPAddress:
-    pass
-
-#class FTEntry:
-#
-#    def __init__(self, dest, sock):
-
-
-
 
 class Router:
 
@@ -61,73 +52,75 @@ class Router:
 
     def __init__(self, networks):
         self.routes = {}
-        self.updates = {} # save update annoucements as { src : annoucement_msg }
+        self.updates = {} # Save update annoucements as { src : annoucement_msg }
         self.relations = {} # {"192.168.0.2" : "peer"}
-        self.sockets = {} #socket.socket() for "192.168.0.2"
+        self.sockets = {} # socket.socket() for "192.168.0.2"
         self.fwd_table = [] #
-	self.port_addrs = {}
+        self.port_addrs = {}
         for relationship in networks:
-            #Ex: 192.168.0.2-peer
-            network, relation = relationship.split("-") #network = "192.168.0.2", relation = "peer"
-            if DEBUG: 
+            # Ex: 192.168.0.2-peer
+            network, relation = relationship.split("-") # network = "192.168.0.2", relation = "peer"
+            if DEBUG:
                 print("Starting socket for", network, relation)
             self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
             self.sockets[network].setblocking(0)
             self.sockets[network].connect(network)
 
             self.relations[network] = relation
-	    self.port_addrs[network] = network[:-1] + "1"
+            self.port_addrs[network] = network[:-1] + "1"
 
         return
 
 
     def lookup_routes(self, daddr):
         """ Lookup all valid routes for an address """
-        # perform DFS for the router at IP address == daddr
-        #
-        # return list of lists representing possible paths
+        # Perform DFS for the router at IP address == daddr
+        # Return list of lists representing possible paths
         outroutes = []
-	count_of_routes = 0
 
-	for each in self.fwd_table:
-		if get_subnet(daddr["dst"], each["netmask"]) == get_subnet(each["network"], each["netmask"]):
-			count_of_routes += 1
-	if count_of_routes == 0:
-		print("No Routes Found\n")	
-		return {"src": daddr["src"],
-			 "dst":   daddr["dst"],
-			 "type":   "no route",
-			 "msg": {}} 
-	elif count_of_routes == 1:
-		packet_copy = copy.deepcopy(daddr)
-		print("1 route found, forwarding packet\n")
-		self.forward([s for s in self.sockets if s != daddr["dst"]][0], packet_copy)
+        count_of_routes = 0
 
-	#for each in self.fwd_table:
-	#	if subnet_binary(each['network'], each['netmask') == subnet_binary
-        #for k in self.relations.keys():
-        #    if daddr == k:
-        #        return [k]
-        #    else:
-        #        outroutes.append(self.lookup_helper(daddr, k))
-	#if len(outroutes) == 0:
+        # Simple count of valid paths by checking forwarding table.
+        # For each entry in fwd_table, checks equality of subnets of fwd_table entry and dst
+        for each in self.fwd_table:
+            if self.get_subnet(daddr["dst"], each["netmask"]) == self.get_subnet(each["network"], each["netmask"]):
+                count_of_routes += 1
+
+        # Sends appopriate message based on count_of_routes
+        if count_of_routes == 0:
+            packet_copy = copy.deepcopy(daddr)
+            print("No Routes Found\n")
+
+            # Forwards message back to sender
+            # TODO: Rewrite to make socket selection cleaner and less arbitrary
+            self.forward([s for s in self.sockets if s != daddr["dst"]][0],
+                         {"src": packet_copy["dst"],
+                        "dst":   packet_copy["src"],
+                        "type":   "no route",
+                        "msg": {}})
+
+        elif count_of_routes == 1:
+            packet_copy = copy.deepcopy(daddr)
+            print("1 route found, forwarding packet to {}\n".format(packet_copy["dst"]))
+
+            # Forwards message using only available path
+            self.forward([s for s in self.sockets if s != daddr["dst"]][0],
+                         packet_copy)
+
         return outroutes
-
-#    def lookup_helper(self, daddr, seen):
-
 
     def get_shortest_as_path(self, routes):
         """ select the route with the shortest AS Path """
         # TODO
         outroutes = []
         return outroutes
-            
+
     def get_highest_preference(self, routes):
         """ select the route with the shortest AS Path """
         # TODO
         outroutes = []
         return outroutes
-         
+
     def get_self_origin(self, routes):
         """ select self originating routes """
         outroutes = []
@@ -171,16 +164,14 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-	#if packet["dst"] in self.fwd_table
-	#packet["src"], packet["dst"] = packet["dst"], packet["src"] 
-	print("sending {} to {}\n".format(packet["type"], packet["dst"]))
-	
-	self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-	print(self.fwd_table)
-	print("\n")
-	
-	return
-            
+        print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+
+        self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+        print(self.fwd_table)
+        print("\n")
+
+        return
+
         return False
 
     def coalesce(self):
@@ -190,30 +181,34 @@ class Router:
 
     def update(self, srcif, packet):
         """	handle update packets	"""
-    	self.updates[packet["src"]] = packet	
 
+        # Save update message for later
+        self.updates[packet["src"]] = packet
+
+        # Add an entry to the forwarding table
+        # TODO: Add functionality to prevent duplicate entries
         self.fwd_table.append({"network": packet["msg"]["network"],
-				"netmask": packet["msg"]["netmask"],
-				"peer": packet["src"]})
+                               "netmask": packet["msg"]["netmask"],
+                               "peer": packet["src"]})
 
-	print("Got update from {}\n".format(srcif))
-        #if self.relations[self.sockets[srcif]] == CUST:
+        print("Got update from {}\n".format(srcif))
 
-	passed = [packet["src"]]
-	
-        for sock in self.sockets:
-		
-        	if sock != packet["src"]:
-			packet_copy = copy.deepcopy(packet)
-			packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-			#packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-        		self.forward(sock, packet_copy)
-            #update all neighbors
-       	  
-            #update only customers
-        # TODO 
+        # Update all neighbors if srcif is CUST
+        if self.relations[srcif] == CUST:
+            for sock in self.sockets:
+
+                # Prevent self-sending
+                if sock != packet["src"]:
+                    packet_copy = copy.deepcopy(packet)
+
+                    # Update is received at the router and passed to other sockets
+                    # so old dst becomes new src and sock becomes new dst
+                    packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+
+                    self.forward(sock, packet_copy)
+
         return
-    
+
     def revoke(self, packet):
         """	handle revoke packets	"""
         rev_msg = packet["msg"]
@@ -226,29 +221,33 @@ class Router:
 
     def dump(self, packet):
         """	handles dump table requests	"""
-	print(packet)
-	print("\n")
+        print(packet)
+
+        # Forward the current forwarding table for comparison.
+        # Filters socket list to exclude socket that sent the packet then takes first of list
+        # TODO: Rewrite to make socket selection cleaner and less arbitrary
         self.forward([s for s in self.sockets if s != packet["src"]][0],
-			 {"src": packet["dst"],
-                           "dst": packet["src"],
-                           "type": "table",
-                           "msg": self.fwd_table})
+                     {"src": packet["dst"],
+                      "dst": packet["src"],
+                      "type": "table",
+                      "msg": self.fwd_table})
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
-    	    print("Handling update")    
-	    self.update(srcif, packet)
+            print("Handling update")
+            self.update(srcif, packet)
         if packet["type"] == DATA:
             print("Checking for possible routes")
-	    self.lookup_routes(packet)	
+            self.lookup_routes(packet)
         if packet["type"] == DUMP:
+            print("Dumping forwarding table")
             self.dump(packet)
         if packet["type"] == RVKE:
             self.revoke(packet)
         if packet["type"] == NRTE:
             self.send_error(srcif, "No route found")
-	if packet["type"] == "wait":
-	    pass
+        if packet["type"] == "wait":
+            pass
 
         return False
 
@@ -257,15 +256,22 @@ class Router:
         # TODO
         return
 
-    def map_ports(self):
-        list_of_ports = []
-        for index, each in enumerate(self.relations.keys(), 1):
-            list_of_ports.append({index : each[:-1] + "1"})
+    # returns subnet of IP based on netmask
+    def get_subnet(self, ip, netmask):
+        split_ip = ip.split(".")
+        split_nm = netmask.split(".")
+        temp = []
+
+        # For each chunk of IP, bitwise-AND with netmask and append to temp
+        for index, each in enumerate(split_ip):
+            temp.append(str(int(each) & int(split_nm[index])))
+
+        return ".".join(temp)
 
 
     def run(self):
         while True:
-            socks = select.select(self.sockets.values(), [], [], 0.1)[0]	
+            socks = select.select(self.sockets.values(), [], [], 0.1)[0]
             for conn in socks:
                 try:
                     k = conn.recv(65535)
@@ -281,22 +287,9 @@ class Router:
                         self.send_error(conn, msg)
                 else:
                     return
-       
-	print(self.fwd_table)
-	return
 
+        return
 
-
-
-#return boolean indicating if in same subnet
-def get_subnet(ip, netmask):
-    split_ip = ip.split(".")
-    split_nm = netmask.split(".")
-    temp = []
-
-    for index, each in enumerate(split_ip):
-	temp.append(str(int(each) & int(split_nm[index])))
-    return ".".join(temp)
 
 if __name__ == "__main__":
     router = Router(args.networks)
