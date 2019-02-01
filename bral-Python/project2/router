@@ -63,7 +63,7 @@ class Router:
         self.updates = {} # save update annoucements as { src : annoucement_msg }
         self.relations = {} # {"192.168.0.2" : "peer"}
         self.sockets = {} #socket.socket() for "192.168.0.2"
-        self.fwd_table = {} #
+        self.fwd_table = [] #
 
         for relationship in networks:
             #Ex: 192.168.0.2-peer
@@ -152,8 +152,8 @@ class Router:
 
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
-	print(srcif)
 	packet["src"] = srcif
+	#if packet["dst"] in self.fwd_table
         self.sockets[srcif].send(json.dumps(packet))
         return
             
@@ -168,8 +168,11 @@ class Router:
         """	handle update packets	"""
         self.updates[packet["src"]] = packet
 
+	
 
-        self.fwd_table[packet["src"]] = packet
+        self.fwd_table.append({"network": packet["msg"]["network"],
+				"netmask": packet["msg"]["netmask"],
+				"peer": packet["src"]})
         #if self.relations[self.sockets[srcif]] == CUST:
         for sock in self.sockets:
 	    print(sock)
@@ -196,8 +199,10 @@ class Router:
 
     def dump(self, packet):
         """	handles dump table requests	"""
-        # TODO
-        return True
+        return json.dumps({"src": packet["dst"],
+                           "dst": packet["src"],
+                           "type": "table",
+                           "msg": self.fwd_table})
 
     def handle_packet(self, srcif, packet):
         if packet["type"] == UPDT:
@@ -232,7 +237,6 @@ class Router:
             for conn in socks:
                 try:
                     k = conn.recv(65535)
-                    print(k)
                 except:
                     # either died on a connection reset, or was SIGTERM's by parent
                     return
@@ -243,9 +247,14 @@ class Router:
                             msg = json.loads(k)
                     if not self.handle_packet(srcif, msg):
                         self.send_error(conn, msg)
+		    else:
+			print(self.fwd_table)
+			print("\n\n\n")
                 else:
                     return
-        return
+       
+	print(self.fwd_table)
+	return
 
 
 
