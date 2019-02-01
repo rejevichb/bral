@@ -155,7 +155,7 @@ class Router:
 		for route in routes:
 			temp[int("".join(route["peer"].split(".")))] = route
 			rts = min(list(temp.keys()))
-			if rts
+			if rts:
 				return temp[rts]["peer"]
 			return []
 
