@@ -87,17 +87,21 @@ class Router:
         #
         # return list of lists representing possible paths
         outroutes = []
+	count_of_routes = 0
 
-	if [d["peer"] for d in self.fwd_table].count(daddr["dst"]) == 0:
-		print("No Routes Found")	
+	for each in self.fwd_table:
+		if get_subnet(daddr["dst"], each["netmask"]) == get_subnet(each["network"], each["netmask"]):
+			count_of_routes += 1
+	if count_of_routes == 0:
+		print("No Routes Found\n")	
 		return {"src": daddr["src"],
 			 "dst":   daddr["dst"],
 			 "type":   "no route",
 			 "msg": {}} 
-	elif [d["peer"] for d in self.fwd_table].count(daddr["dst"]) == 1:
+	elif count_of_routes == 1:
 		packet_copy = copy.deepcopy(daddr)
-		self.forward(daddr["src"], packet_copy)
-		print("1 route found, forwarding packet")	
+		print("1 route found, forwarding packet\n")
+		self.forward([s for s in self.sockets if s != daddr["dst"]][0], packet_copy)
 
 	#for each in self.fwd_table:
 	#	if subnet_binary(each['network'], each['netmask') == subnet_binary
@@ -169,10 +173,12 @@ class Router:
         """	Forward a data packet	"""
 	#if packet["dst"] in self.fwd_table
 	#packet["src"], packet["dst"] = packet["dst"], packet["src"] 
-	print("sending {} to {}".format(packet["type"], packet["dst"]))
+	print("sending {} to {}\n".format(packet["type"], packet["dst"]))
 	
 	self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
 	print(self.fwd_table)
+	print("\n")
+	
 	return
             
         return False
@@ -190,7 +196,7 @@ class Router:
 				"netmask": packet["msg"]["netmask"],
 				"peer": packet["src"]})
 
-	print("Got update from {}".format(srcif))
+	print("Got update from {}\n".format(srcif))
         #if self.relations[self.sockets[srcif]] == CUST:
 
 	passed = [packet["src"]]
@@ -221,7 +227,7 @@ class Router:
     def dump(self, packet):
         """	handles dump table requests	"""
 	print(packet)
-	print("\n\n")
+	print("\n")
         self.forward([s for s in self.sockets if s != packet["src"]][0],
 			 {"src": packet["dst"],
                            "dst": packet["src"],
@@ -282,14 +288,15 @@ class Router:
 
 
 
+#return boolean indicating if in same subnet
+def get_subnet(ip, netmask):
+    split_ip = ip.split(".")
+    split_nm = netmask.split(".")
+    temp = []
 
-def subnet_binary(a, b):
-    a = a.split(".")
-    b = b.split(".")
-    new = []
-    for index, each in enumerate(a):
-        new.append(str(int(each) & int(b[index])))
-    print(".".join(new))
+    for index, each in enumerate(split_ip):
+	temp.append(str(int(each) & int(split_nm[index])))
+    return ".".join(temp)
 
 if __name__ == "__main__":
     router = Router(args.networks)
