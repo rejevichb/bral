@@ -137,9 +137,11 @@ class Router:
                         "IGP" : 2,
                         "UNK" : 3}
 
-        curr_best_origin = origin_ranks[routes[0]["origin"]]
-
+        #curr_best_origin = origin_ranks[routes[0]["origin"]]
+	curr_best_origin = None
         for route in routes:
+	    if curr_best_origin is None:
+		curr_best_origin = origin_ranks[route["origin"]]
             if origin_ranks[route["origin"]] <= curr_best_origin:
                 outroutes.append(route)
 
@@ -184,7 +186,7 @@ class Router:
 
 
         # Rules go here
-        if routes:
+        else:
             # 1. Highest Preference
             routes = self.get_highest_preference(routes)
             # 2. Self Origin
