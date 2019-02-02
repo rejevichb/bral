@@ -1,29 +1,52 @@
 package router
 
 import (
+	"bytes"
 	"encoding/json"
 	"net"
+	"strings"
 )
 
 type IRouter interface {
 	Run()
+	InitRouter(network IP, relation string)
 	//TODO finalize what we want in the interface
 }
 
 //left types as string for now
 type Router struct {
 	FwdTable ForwardingTable
-	Routes [][]net.IPAddr
+	Routes [][]IP
 	updates [] Packet
 	relations string //FIXME type
 	sockets []net.Conn
 }
 
+func (r Router) NewRouter(networks []string) {
+	for _, ns := range networks {
+		nr := strings.Split(ns, "-")
+		network := ParseIP(nr[1])
+		relation := nr[2]
+
+
+	}
+
+
+}
 // Lookup all valid routes for an address
-func (r Router) lookupRoutes(destaddr IP) [][]IP {
-	return make([][]IP, 0)
-	//bitwise-OR using subnet mask
-	//TODO
+func (r Router) lookupRoutes(p Packet) [][]IP {
+	var outroutes [][]IP
+	for i, entry := range r.FwdTable {
+		if EqualIP(r.getSubnet(p.Dst, entry.Netmask), r.getSubnet(entry.Network, entry.Netmask)) {
+			outroutes = append(outroutes, entry)
+		}
+
+
+	}
+}
+
+func (r Router) getSubnet(dst IP, netmask IP) IP {
+
 }
 
 //select the route with the shortest AS path
