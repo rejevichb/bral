@@ -186,11 +186,15 @@ class Router:
             #print("No Routes Found\n")
 
             # Forwards message back to sender
-            self.forward(self.sockets[daddr["src"]],
+	    print(daddr)
+	    try:
+            	self.forward(self.sockets[packet_copy["src"]],
                          {"src": packet_copy["dst"],
                           "dst": packet_copy["src"],
                           "type": "no route",
                           "msg": {}})
+	    except KeyError:
+		self.send_error(packet_copy["src"], "{} not found in socket list".format(packet_copy["src"]))
             return
 
         elif len(routes) == 1:
@@ -228,8 +232,10 @@ class Router:
     def forward(self, srcif, packet):
         """	Forward a data packet	"""
         #print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
-
-        self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+        try:
+		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+	except KeyError:
+		return false
         #print(self.fwd_table)
         #print("\n")
 
@@ -280,12 +286,20 @@ class Router:
     def revoke(self, packet):
         """	handle revoke packets	"""
         rev_msg = packet["msg"]
+	self.revocation[packet["src"]] = rev_msg
 
-        for each in self.networks:
-            pass
+#        for each in self.networks:
+#            pass
 
-            # TODO
-            return True
+	for each in self.sockets:
+		if sock != packet["src"]:
+			packet_copy = copy.deepcopy(packet)
+			packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+			self.forward(sock, packet_copy)
+
+	self.fwd_table = [entry for entry in self.fwd_table if list(entry.keys())[0] != packet["src"]]
+             # TODO
+        return True
 
 
     def dump(self, packet):
@@ -324,7 +338,7 @@ class Router:
 
 
     def send_error(self, conn, msg):
-        """ Send a no_route error message """
+        """ Send a n_route error message """
         # TODO
         return
 
@@ -335,7 +349,7 @@ class Router:
         split_nm = netmask.split(".")
         temp = []
 
-        # For each chunk of IP, bitwise-AND with netmask and append to temp
+        # For eachchunk of IP, bitwise-AND with netmask and append to temp
         for index, each in enumerate(split_ip):
             temp.append(str(int(each) & int(split_nm[index])))
 
