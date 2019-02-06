@@ -2,11 +2,17 @@ package router
 
 import (
 	"errors"
+	"net"
 	"strings"
 )
 
 type MSGType int
-type ForwardingTable [4][]interface{}
+type FTableEntry struct {
+	Network IP
+	Netmask IP
+	conn net.Conn
+}
+type ForwardingTable []FTableEntry
 
 const (
 	// Message Types
@@ -74,8 +80,8 @@ func StringToMSGType(s string) (MSGType, error) {
 This data type represents a single message
  */
 type Packet struct {
-	Src string              `json:"src"`
-	Dst string              `json:"dst"`
+	Src IP                  `json:"src"`
+	Dst IP                  `json:"dst"`
 	Typ MSGType             `json:"type"`
 	Msg []byte              `json:"msg"`
 	Table ForwardingTable   `json:"table"`
