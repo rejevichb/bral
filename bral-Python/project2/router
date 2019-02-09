@@ -354,6 +354,10 @@ class Router:
 					  "msg": ""})
 		return
 
+	def send_error(self, conn, msg):
+		pass
+
+
 	# returns subnet of IP based on netmask
 	def get_subnet(self, ip, netmask):
 		split_ip = ip.split(".")
