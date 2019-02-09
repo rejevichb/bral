@@ -286,6 +286,7 @@ class Router:
 					# print("{} : {}").format(entry["network"], nw)
 					# print("{} : {}").format(entry["netmask"], nm)
 					# print("{} : {}").format(entry["peer"], packet["src"])
+					pass
 				else:
 					temp.append(entry)
 			self.fwd_table = temp
