@@ -185,14 +185,10 @@ class Router:
 			# print("No Routes Found\n")
 
 			# Forwards message back to sender
-			try:
-				self.forward(self.sockets[daddr["dst"]],
-						 {"src": packet_copy["dst"],
-						  "dst": packet_copy["src"],
-						  "type": "no route",
-						  "msg": {}})
-			except KeyError:
-				self.send_error(srcif, "No Route Found")
+			self.send_error(srcif, {"src": packet_copy["dst"],
+						"dst": packet_copy["src"],
+						"type": "no route",
+						"msg": {}})
 			return
 
 		elif len(routes) == 1:
