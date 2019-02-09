@@ -259,24 +259,7 @@ class Router:
 
 		# print("Got update from {}".format(srcif))
 
-		# Update all neighbors if srcif is CUST
-		if self.relations[srcif] == CUST:
-			for sock in self.sockets:
-				# Prevent self-sending
-				if sock != packet["src"]:
-					packet_copy = copy.deepcopy(packet)
-					# Update is received at the router and passed to other sockets
-					# so old dst becomes new src and sock becomes new dst
-					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-					self.forward(sock, packet_copy)
-
-		# Update received from a peer or a provider: only send updates to your customers
-		elif self.relations[srcif] == PEER or self.relations[srcif] == PROV:
-			for sock in self.sockets:
-				if self.relations[sock] == CUST and sock != [packet["src"]]:
-					p_copy = copy.deepcopy(packet)
-					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
-					self.forward(sock, p_copy)
+		self.update_on_relationship(self, packet)
 
 		return
 
@@ -299,17 +282,12 @@ class Router:
 
 			self.fwd_table = filter(lambda x:x["network"] != nw and x["netmask"] != nm, self.fwd_table)
 
+		self.update_on_relationship(self, packet)
 
-		print("fwtable {}".format(self.fwd_table))
-		# Update received from a customer: send updates to all other neighbors
-
-		# for each in self.networks:   #?????
-			# pass                     #?????
-
-			# TODO
 		return True
 
-	def check_relationship(self, packet):
+	def update_on_relationship(self, packet):
+		# Update received from a customer: send updates to all other neighbors
 		if self.relations[packet["src"]] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:  # no self sending
@@ -326,8 +304,6 @@ class Router:
 					p_copy = copy.deepcopy(packet)
 					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
 					self.forward(sock, p_copy)
-
-
 
 	def dump(self, packet):
 		"""	handles dump table requests	"""
