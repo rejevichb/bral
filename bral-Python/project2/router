@@ -290,7 +290,6 @@ class Router:
 
 		# delete entry between src in received message and each network in the msg portion
 		# of the message in forwarding table
-<<<<<<< HEAD
 
 		temp = []
 		for unreachable_nw in rev_msg:
