@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse, socket, time, json, select, struct, math, copy
+import argparse, socket, time, json, select, struct, math, copy, logging
 
 # DEBUG = True
 DEBUG = False
@@ -274,10 +274,25 @@ class Router:
 
 	def revoke(self, packet):
 		"""	handle revoke packets	"""
-		rev_msg = packet["msg"]
+		rev_msg = packet["msg"] #packet message contents
+		src = packet["src"] # src IP
 
-		for each in self.networks:
-			pass
+		# Save revoke in this routers updates list
+		self.updates[packet["src"]] = packet
+
+		# delete entry between src in received message and each network in the msg portion
+		# of the message in forwarding table
+		for unreachable_nw in rev_msg:
+			# destination IP/CIDR
+			nw_nm_pair = unreachable_nw.split(",")
+			nw = nw_nm_pair[0]
+			nm = nw_nm_pair[1]
+
+			#TODO delete between src and each new unreachable_nw in msg list (nm, nw already pulled out)
+			self.fwd_table[src] <- 0
+
+		# for each in self.networks:   #?????
+			# pass                     #?????
 
 			# TODO
 			return True
