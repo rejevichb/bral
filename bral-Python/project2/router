@@ -266,23 +266,24 @@ class Router:
 	def revoke(self, packet):
 		"""	handle revoke packets	"""
 		rev_msg = packet["msg"]  # packet message contents
-		src = packet["src"]  # src IP
+
+		for entry, i in self.fwd_table:
+			print("forwarding table BEFORE i {}".format(entry))
 
 		# Save revoke in this routers updates list
 		self.updates[packet["src"]] = packet
 
 		# delete entry between src in received message and each network in the msg portion
 		# of the message in forwarding table
-
-		temp = []
 		for unreachable_nw in rev_msg:
 			# destination IP/CIDR
 			nw = unreachable_nw["network"]
 			nm = unreachable_nw["netmask"]
-
 			self.fwd_table = filter(lambda x:x["network"] != nw and x["netmask"] != nm, self.fwd_table)
 
 		self.update_on_relationship(packet)
+		for entry, i in self.fwd_table:
+			print("forwarding table AFTER i {}".format(entry))
 
 		return True
 
