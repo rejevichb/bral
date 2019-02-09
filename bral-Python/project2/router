@@ -279,7 +279,7 @@ class Router:
 			# destination IP/CIDR
 			nw = unreachable_nw["network"]
 			nm = unreachable_nw["netmask"]
-			# self.fwd_table = filter(lambda x:x["network"] != nw and x["netmask"] != nm and x['peer'] != packet["dst"], self.fwd_table)
+			self.fwd_table = filter(lambda x:x["network"] != nw and x["netmask"] != nm and x['peer'] != packet["origin"], self.fwd_table)
 
 		self.update_on_relationship(packet)
 		for entry in self.fwd_table:
