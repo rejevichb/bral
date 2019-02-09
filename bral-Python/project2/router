@@ -331,7 +331,7 @@ class Router:
 		if packet["type"] == DATA:
 			# print("Checking for possible routes")
 			if not self.get_route(srcif, packet):
-				self.send_error()
+				self.no_route(packet, srcif)
 
 		if packet["type"] == DUMP:
 			# print("Dumping forwarding table")
@@ -345,13 +345,13 @@ class Router:
 
 		return False
 
-	def no_route(self, packet, msg):
+	def no_route(self, packet, srcif):
 		""" Send a no_route error message """
-		self.forward(self.,
+		self.forward(packet["src"],
 					 {"src": packet["dst"],
 					  "dst": packet["src"],
-					  "type": "table",
-					  "msg": self.fwd_table})
+					  "type": "no route",
+					  "msg": ""})
 		return
 
 	# returns subnet of IP based on netmask
