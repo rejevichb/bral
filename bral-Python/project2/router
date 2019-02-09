@@ -302,7 +302,7 @@ class Router:
 					p_copy = copy.deepcopy(packet)
 					# keep source as the original, because relationship to delete is expressed
 					# as a relation from the revoke message src and the networks in the msg field.
-					p_copy["dst"] = sock
+					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
 					self.forward(sock, p_copy)
 
 		# Update received from a peer or a provider: only send updates to your customers
@@ -310,7 +310,7 @@ class Router:
 			for sock in self.sockets:
 				if self.relations[sock] == CUST and sock != src:
 					p_copy = copy.deepcopy(packet)
-					p_copy["dst"] = sock
+					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
 					self.forward(sock, p_copy)
 
 
