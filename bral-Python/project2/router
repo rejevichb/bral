@@ -259,23 +259,28 @@ class Router:
 		# Update all neighbors if srcif is CUST
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
-
 				# Prevent self-sending
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
-
 					# Update is received at the router and passed to other sockets
 					# so old dst becomes new src and sock becomes new dst
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-
 					self.forward(sock, packet_copy)
+
+		# Update received from a peer or a provider: only send updates to your customers
+		elif self.relations[srcif] == PEER or self.relations[srcif] == PROV:
+			for sock in self.sockets:
+				if self.relations[sock] == CUST and sock != [packet["src"]]:
+					p_copy = copy.deepcopy(packet)
+					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
+					self.forward(sock, p_copy)
 
 		return
 
 	def revoke(self, packet):
 		"""	handle revoke packets	"""
-		rev_msg = packet["msg"] #packet message contents
-		src = packet["src"] # src IP
+		rev_msg = packet["msg"]  # packet message contents
+		src = packet["src"]  # src IP
 
 		# Save revoke in this routers updates list
 		self.updates[packet["src"]] = packet
@@ -288,8 +293,27 @@ class Router:
 			nw = nw_nm_pair[0]
 			nm = nw_nm_pair[1]
 
-			#TODO delete between src and each new unreachable_nw in msg list (nm, nw already pulled out)
+			# TODO delete between src and each new unreachable_nw in msg list (nm, nw already pulled out)
 			self.fwd_table[src] <- 0
+
+		# Update received from a customer: send updates to all other neighbors
+		if self.relations[src] == CUST:
+			for sock in self.sockets:
+				if sock != src: # no self sending
+					p_copy = copy.deepcopy(packet)
+					# keep source as the original, because relationship to delete is expressed
+					# as a relation from the revoke message src and the networks in the msg field.
+					p_copy["dst"] = sock
+					self.forward(sock, p_copy)
+
+		# Update received from a peer or a provider: only send updates to your customers
+		elif self.relations[src] == PEER or self.relations[src] == PROV:
+			for sock in self.sockets:
+				if self.relations[sock] == CUST and sock != src:
+					p_copy = copy.deepcopy(packet)
+					p_copy["dst"] = sock
+					self.forward(sock, p_copy)
+
 
 		# for each in self.networks:   #?????
 			# pass                     #?????
