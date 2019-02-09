@@ -289,12 +289,11 @@ class Router:
 		# of the message in forwarding table
 		for unreachable_nw in rev_msg:
 			# destination IP/CIDR
-			nw_nm_pair = unreachable_nw.split(",")
-			nw = nw_nm_pair[0]
-			nm = nw_nm_pair[1]
+			nw = unreachable_nw["network"]
+			nm = unreachable_nw["netmask"]
 
 			# TODO delete between src and each new unreachable_nw in msg list (nm, nw already pulled out)
-			self.fwd_table[src] <- 0
+			self.fwd_table = self.fwd_table.filter(lambda x:x["network"] != nw and x["netmask"] != nm)
 
 		# Update received from a customer: send updates to all other neighbors
 		if self.relations[src] == CUST:
