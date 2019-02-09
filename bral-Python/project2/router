@@ -279,12 +279,17 @@ class Router:
 			# destination IP/CIDR
 			nw = unreachable_nw["network"]
 			nm = unreachable_nw["netmask"]
+
+			temp = []
 			#self.fwd_table = filter(lambda x:x["network"] != nw and x["netmask"] != nm, self.fwd_table)
 			for entry in self.fwd_table:
 				if entry["network"] == nw and entry["netmask"] == nm and entry["peer"] == packet["src"]:
 					print("{} : {}").format(entry["network"], nw)
 					print("{} : {}").format(entry["netmask"], nm)
 					print("{} : {}").format(entry["peer"], packet["src"])
+				else:
+					temp.append(entry)
+			self.fwd_table = temp
 		self.update_on_relationship(packet)
 		for entry in self.fwd_table:
 			print("forwarding table AFTER {}".format(entry))
