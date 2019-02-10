@@ -1,12 +1,13 @@
 package router
 
+import "bytes"
+
 type IP []byte
 type IPMask []byte
 
 // IP address lengths (bytes).
 const (
 	IPv4len = 4
-	IPv6len = 16
 	)
 
 // An IPNet represents an IP network.
@@ -18,7 +19,7 @@ type IPNet struct {
 // IPv4 returns the IP address (in 16-byte form) of the
 // IPv4 address a.b.c.d.
 func IPv4(a, b, c, d byte) IP {
-	  	p := make(IP, IPv6len)
+	  	p := make(IP, IPv4len)
 	  	copy(p, v4InV6Prefix)
 	  	p[12] = a
 	  	p[13] = b
@@ -26,6 +27,10 @@ func IPv4(a, b, c, d byte) IP {
 	  	p[15] = d
 	  	return p
 	  }
+
+func EqualIP(x, y IP) bool {
+	return bytes.Equal(x,y)
+}
 
 var v4InV6Prefix = []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff}
 
