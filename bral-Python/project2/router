@@ -164,7 +164,22 @@ class Router:
 	def filter_relationships(self, srcif, routes):
 		""" Don't allow Peer->Peer, Peer->Prov, or Prov->Peer forwards """
 		outroutes = []
-		return outroutes
+		if self.relations[srcif] == CUST:
+			# print("{} SRCIF IS CUST\n".format(srcif))
+			return routes
+		elif self.relations[srcif] == PEER:
+			# print("{} SRCIF IS PEER\n".format(srcif))
+			for route in routes:
+				if self.relations[route["peer"]] == CUST:
+					outroutes.append(route)
+			
+		else:
+			# print("SRCIF IS PROV")
+			for route in routes:
+				if self.relations[route["peer"]] != PEER:
+					outroutes.append(route)
+		
+		return outroutes[0] if len(outroutes) == 1 else None
 
 	def get_min_ip(self, routes):
 		temp = {}
@@ -198,9 +213,11 @@ class Router:
 			packet_copy = copy.deepcopy(daddr)
 			# print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 			# Forwards message using only available path
-			self.forward(routes[0]["peer"], packet_copy)
-
-			return
+			return self.forward(routes[0]["peer"], packet_copy) if self.filter_relationships(srcif, routes) is not None else self.forward(srcif,
+						 {"src": srcif[:-1] + "1",
+						  "dst": packet_copy["src"],
+						  "type": "no route",
+						  "msg": {}})
 
 		# Rules go here
 		else:
@@ -220,11 +237,16 @@ class Router:
 			# 5. Lowest IP Address
 			# TODO assign peer to return of filter_relationships 
 			# Once it is writter
-			peer = self.get_min_ip(routes)
+			#peer = self.get_min_ip(routes)
+			routes = self.get_min_ip(routes)
 			# Final check: enforce peering relationships
-			routes = self.filter_relationships(srcif, routes)
+			peer = self.filter_relationships(srcif, routes)
 
-		return self.forward(peer, daddr) if peer else None
+		return self.forward(peer, daddr) if peer is not None  else self.forward(srcif,
+						 		{"src": srcif[:-1] + "1",
+						  		"dst": packet_copy["src"],
+						  		"type": "no route",
+						  		"msg": {}})
 		
 
 	def forward(self, srcif, packet):
@@ -273,6 +295,19 @@ class Router:
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
 					self.forward(sock, packet_copy)
+		else:
+			for sock in self.sockets:
+
+				# Prevent self-sending
+				if sock != packet["src"] and self.relations[sock] == CUST:
+					packet_copy = copy.deepcopy(packet)
+
+					# Update is received at the router and passed to other sockets
+					# so old dst becomes new src and sock becomes new dst
+					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+
+					self.forward(sock, packet_copy)
+			
 
 		return
 
@@ -341,7 +376,7 @@ class Router:
 
 	def send_error(self, conn, msg):
 		""" Send a no_route error message """
-		# TODO
+		#self.forward(conn, msg)
 		return
 
 	# returns subnet of IP based on netmask
