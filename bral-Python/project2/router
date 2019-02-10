@@ -326,7 +326,8 @@ class Router:
 					# keep source as the original, because relationship to delete is expressed
 					# as a relation from the revoke message src and the networks in the msg field.
 					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
-					self.forward(sock, p_copy)
+					self.get_route(srcif, packet)
+					#self.forward(sock, p_copy)
 
 		# Update received from a peer or a provider: only send updates to your customers
 		elif self.relations[packet["src"]] == PEER or self.relations[packet["src"]] == PROV:
