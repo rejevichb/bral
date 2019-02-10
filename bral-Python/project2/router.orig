@@ -352,9 +352,14 @@ class Router:
 			print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
+<<<<<<< HEAD
+			print("Checking for possible routes")
+			self.get_route(srcif, packet)
+=======
 			# print("Checking for possible routes")
 			if not self.get_route(srcif, packet):
 				self.no_route(packet, srcif)
+>>>>>>> 23dc771c353162267227ec9b7ec1a49be2d06b1d
 
 		if packet["type"] == DUMP:
 			print("Dumping forwarding table")
@@ -370,11 +375,17 @@ class Router:
 
 	def no_route(self, packet, srcif):
 		""" Send a no_route error message """
+<<<<<<< HEAD
+		for sock in self.sockets:
+			if self.sockets[sock] == conn:
+				self.forward(sock, msg)
+=======
 		self.forward(packet["src"],
 					 {"src": packet["dst"],
 					  "dst": packet["src"],
 					  "type": "no route",
 					  "msg": ""})
+>>>>>>> 23dc771c353162267227ec9b7ec1a49be2d06b1d
 		return
 
 	def send_error(self, conn, msg):
