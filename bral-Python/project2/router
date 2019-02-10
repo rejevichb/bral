@@ -189,6 +189,12 @@ class Router:
 
 		return temp[min(list(temp.keys()))]["peer"]
 
+	def send_no_route(self, srcif, packet):
+		self.forward(srcif, {"src": srcif[:-1] + "1",
+					  "dst": packet["src"],
+					  "type": "no route",
+					  "msg": {}})
+
 	def get_route(self, srcif, daddr):
 		"""	Select the best route for a given address	"""
 		# TODO
@@ -200,24 +206,18 @@ class Router:
 			# print("No Routes Found\n")
 
 			# Forwards message back to sender
-			#self.forward(self.sockets[daddr["dst"]],
 			# print("Sending packet back {}\n".format(packet_copy))
-			self.forward(srcif,
-						 {"src": srcif[:-1] + "1",
-						  "dst": packet_copy["src"],
-						  "type": "no route",
-						  "msg": {}})
+			self.send_no_route(srcif, packet_copy)
 			return
 
 		elif len(routes) == 1:
 			packet_copy = copy.deepcopy(daddr)
 			# print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 			# Forwards message using only available path
-			return self.forward(routes[0]["peer"], packet_copy) if self.filter_relationships(srcif, routes) is not None else self.forward(srcif,
-						 {"src": srcif[:-1] + "1",
-						  "dst": packet_copy["src"],
-						  "type": "no route",
-						  "msg": {}})
+			if self.filter_relationships(srcif, routes) is not None:
+				return self.forward(routes[0]["peer"], packet_copy)
+			else:
+				return self.send_no_route(srcif, packet_copy)
 
 		# Rules go here
 		else:
@@ -242,11 +242,7 @@ class Router:
 			# Final check: enforce peering relationships
 			peer = self.filter_relationships(srcif, routes)
 
-		return self.forward(peer, daddr) if peer is not None  else self.forward(srcif,
-						 		{"src": srcif[:-1] + "1",
-						  		"dst": packet_copy["src"],
-						  		"type": "no route",
-						  		"msg": {}})
+		return self.forward(peer, daddr) if peer is not None  else self.send_no_route(srcif, daddr)
 		
 
 	def forward(self, srcif, packet):
@@ -359,16 +355,17 @@ class Router:
 			# print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			# print("Checking for possible routes")
+			# print("Checking for possible routes data message")
 			self.get_route(srcif, packet)
 
 		if packet["type"] == DUMP:
 			# print("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
+			# print("Revoking entry in forwarding table
 			self.revoke(packet)
 		if packet["type"] == NRTE:
-			self.send_error(srcif, "No route found")
+			self.send_no_route(srcif, packet)
 		if packet["type"] == "wait":
 			pass
 
