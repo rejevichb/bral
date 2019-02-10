@@ -352,8 +352,9 @@ class Router:
 			print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			print("Checking for possible routes")
-			self.get_route(srcif, packet)
+			# print("Checking for possible routes")
+			if not self.get_route(srcif, packet):
+				self.no_route(packet, srcif)
 
 		if packet["type"] == DUMP:
 			print("Dumping forwarding table")
@@ -367,12 +368,18 @@ class Router:
 
 		return False
 
-	def send_error(self, conn, msg):
+	def no_route(self, packet, srcif):
 		""" Send a no_route error message """
-		for sock in self.sockets:
-			if self.sockets[sock] == conn:
-				self.forward(sock, msg)
+		self.forward(packet["src"],
+					 {"src": packet["dst"],
+					  "dst": packet["src"],
+					  "type": "no route",
+					  "msg": ""})
 		return
+
+	def send_error(self, conn, msg):
+		pass
+
 
 	# returns subnet of IP based on netmask
 	def get_subnet(self, ip, netmask):
