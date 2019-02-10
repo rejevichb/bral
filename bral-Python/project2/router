@@ -187,7 +187,7 @@ class Router:
 			# Forwards message back to sender
 			try:
 				self.forward(self.sockets[daddr["dst"]], {"src": packet_copy["dst"], "dst": packet_copy["src"], "type": "no route", "msg": {}})
-			except KeyError:	
+			except KeyError:
 				self.send_error(srcif, {"src": packet_copy["dst"],
 						"dst": packet_copy["src"],
 						"type": "no route",
@@ -264,9 +264,9 @@ class Router:
 					p_copy = copy.deepcopy(packet)
 					# keep source as the original, because relationship to delete is expressed
 					# as a relation from the revoke message src and the networks in the msg field.
-					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"])) 
+					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"]))
 					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
-					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"])) 
+					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"]))
 					self.forward(sock, p_copy)
 
 		# Update received from a peer or a provider: only send updates to your customers
@@ -275,7 +275,9 @@ class Router:
 			for sock in self.sockets:
 				if self.relations[sock] == CUST and sock != packet["src"]:
 					p_copy = copy.deepcopy(packet)
+					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"]))
 					p_copy["src"], p_copy["dst"] = p_copy["dst"], sock
+					print("{} src and {} dst".format(p_copy["src"], p_copy["dst"]))
 					self.forward(sock, p_copy)
 
 		#self.update_on_relationship(packet)
