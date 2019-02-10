@@ -59,14 +59,14 @@ class Router:
 			# Ex: 192.168.0.2-peer
 			network, relation = relationship.split("-")  # network = "192.168.0.2", relation = "peer"
 			# if DEBUG:
-			print("Starting socket for {} - {}".format(network, relation))
+			# print("Starting socket for {} - {}".format(network, relation))
 			self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 			self.sockets[network].setblocking(0)
 			self.sockets[network].connect(network)
 
 			self.relations[network] = relation
 
-		print("\n")
+		# print("\n")
 
 		return
 
@@ -94,11 +94,11 @@ class Router:
 		for route in routes:
 			if curr_shortest_as is None:
 				curr_shortest_as = len(route["ASPath"])
-			print("CSA set to {}".format(len(route["ASPath"])))
+			# print("CSA set to {}".format(len(route["ASPath"])))
 			if len(route["ASPath"]) <= curr_shortest_as:
 				outroutes.append(route)
-			print("{} routes with shortest_path".format(len(outroutes)))
-			print(outroutes)
+			# print("{} routes with shortest_path".format(len(outroutes)))
+			# print(outroutes)
 		return outroutes
 
 	def get_highest_preference(self, routes):
@@ -132,7 +132,7 @@ class Router:
 		else:
 			for route in routes:
 				if route['selfOrigin'].decode('utf-8') == "True":
-					print("Route added: {}".format(route))
+					# print("Route added: {}".format(route))
 					outroutes.append(route)
 
 		return outroutes
@@ -179,14 +179,14 @@ class Router:
 		# TODO
 		peer = None
 		routes = self.lookup_routes(daddr)
-		print(routes)
+		# print(routes)
 		if len(routes) == 0 or routes is None:
 			packet_copy = copy.deepcopy(daddr)
-			print("No Routes Found\n")
+			# print("No Routes Found\n")
 
 			# Forwards message back to sender
 			#self.forward(self.sockets[daddr["dst"]],
-			print("Sending packet back {}\n".format(packet_copy))
+			# print("Sending packet back {}\n".format(packet_copy))
 			self.forward(srcif,
 						 {"src": srcif[:-1] + "1",
 						  "dst": packet_copy["src"],
@@ -196,7 +196,7 @@ class Router:
 
 		elif len(routes) == 1:
 			packet_copy = copy.deepcopy(daddr)
-			print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
+			# print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 			# Forwards message using only available path
 			self.forward(routes[0]["peer"], packet_copy)
 
@@ -204,19 +204,19 @@ class Router:
 
 		# Rules go here
 		else:
-			print("{} routes found, finding best route".format(len(routes)))
+			# print("{} routes found, finding best route".format(len(routes)))
 			# 1. Highest Preference
 			routes = self.get_highest_preference(routes)
-			print("Route list after get_highest_preference: {}".format(routes))
+			# print("Route list after get_highest_preference: {}".format(routes))
 			# 2. Self Origin
 			routes = self.get_self_origin(routes)
-			print("Route list after get_self_origin: {}".format(routes))
+			# print("Route list after get_self_origin: {}".format(routes))
 			# 3. Shortest ASPath
 			routes = self.get_shortest_as_path(routes)
-			print("Route list after get_shortest_as_path: {}".format(routes))
+			# print("Route list after get_shortest_as_path: {}".format(routes))
 			# 4. EGP > IGP > UNK
 			routes = self.get_origin_routes(routes)
-			print("Route list after get_origin_routes: {}".format(routes))
+			# print("Route list after get_origin_routes: {}".format(routes))
 			# 5. Lowest IP Address
 			# TODO assign peer to return of filter_relationships 
 			# Once it is writter
@@ -229,11 +229,11 @@ class Router:
 
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
-		print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+		# print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-		print(self.fwd_table)
-		print("\n")
+		# print(self.fwd_table)
+		# print("\n")
 
 		return
 
@@ -258,7 +258,7 @@ class Router:
 							   "origin": packet["msg"]["origin"],
 							   "peer": packet["src"]})
 
-		print("Got update from {}".format(srcif))
+		# print("Got update from {}".format(srcif))
 
 		# Update all neighbors if srcif is CUST
 		if self.relations[srcif] == CUST:
@@ -284,13 +284,23 @@ class Router:
 		for unreachable in rev_msg:
 			for entry in self.fwd_table:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry["peer"] == packet["src"]:
-					print("{} revoked".format(unreachable["network"]))
+					# print("{} revoked".format(unreachable["network"]))
 					continue
 				else:
 					if entry not in temp:
 						temp.append(entry)
 			self.fwd_table = temp
-		print(self.fwd_table)
+		
+		for sock in self.sockets:
+			if sock != packet["src"]:
+				packet_copy = copy.deepcopy(packet)
+
+				# Update is received at the router and passed to other sockets
+				# so old dst becomes new src and sock becomes new dst
+				packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+
+				self.forward(sock, packet_copy)
+			
 			
 
 			# TODO
@@ -298,7 +308,7 @@ class Router:
 
 	def dump(self, packet):
 		"""	handles dump table requests	"""
-		print(packet)
+		# print(packet)
 
 		# Forward the current forwarding table for comparison.
 		# Filters socket list to exclude socket that sent the packet then takes first of list
@@ -311,14 +321,14 @@ class Router:
 
 	def handle_packet(self, srcif, packet):
 		if packet["type"] == UPDT:
-			print("Handling update")
+			# print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			print("Checking for possible routes")
+			# print("Checking for possible routes")
 			self.get_route(srcif, packet)
 
 		if packet["type"] == DUMP:
-			print("Dumping forwarding table")
+			# print("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
 			self.revoke(packet)
