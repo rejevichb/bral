@@ -258,6 +258,11 @@ class Router:
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# TODO (this is the most difficult task, save until last)
+		#netmask has to be the same
+		#go to end of prefix mask
+		#only aggregate routes going to same output port
+		#
+
 		return False
 
 	def update(self, srcif, packet):
