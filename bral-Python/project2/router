@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import argparse, socket, time, json, select, struct, math, copy, logging
+import argparse, socket, json, select,  copy, logging
 
 DEBUG = True
-logging.basicConfig(filename='router.log', level=logging.DEBUG)
 #DEBUG = False
 #logging.basicConfig(filename='example.log', level=logging.CRITICAL)
 
@@ -85,19 +84,19 @@ class Router:
 		#for entry in self.fwd_table:
 		#	if self.get_subnet(daddr["dst"], entry["netmask"]) == self.get_subnet(entry["network"], entry["netmask"]):
 		#		outroutes.append(entry)
-		
+
 		for entry in self.fwd_table:
 			num_matches = 0
 			split_dst = daddr["dst"].split(".")
 			split_entry = entry["network"].split(".")
-			
+
 			for index, octet in enumerate(split_dst):
 				if octet == split_entry[index]:
 					num_matches += 1
 				else:
 					break
 			print("Compared {} and {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
-			
+
 			if num_matches > curr_max_match:
 				curr_max_match = num_matches
 				outroutes = [entry]
@@ -276,74 +275,120 @@ class Router:
 		for each in self.fwd_table:
 			print(each)
 		print("\n")
-
 		return
 
-	def coalesce(self):
-		"""	coalesce any routes that are right next to each other	"""
-		# TODO (this is the most difficult task, save until last)
-		#netmask has to be the same
-		#go to end of prefix mask
-		#only aggregate routes going to same output port
-		print("Looking for routes to aggregate")
 
-		old = self.fwd_table
-		to_keep = []
-		to_remove = []
-		for index, entry_a in enumerate(self.fwd_table):
-			if entry_a in to_remove:
-				continue
+	#(FWTableEntry -> [4]BinString
+	def get_nw_prefix_binary(self, entry):
+		"""get the network prefix in a list of 4 chunks of 8 bytes"""
+		return list(map(lambda x: format(int(bin(x)), "08b"), entry["network"].split(".")))
 
-			for entry_b in self.fwd_table[index:]:
-				if entry_a == entry_b or entry_b in to_remove:
-					continue			
-	
-				elif entry_a["netmask"] == entry_b["netmask"] and self.get_subnet(entry_a["network"], entry_a["netmask"]) == self.get_subnet(entry_b["network"], entry_b["netmask"]) and entry_a["peer"] == entry_b["peer"]:
-						print("Aggregating {} and {}".format(entry_a["network"], entry_b["network"]))
-						entry_a["network"] = self.get_subnet(entry_a["network"], self.decrement_netmask(entry_a["netmask"]))
-						print("Product is {}".format(entry_a["network"]))	
-						to_keep.append(entry_a)
-						to_remove.append(entry_b)			
-					
-				else:
-					to_keep.append(entry_a)
-					to_keep.append(entry_b)
 
-		updated = []
-		for each in to_keep:
-			if each not in to_remove and each not in updated:
-				updated.append(each)
-		if updated != old:
-			self.fwd_table = updated
+	#([4]byte, [4]byte, int) -> bool
+	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
+		""" can the entry be aggregated based on length of prefix"""
+		matching = 0
+		for i in netmask_len - 1:
+			if binary_addr1[i] == binary_addr2[i]:
+				matching += 1
+			else:
+				return False
+		return True
 
 	def decrement_netmask(self, netmask):
 		split_nm = netmask.split(".")
-		
-		# Get index of final non-zero octet in netmask
-		# If all octets are non-zero, return final position 
-		# as target. Else, make target the index before the first 0
-		if "0" not in split_nm:	
+	# Get index of final non-zero octet in netmask
+	# If all octets are non-zero, return final position
+	# as target. Else, make target the index before the first 0
+		if "0" not in split_nm:
 			target = 3
 		else:
 			target = split_nm.index("0") - 1
 
 		if split_nm[target] == "255":
 			split_nm[target] = "254"
-
 		else:
 			split_nm[target][split_nm[target].index("0") - 1] = 0
-		
+
 		print("{} converted to {}".format(netmask, ".".join(split_nm)))
 		return ".".join(split_nm)
 
+	def mask(self, i):
+		if i <= 8:
+			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
+		elif i <= 16 :
+			return "255." + str(int(("1" * (i - 8)) + ("0" * (8 - (i - 8))), 2)) + ".0.0"
+		elif i <= 24:
+			return "255.255." + str(int(("1" * (i - 16)) + ("0" * (8 - (i - 16))), 2)) + ".0"
+		elif 24 < i < 32:
+			return "255.255.255." + str(int(("1" * (i - 24)) + ("0" * (8 - (i - 24))), 2))
+
+
+	# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
+	def fwt_entry_from_coalesce(self, entry1, entry2, nm_len):
+
+		cidr_lookup = [(i, self.mask(i)) for i in range(1:32)  ]
+
+
+		cp = copy.deepcopy(entry1)
+		smallr_ip = self.pick_smaller_ip(entry1,entry2)
+		cp["network"] = smallr_ip
+		cp["netmask"] = self.decrement_netmask(cp["netmask"])
+
+
+
+
+
+	# (string, string) -> string
+	def pick_smaller_ip(self, a, b):
+		a_split = a.split(".")
+		b_split = b.split(".")
+
+		for index, octet in enumerate(a_split):
+			if octet > b_split[index]:
+				return a
+			elif octet < b_split[index]:
+				return b
+
+
+	def coalesce(self):
+		"""	coalesce any routes that are right next to each other	"""
+		#if we do end up coalescing, we will need to both add and remove routes from table
+		to_remove = []
+		to_add = []
+		#can we coalesce?
+		for c_entry in self.fwd_table:
+			#look at this one entry
+			nm = c_entry["netmask"]
+			peer = c_entry["peer"]
+			prefix = self.get_nw_prefix_binary(c_entry)
+			#compare to the rest of the table
+			for entry in self.fwd_table:
+				#must match exactly on netmask and peer, and must ignore comparing entry to self.
+				if entry != c_entry and nm == entry["netmask"] and peer == entry["peer"]:
+					#does the prefix allow for aggregation?
+					nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
+					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry), nm_length):
+						to_remove.append(c_entry)
+						to_remove.append(entry) #aggregate the two routes to remove
+						to_add.append(self.fwt_entry_from_coalesce(c_entry, entry, nm_length)) #calculate the new entry to add
+						found = True
+						break
+
+		if found:
+			self.fwd_table = self.fwd_table.extend(to_add)
+			self.fwd_table = self.fwd.table[e for ent in self.fwd_table if ent not in to_remove]
+			return True
+
+		return False
+
 	def update(self, srcif, packet):
 		"""	handle update packets	"""
-
 		# Save update message for later
 		self.updates[packet["src"]] = packet
 
 		# Add an entry to the forwarding table
-		# TODO: Add functionality to prevent duplicate entries	
+		# TODO: Add functionality to prevent duplicate entries
 		self.fwd_table.append({"network": packet["msg"]["network"],
 							   "netmask": packet["msg"]["netmask"],
 							   "localpref": packet["msg"]["localpref"],
@@ -398,8 +443,8 @@ class Router:
 						temp.append(entry)
 			self.fwd_table = temp
 		
-		
-		if self.relations[srcif] == CUST:	
+
+		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
@@ -412,7 +457,7 @@ class Router:
 		else:
 			for sock in self.sockets:
 				if sock != packet["src"] and self.relations[sock] == CUST:
-					packet_copy = copy.deepcopy(packet)	
+					packet_copy = copy.deepcopy(packet)
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
 					self.forward(sock, packet_copy)
