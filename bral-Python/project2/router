@@ -2,8 +2,12 @@
 
 import argparse, socket, time, json, select, struct, math, copy, logging
 
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+logging.basicConfig(filename='router.log', level=logging.DEBUG)
+#DEBUG = False
+#logging.basicConfig(filename='example.log', level=logging.CRITICAL)
+
+
 
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
@@ -67,7 +71,6 @@ class Router:
 			self.relations[network] = relation
 
 		print("\n\n\n\n")
-
 		return
 
 	def lookup_routes(self, daddr):
@@ -113,11 +116,11 @@ class Router:
 		for route in routes:
 			if curr_shortest_as is None:
 				curr_shortest_as = len(route["ASPath"])
-			print("CSA set to {}".format(len(route["ASPath"])))
+			print("Current Shortest AS set to {}".format(len(route["ASPath"])))
 			if len(route["ASPath"]) <= curr_shortest_as:
 				outroutes.append(route)
 			print("{} routes with shortest_path".format(len(outroutes)))
-			print(outroutes)
+		print(outroutes)
 		return outroutes
 
 	def get_highest_preference(self, routes):
@@ -222,7 +225,7 @@ class Router:
 		print(routes)
 		if len(routes) == 0 or routes is None:
 			packet_copy = copy.deepcopy(daddr)
-			print("No Routes Found\n")
+			logging.warning("No Routes Found\n")
 
 			# Forwards message back to sender
 			print("Sending packet back {}\n".format(packet_copy))
@@ -267,7 +270,7 @@ class Router:
 
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
-		print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+		logging.warning("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
 		for each in self.fwd_table:
@@ -433,20 +436,22 @@ class Router:
 
 	def handle_packet(self, srcif, packet):
 		if packet["type"] == UPDT:
-			print("Handling update")
+			logging.warning("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			print("Checking for possible routes data message")
+			logging.warning("Checking for possible routes data message")
 			self.get_route(srcif, packet)
 		if packet["type"] == DUMP:
-			print("Dumping forwarding table")
+			logging.warning("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
 			print("Revoking entry in forwarding table")
 			self.revoke(srcif, packet)
 		if packet["type"] == NRTE:
+			logging.warning("No route for packet")
 			self.send_no_route(srcif, packet)
 		if packet["type"] == "wait":
+			logging.warning("wait")
 			pass
 
 		return False
