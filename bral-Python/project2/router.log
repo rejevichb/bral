@@ -1,0 +1,1449 @@
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 2
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 2
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+INFO:root:Current Shortest AS set to 2
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 2
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 12.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'1', u'4'], 'netmask': u'255.0.0.0', 'peer': u'192.168.0.2', 'selfOrigin': u'False'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'IGP', 'localpref': u'150', 'network': u'12.0.0.0', 'ASPath': [u'3', u'4'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[]
+WARNING:root:No Routes Found
+
+DEBUG:root:Sending packet back {u'msg': u'ea601d1fbd4a61194622335f796a89ea1edbed9979daeacc595f6b7dc366c67b2e99740fa3b59ddd96bb93ebfed4de28', u'src': u'192.168.1.25', u'dst': u'172.169.0.25', u'type': u'data'}
+
+WARNING:root:Forwarding no route to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Revoking entry in forwarding table
+DEBUG:root:172.169.0.0 revoked
+WARNING:root:Forwarding revoke to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+WARNING:root:Forwarding revoke to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'3', u'2'], 'netmask': u'255.255.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'False'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[]
+WARNING:root:No Routes Found
+
+DEBUG:root:Sending packet back {u'msg': u'627ca734dcfaeb3205c275f0c900061f7c03a8eeff1b4e2d74a29585d74aba7e90f3ebfaf235c9f60cc9182e01a7365b', u'src': u'192.168.1.25', u'dst': u'1.2.3.4', u'type': u'data'}
+
+WARNING:root:Forwarding no route to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - peer
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - peer
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:10.0.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding no route to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:10.0.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding no route to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - prov
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:SRCIF IS PROV
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:SRCIF IS PROV
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - peer
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - prov
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:172.168.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 192.168.1.25
+DEBUG:root:SRCIF IS PROV
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 11.0.0.25
+DEBUG:root:172.168.0.2 SRCIF IS PEER
+
+WARNING:root:Forwarding no route to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:1 route found, forwarding packet to 172.169.0.25
+DEBUG:root:SRCIF IS PROV
+WARNING:root:Forwarding no route to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Dumping forwarding table
+DEBUG:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+WARNING:root:Forwarding table to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'2'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Starting socket for 192.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 172.168.0.2 - cust
+DEBUG:root:
+
+DEBUG:root:Starting socket for 10.0.0.2 - prov
+DEBUG:root:
+
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 192.168.0.2
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 172.168.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 10.0.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Handling update
+DEBUG:root:Got update from 10.0.0.2
+WARNING:root:Forwarding update to 192.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+WARNING:root:Forwarding update to 172.168.0.2
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 172.169.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:192.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 11.0.0.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:172.168.0.2 SRCIF IS CUST
+
+WARNING:root:Forwarding data to 192.168.1.25
+WARNING:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'11.0.0.0', 'ASPath': [u'3'], 'netmask': u'255.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:recieving msg to handle over wire
+WARNING:root:Checking for possible routes data message
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:2 routes found, finding best route
+DEBUG:root:Route list after get_highest_preference: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route added: {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}
+DEBUG:root:Route list after get_self_origin: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+INFO:root:Current Shortest AS set to 1
+INFO:root:1 routes with shortest_path
+INFO:root:Current Shortest AS set to 1
+INFO:root:2 routes with shortest_path
+DEBUG:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_shortest_as_path: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:Route list after get_origin_routes: [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'0.0.0.0', 'ASPath': [u'3'], 'netmask': u'0.0.0.0', 'peer': u'10.0.0.2', 'selfOrigin': u'True'}]
+DEBUG:root:SRCIF IS PROV
