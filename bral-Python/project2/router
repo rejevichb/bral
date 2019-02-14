@@ -411,6 +411,7 @@ class Router:
 						if self.sockets[sock] == conn:
 							srcif = sock
 							msg = json.loads(k)
+							logging.debug("recieving msg to handle over wire")
 					if not self.handle_packet(srcif, msg):
 						self.send_error(conn, msg)
 				else:
