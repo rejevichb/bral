@@ -293,7 +293,6 @@ class Router:
 		print(entry)
 		nw_split = entry["network"].split(".")
 		return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
->>>>>>> 93c9f0859b55e3d0b2d5737f64f824cc405ee09a
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
@@ -313,7 +312,7 @@ class Router:
 		# If all octets are non-zero, return final position
 		# as target. Else, make target the index before the first 0
 		if "0" not in split_nm:
-			target =
+			target = 3
 		else:
 			target = split_nm.index("0") - 1
 
@@ -370,13 +369,9 @@ class Router:
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# if we do end up coalescing, we will need to both add and remove routes from table
-<<<<<<< HEAD
 		old = copy.deepcopy(self.fwd_table)
 		to_remove = []
 		to_add = []
-=======
-		to_remove, to_add = []
->>>>>>> 93c9f0859b55e3d0b2d5737f64f824cc405ee09a
 		found = False
 		# can we coalesce?
 		for c_entry in self.fwd_table:
