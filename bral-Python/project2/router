@@ -97,7 +97,6 @@ class Router:
 		# for entry in self.fwd_table:
 		#	if self.get_subnet(daddr["dst"], entry["netmask"]) == self.get_subnet(entry["network"], entry["netmask"]):
 		#		outroutes.append(entry)
-
 		for entry in self.fwd_table:
 			num_matches = 0
 			split_dst = daddr["dst"].split(".")
@@ -241,7 +240,6 @@ class Router:
 			# Forwards message back to sender
 			logging.warning("Sending packet back {}\n".format(packet_copy))
 			self.send_no_route(srcif, packet_copy)
-
 			return
 
 		elif len(routes) == 1:
@@ -293,7 +291,10 @@ class Router:
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
 		logging.warning(entry)
 		nw_split = entry["network"].split(".")
-		return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
+		out = []
+		for i in nw_split:
+			out.append(bin(int(i)))
+		return out
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
@@ -316,7 +317,6 @@ class Router:
 			target = 3
 		else:
 			target = split_nm.index("0") - 1
-
 		if split_nm[target] == "255":
 			split_nm[target] = "254"
 		else:
@@ -474,11 +474,9 @@ class Router:
 	def dump(self, packet):
 		"""	handles dump table requests	"""
 		logging.warning(packet)
-
 		""" Forward the current forwarding table for comparison.
 			Filters socket list to exclude socket that sent the packet then takes first of list
 			self.forward([s for s in self.sockets if s != packet["src"]][0],"""
-
 		self.forward(packet["src"],
 					 {"src": packet["dst"],
 					  "dst": packet["src"],
