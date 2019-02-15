@@ -222,7 +222,7 @@ class Router:
 		print(routes)
 		if len(routes) == 0 or routes is None:
 			packet_copy = copy.deepcopy(daddr)
-			logging.warning("No Routes Found\n")
+			print("No Routes Found\n")
 
 			# Forwards message back to sender
 			print("Sending packet back {}\n".format(packet_copy))
@@ -266,7 +266,7 @@ class Router:
 
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
-		logging.warning("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+		print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
 		for each in self.fwd_table:
@@ -277,16 +277,26 @@ class Router:
 	# (FWTableEntry -> [4]BinString
 	def get_nw_prefix_binary(self, entry):
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
-		print(entry)
 		nw_split = entry["network"].split(".")
-		return list(map(lambda x: format(int(bin(x)), "08b"), nw_split))
+		#return map(lambda x: format(int(bin(x)), "08b"), nw_split)
+		temp = []
+		for each in nw_split:
+			bin_string = bin(int(each))
+			bin_string = "0" * len(bin_string[2:]) + bin_string[2:]
+			temp.append(bin_string)
+
+		return temp		
+
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
 		""" can the entry be aggregated based on length of prefix"""
 		matching = 0
-		for i in netmask_len - 1:
-			if binary_addr1[i] == binary_addr2[i]:
+		a = "".join(binary_addr1)
+		b = "".join(binary_addr1)
+
+		for i in range(netmask_len - 1):
+			if a[i] == b[i]:
 				matching += 1
 			else:
 				return False
@@ -311,6 +321,16 @@ class Router:
 		return ".".join(split_nm)
 
 	def mask(self, i):
+		full_octets = i // 8
+		not_full_octets = i % 8
+		final = ""
+		if full_octets < 4:
+			final += "11111111." * full octets
+			final += "1" * not_full_octets + "0" * 8 - not_full_octets
+		for i in range(full_octets):
+			final += "1" * 8
+		return ("1" * i)
+		
 		if i <= 8:
 			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
 		elif i <= 16:
@@ -323,9 +343,11 @@ class Router:
 	# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
 	def fwt_entry_from_coalesce(self, entry1, entry2, nm_len):
 		cp = copy.deepcopy(entry1)
-		smallr_ip = self.pick_smaller_ip(entry1, entry2)
+		smallr_ip = self.pick_smaller_ip(entry1["network"], entry2["network"])
 		cp["network"] = smallr_ip
 		cp["netmask"] = self.mask(nm_len)
+		print(cp["netmask"])
+		cp["network"] = self.get_subnet(cp["network"], cp["netmask"])
 		return cp
 
 	# (string, string) -> string
@@ -342,6 +364,7 @@ class Router:
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# if we do end up coalescing, we will need to both add and remove routes from table
+		old = copy.deepcopy(self.fwd_table)
 		to_remove = []
 		to_add = []
 		found = False
@@ -358,15 +381,23 @@ class Router:
 					# does the prefix allow for aggregation?
 					nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry), nm_length):
-						to_remove.append(c_entry)
-						to_remove.append(entry)  # aggregate the two routes to remove
+						print("Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
+						#to_remove.append(c_entry)
+						#to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
+						for each in [entry, c_entry]:
+							if each not in to_add:
+								to_remove.append(each)
 						found = True
+						
 						break
 
 		if found:
+			print("TO ADD:{}".format(to_add))
 			self.fwd_table.extend(to_add)
 			self.fwd_table = [e for e in self.fwd_table if e not in to_remove]
+			print("FINAL: {}".format(self.fwd_table))
+
 			return True
 
 		return False
@@ -375,6 +406,8 @@ class Router:
 		"""	handle update packets	"""
 		# Save update message for later
 		self.updates[packet["src"]] = packet
+		
+
 
 		# Add an entry to the forwarding table
 		# TODO: Add functionality to prevent duplicate entries
@@ -385,9 +418,12 @@ class Router:
 							   "ASPath": packet["msg"]["ASPath"],
 							   "origin": packet["msg"]["origin"],
 							   "peer": packet["src"]})
+		print("Forwarding table before agg:\n{}".format(self.fwd_table))
+
 		if len(self.fwd_table) > 1:
-			while self.coalesce():
-				self.coalesce()
+			self.coalesce()
+
+		print("Forwarding Table after agg:\n{}".format(self.fwd_table))
 
 		print("Got update from {}".format(srcif))
 
@@ -470,22 +506,22 @@ class Router:
 
 	def handle_packet(self, srcif, packet):
 		if packet["type"] == UPDT:
-			logging.warning("Handling update")
+			print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			logging.warning("Checking for possible routes data message")
+			print("Checking for possible routes data message")
 			self.get_route(srcif, packet)
 		if packet["type"] == DUMP:
-			logging.warning("Dumping forwarding table")
+			print("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
 			print("Revoking entry in forwarding table")
 			self.revoke(srcif, packet)
 		if packet["type"] == NRTE:
-			logging.warning("No route for packet")
+			print("No route for packet")
 			self.send_no_route(srcif, packet)
 		if packet["type"] == "wait":
-			logging.warning("wait")
+			print("wait")
 			pass
 
 		return False
