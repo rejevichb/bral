@@ -69,19 +69,21 @@ class Router:
 		self.relations = {}  # {"192.168.0.2" : "peer"}
 		self.sockets = {}  # socket.socket() for "192.168.0.2"
 		self.fwd_table = []  #
-
+		self.aggregated = {}	
+		self.route_info = {}	
+		
 		for relationship in networks:
 			# Ex: 192.168.0.2-peer
 			network, relation = relationship.split("-")  # network = "192.168.0.2", relation = "peer"
 			# if DEBUG:
-			print("Starting socket for {} - {}".format(network, relation))
+			##print("Starting socket for {} - {}".format(network, relation))
 			self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 			self.sockets[network].setblocking(0)
 			self.sockets[network].connect(network)
 
 			self.relations[network] = relation
 
-		print("\n\n\n\n")
+		##print("\n\n\n\n")
 		return
 
 	def lookup_routes(self, daddr):
@@ -91,11 +93,6 @@ class Router:
 		# Return list of lists representing possible paths
 		outroutes = []
 		curr_max_match = 0
-		# Simple count of valid paths by checking forwarding table.
-		# For each entry in fwd_table, checks equality of subnets of fwd_table entry and dst
-		# for entry in self.fwd_table:
-		#	if self.get_subnet(daddr["dst"], entry["netmask"]) == self.get_subnet(entry["network"], entry["netmask"]):
-		#		outroutes.append(entry)
 
 		for entry in self.fwd_table:
 			num_matches = 0
@@ -107,14 +104,14 @@ class Router:
 					num_matches += 1
 				else:
 					break
-			print("Compared {} and {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
 
 			if num_matches > curr_max_match:
 				curr_max_match = num_matches
 				outroutes = [entry]
 			elif num_matches == curr_max_match:
 				outroutes.append(entry)
-
+		if curr_max_match == 0:
+			return []
 		return outroutes
 
 	def get_shortest_as_path(self, routes):
@@ -126,11 +123,11 @@ class Router:
 		for route in routes:
 			if curr_shortest_as is None:
 				curr_shortest_as = len(route["ASPath"])
-			print("Current Shortest AS set to {}".format(len(route["ASPath"])))
+			##print("Current Shortest AS set to {}".format(len(route["ASPath"])))
 			if len(route["ASPath"]) <= curr_shortest_as:
 				outroutes.append(route)
-			print("{} routes with shortest_path".format(len(outroutes)))
-		print(outroutes)
+			##print("{} routes with shortest_path".format(len(outroutes)))
+		##print(outroutes)
 		return outroutes
 
 	def get_highest_preference(self, routes):
@@ -164,7 +161,7 @@ class Router:
 		else:
 			for route in routes:
 				if route['selfOrigin'].decode('utf-8') == "True":
-					print("Route added: {}".format(route))
+					##print("Route added: {}".format(route))
 					outroutes.append(route)
 
 		return outroutes
@@ -197,16 +194,16 @@ class Router:
 		""" Don't allow Peer->Peer, Peer->Prov, or Prov->Peer forwards """
 		outroutes = []
 		if self.relations[srcif] == CUST:
-			print("{} SRCIF IS CUST\n".format(srcif))
+			##print("{} SRCIF IS CUST\n".format(srcif))
 			return routes
 		elif self.relations[srcif] == PEER:
-			print("{} SRCIF IS PEER\n".format(srcif))
+			##print("{} SRCIF IS PEER\n".format(srcif))
 			for route in routes:
 				if self.relations[route["peer"]] == CUST:
 					outroutes.append(route)
 
 		else:
-			print("SRCIF IS PROV")
+			##print("SRCIF IS PROV")
 			for route in routes:
 				if self.relations[route["peer"]] != PEER:
 					outroutes.append(route)
@@ -222,6 +219,7 @@ class Router:
 		return temp[min(list(temp.keys()))]["peer"]
 
 	def send_no_route(self, srcif, packet):
+		##print(packet)
 		self.forward(srcif, {"src": srcif[:-1] + "1",
 							 "dst": packet["src"],
 							 "type": "no route",
@@ -232,20 +230,21 @@ class Router:
 		# TODO
 		peer = None
 		routes = self.lookup_routes(daddr)
-		print(routes)
+		##print(routes)
 		if len(routes) == 0 or routes is None:
 			packet_copy = copy.deepcopy(daddr)
-			print("No Routes Found\n")
+			##print("No Routes Found\n")
 
 			# Forwards message back to sender
-			print("Sending packet back {}\n".format(packet_copy))
+			##print("Sending packet back {}\n".format(packet_copy))
+			##print(packet_copy)
 			self.send_no_route(srcif, packet_copy)
 
 			return
 
 		elif len(routes) == 1:
 			packet_copy = copy.deepcopy(daddr)
-			print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
+			##print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 			# Forwards message using only available path
 			if self.filter_relationships(srcif, routes) is not None:
 				return self.forward(routes[0]["peer"], packet_copy)
@@ -254,19 +253,19 @@ class Router:
 
 		# Rules go here
 		else:
-			print("{} routes found, finding best route\n".format(len(routes)))
+			##print("{} routes found, finding best route\n".format(len(routes)))
 			# 1. Highest Preference
 			routes = self.get_highest_preference(routes)
-			print("Route list after get_highest_preference: {}\n".format(routes))
+			##print("Route list after get_highest_preference: {}\n".format(routes))
 			# 2. Self Origin
 			routes = self.get_self_origin(routes)
-			print("Route list after get_self_origin: {}\n".format(routes))
+			##print("Route list after get_self_origin: {}\n".format(routes))
 			# 3. Shortest ASPath
 			routes = self.get_shortest_as_path(routes)
-			print("Route list after get_shortest_as_path: {}\n".format(routes))
+			##print("Route list after get_shortest_as_path: {}\n".format(routes))
 			# 4. EGP > IGP > UNK
 			routes = self.get_origin_routes(routes)
-			print("Route list after get_origin_routes: {}\n".format(routes))
+			##print("Route list after get_origin_routes: {}\n".format(routes))
 			# 5. Lowest IP Address
 			# TODO assign peer to return of filter_relationships
 			# Once it is writter
@@ -274,23 +273,24 @@ class Router:
 			routes = self.get_min_ip(routes)
 			# Final check: enforce peering relationships
 			peer = self.filter_relationships(srcif, routes)
-
+		##print("Optimal route to send data: {}".format(peer))
+		##print("Data being sent: {}".format(daddr))
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
-		print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
+		##print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
-		for each in self.fwd_table:
-			print(each)
-		print("\n")
+		#for each in self.fwd_table:
+			##print(each)
+		##print("\n")
 		return
 
 	# FWTableEntry -> [4]BinString
 	def get_nw_prefix_binary(self, entry):
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
-		print(entry)
+		##print(entry)
 		nw_split = entry["network"].split(".")
 		temp = []
 		for each in nw_split:
@@ -331,21 +331,11 @@ class Router:
 		else:
 			split_nm[target][split_nm[target].index("0") - 1] = 0
 
-		print("{} converted to {}".format(netmask, ".".join(split_nm)))
+		##print("{} converted to {}".format(netmask, ".".join(split_nm)))
 		return ".".join(split_nm)
 
 	#Int -> DDNetmaskString
 	def mask(self, i):
-		#full_octets = i // 8
-		#not_full_octets = i % 8
-		#final = ""
-		#if full_octets < 4:
-			#final += "11111111." * full octets
-			#final += "1" * not_full_octets + "0" * 8 - not_full_octets
-		#for i in range(full_octets):
-	#		final += "1" * 8
-		#return ("1" * i)
-	
 		if i <= 8:
 			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
 		elif i <= 16:
@@ -361,9 +351,20 @@ class Router:
 		smallr_ip = self.pick_smaller_ip(entry1["network"], entry2["network"])
 		cp["network"] = smallr_ip
 		cp["netmask"] = self.mask(nm_len - 1)
-		print(cp["netmask"])
+		##print(cp["netmask"])
 		cp["network"] = self.get_subnet(cp["network"], cp["netmask"])
+		self.aggregated[cp["network"]] = self.aggregated.setdefault(cp["network"], [])
+		
+		self.aggregated[cp["network"]].append({"network": entry1["network"], "netmask": entry1["netmask"]})
+		self.aggregated[cp["network"]].append({"network": entry2["network"], "netmask": entry2["netmask"]})
+		
+
+		self.route_info[entry1["network"]] = entry1
+		self.route_info[entry2["network"]] = entry2
+
+
 		return cp
+		#
 
 	# (string, string) -> string
 	def pick_smaller_ip(self, a, b):
@@ -396,7 +397,7 @@ class Router:
 					# does the prefix allow for aggregation?
 					nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry), nm_length):
-						print("Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
+						##print("Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
 						#to_remove.append(c_entry)
 						#to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
@@ -408,14 +409,14 @@ class Router:
 						break
 
 		if found:
-			print("TO ADD:{}".format(to_add))
+			##print("TO ADD:{}".format(to_add))
 			self.fwd_table.extend(to_add)
 			temp = []
 			for each in self.fwd_table:
 				if each not in temp and each not in to_remove:
 					temp.append(each)
 			self.fwd_table = temp
-			print("FINAL: {}".format(self.fwd_table))
+			##print("FINAL: {}".format(self.fwd_table))
 
 			return True
 
@@ -425,7 +426,7 @@ class Router:
 	def update(self, srcif, packet):
 		"""	handle update packets	"""
 		# Save update message for later
-		self.updates[packet["src"]] = packet
+		self.updates[packet["src"]] = packet["msg"]
 		
 
 		
@@ -438,15 +439,15 @@ class Router:
 							   "ASPath": packet["msg"]["ASPath"],
 							   "origin": packet["msg"]["origin"],
 							   "peer": packet["src"]})
-		print("Forwarding table before agg:\n{}".format(self.fwd_table))
+		##print("Forwarding table before agg:\n{}".format(self.fwd_table))
 
 		if len(self.fwd_table) > 1:
 			while self.coalesce():
 				self.coalesce()
 
-		print("Forwarding Table after agg:\n{}".format(self.fwd_table))
+		##print("Forwarding Table after agg:\n{}".format(self.fwd_table))
 
-		print("Got update from {}".format(srcif))
+		##print("Got update from {}".format(srcif))
 
 		""" Update all neighbors if srcif is CUST
 			Update received from a customer: send updates to all other neighbors """
@@ -476,21 +477,92 @@ class Router:
 
 	# (DDAddressString, Packet) -> bool
 	def revoke(self, srcif, packet):
+		#print("Curr Routing Table")
+		#for entry in self.fwd_table:
+			#print(entry)
 		"""	handle revoke packets	"""
-		rev_msg = packet["msg"]  # packet message contents
+		rev_msg = packet["msg"]  # packet message contentsi
+		new_updates = {}
+		for peer, msg in self.updates.items():
+			
+			print("{} : {}".format(peer,msg))
+			
+			if packet["src"] == peer and msg == rev_msg:
+				continue
+			
+			new_updates[peer] = msg
+		
+		self.updates = new_updates
+		
+
 		temp = []
 
 		for unreachable in rev_msg:
 			for entry in self.fwd_table:
-				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
-					"peer"] == packet["src"]:
-					print("{} revoked".format(unreachable["network"]))
+				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry["peer"] == packet["src"]:
+					##print("{} revoked".format(unreachable["network"]))
 					continue
 				else:
 					if entry not in temp:
 						temp.append(entry)
+		
 			self.fwd_table = temp
-
+		##print("Fwd Table after REVOKE:\n")
+		#for entry in self.fwd_table:
+			##print(entry)
+		##print("\n"
+		#print("Agg Table: {}".format(self.aggregated))
+		
+		new_fwd = []
+		
+		for k,v in self.updates.items():
+			
+			new_fwd.append({"network": v["network"],
+							   "netmask": v["netmask"],
+							   "localpref": v["localpref"],
+							   "selfOrigin": v["selfOrigin"],
+							   "ASPath": v["ASPath"],
+							   "origin": v["origin"],
+							   "peer": k})
+		
+		self.fwd_table = new_fwd
+		print("REVOKE FWD TABLE BEFORE AGG:")
+		print(self.fwd_table)
+		while self.coalesce():
+			self.coalesce()
+		print("REVOKE FWD TABLE AFTER AGG: {}".format(self.fwd_table))
+		"""for rev in rev_msg:
+			#print(rev)
+			for k,v in self.aggregated.items():
+				if rev in v:
+					#print("matched found to disaggregate {}".format(k))
+					for agg in v:
+						if agg != rev:
+							
+							nm_length = "".join(map(lambda x: format(int(x), "08b"), agg["netmask"].split("."))).count("1")
+							#print("entry being added: {}".format(agg))
+							self.fwd_table.append({"network": agg["network"],
+							   "netmask": self.mask(nm_length),
+							   "localpref": self.route_info[agg["network"]]["localpref"],
+							   "selfOrigin": self.route_info[agg["network"]]["selfOrigin"],
+							   "ASPath": self.route_info[agg["network"]]["ASPath"],
+							   "origin": self.route_info[agg["network"]]["origin"],
+							   "peer": self.route_info[agg["network"]]["peer"]})
+			for entry in self.fwd_table:
+				if self.found_revoked
+					temp = [x for x in entry["agg_routes"] if x != each]
+					for each in temp:
+		
+		temp = []		
+		for entry in self.fwd_table:
+			if entry not in temp:
+				temp.append(entry)
+		self.fwd_table = temp	
+	"""
+		#print("FWD TABLE AFTER REVOKE:")
+		#for entry in self.fwd_table:
+			#print(entry)
+		
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:
@@ -512,10 +584,13 @@ class Router:
 		# TODO
 		return True
 
+
+	#def found_revoked(self, rev_route, ):
+
 	# Packet -> void
 	def dump(self, packet):
 		"""	handles dump table requests	"""
-		print(packet)
+		##print(packet)
 
 		""" Forward the current forwarding table for comparison.
 			Filters socket list to exclude socket that sent the packet then takes first of list
@@ -531,22 +606,22 @@ class Router:
 	def handle_packet(self, srcif, packet):
 		"""Switch over packet type and choose which action to take"""
 		if packet["type"] == UPDT:
-			print("Handling update")
+			##print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			print("Checking for possible routes data message")
+			##print("Checking for possible routes data message\n{}".format(packet))
 			self.get_route(srcif, packet)
 		if packet["type"] == DUMP:
-			print("Dumping forwarding table")
+			##print("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
-			print("Revoking entry in forwarding table")
+			##print("Revoking entry in forwarding table")
 			self.revoke(srcif, packet)
 		if packet["type"] == NRTE:
-			print("No route for packet")
+			##print("No route for packet")
 			self.send_no_route(srcif, packet)
 		if packet["type"] == "wait":
-			print("wait")
+			##print("wait")
 			pass
 
 		return False
