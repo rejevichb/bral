@@ -283,7 +283,7 @@ class Router:
 
 			peer = self.filter_relationships(srcif, routes)
 
-			peer = self.longest_prefix_match(srcif, routes)
+			#peer = self.longest_prefix_match(srcif, routes)
 
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
