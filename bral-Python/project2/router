@@ -4,8 +4,21 @@ import argparse, socket, json, select, copy
 
 DEBUG = True
 # DEBUG = False
-# logging.basicConfig(filename='example.log', level=logging.CRITICAL)
 
+''''
+DD_String = a decimal dotted netmask string, i.e. "129.10.0.0"
+A DD_String is either a DDAddrString, meaning the string is an address, or a DDNetmaskString, meaning it is a netmask
+FTableEntry = an entry in the forwarding table. ie:
+{
+      "network":    "<network prefix>",           # Example: 12.0.0.0
+      "netmask":    "<associated CIDR netmask>",  # Example: 255.0.0.0
+      "localpref":  "<integer>",                  # Example: 100
+      "selfOrigin": "<true|false>",
+      "ASPath":     "{<nid>, [nid], ...}",        # Examples: [1] or [3, 4] or [1, 4, 3]
+      "origin":     "<IGP|EGP|UNK>",
+    }
+
+'''''
 
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
@@ -274,12 +287,12 @@ class Router:
 		print("\n")
 		return
 
-	# (FWTableEntry -> [4]BinString
+	# FWTableEntry -> [4]BinString
 	def get_nw_prefix_binary(self, entry):
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
 		print(entry)
 		nw_split = entry["network"].split(".")
-		return list(map(lambda x: format(int(bin(x)), "08b"), nw_split))
+		return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
@@ -292,6 +305,7 @@ class Router:
 				return False
 		return True
 
+	#DDNetmaskString -> DDNetmaskString
 	def decrement_netmask(self, netmask):
 		split_nm = netmask.split(".")
 		# Get index of final non-zero octet in netmask
@@ -310,6 +324,7 @@ class Router:
 		print("{} converted to {}".format(netmask, ".".join(split_nm)))
 		return ".".join(split_nm)
 
+	#Int -> DDNetmaskString
 	def mask(self, i):
 		if i <= 8:
 			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
@@ -332,18 +347,17 @@ class Router:
 	def pick_smaller_ip(self, a, b):
 		a_split = a.split(".")
 		b_split = b.split(".")
-
 		for index, octet in enumerate(a_split):
 			if octet > b_split[index]:
 				return a
 			elif octet < b_split[index]:
 				return b
 
+	# -> void
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# if we do end up coalescing, we will need to both add and remove routes from table
-		to_remove = []
-		to_add = []
+		to_remove, to_add = []
 		found = False
 		# can we coalesce?
 		for c_entry in self.fwd_table:
@@ -371,12 +385,13 @@ class Router:
 
 		return False
 
+	# (DDAddressString, Packet) -> void
 	def update(self, srcif, packet):
 		"""	handle update packets	"""
 		# Save update message for later
 		self.updates[packet["src"]] = packet
 
-		# Add an entry to the forwarding table
+		"""Add an entry to the forwarding table """
 		# TODO: Add functionality to prevent duplicate entries
 		self.fwd_table.append({"network": packet["msg"]["network"],
 							   "netmask": packet["msg"]["netmask"],
@@ -391,16 +406,16 @@ class Router:
 
 		print("Got update from {}".format(srcif))
 
-		# Update all neighbors if srcif is CUST
-		# Update received from a customer: send updates to all other neighbors
+		""" Update all neighbors if srcif is CUST
+			Update received from a customer: send updates to all other neighbors """
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				# Prevent self-sending
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
 
-					# Update is received at the router and passed to other sockets
-					# so old dst becomes new src and sock becomes new dst
+					"""Update is received at the router and passed to other sockets
+						so old dst becomes new src and sock becomes new dst """
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
 					self.forward(sock, packet_copy)
@@ -410,18 +425,19 @@ class Router:
 				if sock != packet["src"] and self.relations[sock] == CUST:
 					packet_copy = copy.deepcopy(packet)
 
-					# Update is received at the router and passed to other sockets
-					# so old dst becomes new src and sock becomes new dst
+					""" Update is received at the router and passed to other sockets
+						so old dst becomes new src and sock becomes new dst"""
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
 					self.forward(sock, packet_copy)
 		return
 
+	# (DDAddressString, Packet) -> bool
 	def revoke(self, srcif, packet):
 		"""	handle revoke packets	"""
 		rev_msg = packet["msg"]  # packet message contents
-
 		temp = []
+
 		for unreachable in rev_msg:
 			for entry in self.fwd_table:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
@@ -438,8 +454,8 @@ class Router:
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
 
-					# Update is received at the router and passed to other sockets
-					# so old dst becomes new src and sock becomes new dst
+					""" Update is received at the router and passed to other sockets
+						so old dst becomes new src and sock becomes new dst """
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
 
 					self.forward(sock, packet_copy)
@@ -454,20 +470,24 @@ class Router:
 		# TODO
 		return True
 
+	# Packet -> void
 	def dump(self, packet):
 		"""	handles dump table requests	"""
 		print(packet)
 
-		# Forward the current forwarding table for comparison.
-		# Filters socket list to exclude socket that sent the packet then takes first of list
-		# self.forward([s for s in self.sockets if s != packet["src"]][0],
+		""" Forward the current forwarding table for comparison.
+			Filters socket list to exclude socket that sent the packet then takes first of list
+			self.forward([s for s in self.sockets if s != packet["src"]][0],"""
+
 		self.forward(packet["src"],
 					 {"src": packet["dst"],
 					  "dst": packet["src"],
 					  "type": "table",
 					  "msg": self.fwd_table})
 
+	# Packet -> bool
 	def handle_packet(self, srcif, packet):
+		"""Switch over packet type and choose which action to take"""
 		if packet["type"] == UPDT:
 			print("Handling update")
 			self.update(srcif, packet)
@@ -488,12 +508,14 @@ class Router:
 			pass
 
 		return False
-
+	# (Connection, Msg) -> void
 	def send_error(self, conn, msg):
 		pass
 
-	# returns subnet of IP based on netmask
+	# TODO not used
+	# DDAddrString, DDNetmaskString
 	def get_subnet(self, ip, netmask):
+		"""returns subnet of IP based on netmask"""
 		split_ip = ip.split(".")
 		split_nm = netmask.split(".")
 		temp = []
