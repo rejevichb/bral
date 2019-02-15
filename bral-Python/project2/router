@@ -523,10 +523,7 @@ class Router:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
 					"peer"] == packet["src"]:
 					logging.info("REVOKE:{} revoked".format(unreachable["network"]))
-				else:
-					if entry not in temp:
-						temp.append(entry)
-			self.fwd_table = temp
+					self.fwd_table.remove(entry)
 
 		#must pass on to neighbors
 		if self.relations[srcif] == CUST:
@@ -566,6 +563,7 @@ class Router:
 	# Packet -> bool
 	def handle_packet(self, srcif, packet):
 		"""Switch over packet type and choose which action to take"""
+		logging.info("HANDLE_PACKET_CONTENTS {}".format(packet))
 		if packet["type"] == UPDT:
 			logging.info(":handle_packet:Handling update")
 			self.update(srcif, packet)
