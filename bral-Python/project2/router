@@ -19,7 +19,7 @@ FTableEntry = an entry in the forwarding table. ie:
     }
 
 '''''
-logging.basicConfig(filename="routerall",level=logging.INFO)
+logging.basicConfig(filename="6-disaggregate.txt",level=logging.INFO)
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
 args = parser.parse_args()
@@ -221,9 +221,9 @@ class Router:
 		temp = {}
 
 		for route in routes:
-			temp[int("".join(route["network"].split(".")))] = route
+			temp[int("".join(route["peer"].split(".")))] = route
 
-		min_ip = temp[min(list(temp.keys()))]["network"]
+		min_ip = temp[min(list(temp.keys()))]["peer"]
 		logging.info(":GET_MIN_IP: min = {}".format(min_ip))
 		return min_ip
 
@@ -364,19 +364,19 @@ class Router:
 		"generate a netmast strink from a prefix length"
 		if i <= 8:
 			out = str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
-			logging.log(":MASK1: int {} to mask {}".format(i, out))
+			logging.info(":MASK1: int {} to mask {}".format(i, out))
 			return out
 		elif i <= 16:
 			out = "255." + str(int(("1" * (i - 8)) + ("0" * (8 - (i - 8))), 2)) + ".0.0"
-			logging.log(":MASK2: int {} to mask {}".format(i, out))
+			logging.info(":MASK2: int {} to mask {}".format(i, out))
 			return out
 		elif i <= 24:
 			out = "255.255." + str(int(("1" * (i - 16)) + ("0" * (8 - (i - 16))), 2)) + ".0"
-			logging.log(":MASK3: int {} to mask {}".format(i, out))
+			logging.info(":MASK3: int {} to mask {}".format(i, out))
 			return out
 		else:
 			out = "255.255.255." + str(int(("1" * (i - 24)) + ("0" * (8 - (i - 24))), 2))
-			logging.log(":MASK4: int {} to mask {}".format(i, out))
+			logging.info(":MASK4: int {} to mask {}".format(i, out))
 			return out
 
 
@@ -517,26 +517,25 @@ class Router:
 		rev_msg = packet["msg"]  # packet message contents
 		temp = []
 
-		for unreachable in rev_msg:
-			for entry in self.fwd_table:
+		# delete forwarding table entry if necessary
+		for entry in self.fwd_table:
+			for unreachable in rev_msg:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
 					"peer"] == packet["src"]:
 					logging.info("REVOKE:{} revoked".format(unreachable["network"]))
-					continue
 				else:
 					if entry not in temp:
 						temp.append(entry)
 			self.fwd_table = temp
 
+		#must pass on to neighbors
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
-
 					""" Update is received at the router and passed to other sockets
 						so old dst becomes new src and sock becomes new dst """
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
-
 					self.forward(sock, packet_copy)
 		else:
 			for sock in self.sockets:
