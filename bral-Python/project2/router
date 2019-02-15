@@ -292,14 +292,24 @@ class Router:
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
 		print(entry)
 		nw_split = entry["network"].split(".")
-		return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
+		temp = []
+		for each in nw_split:
+			temp.append(bin(int(each)))	
+		
+		return temp
+		#return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
 		""" can the entry be aggregated based on length of prefix"""
 		matching = 0
-		for i in netmask_len - 1:
-			if binary_addr1[i] == binary_addr2[i]:
+		a = ""
+		b = ""
+		for index, each in enumerate(binary_addr1):
+			a += bin(int(each[2:]))[2:]
+			b += bin(int(binary_addr2[index][2:]))[2:]
+		for i in range(netmask_len - 1):
+			if a[i] == b[i]:
 				matching += 1
 			else:
 				return False
@@ -326,16 +336,16 @@ class Router:
 
 	#Int -> DDNetmaskString
 	def mask(self, i):
-		full_octets = i // 8
-		not_full_octets = i % 8
-		final = ""
-		if full_octets < 4:
-			final += "11111111." * full octets
-			final += "1" * not_full_octets + "0" * 8 - not_full_octets
-		for i in range(full_octets):
-			final += "1" * 8
-		return ("1" * i)
-		
+		#full_octets = i // 8
+		#not_full_octets = i % 8
+		#final = ""
+		#if full_octets < 4:
+			#final += "11111111." * full octets
+			#final += "1" * not_full_octets + "0" * 8 - not_full_octets
+		#for i in range(full_octets):
+	#		final += "1" * 8
+		#return ("1" * i)
+	
 		if i <= 8:
 			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
 		elif i <= 16:
@@ -350,7 +360,7 @@ class Router:
 		cp = copy.deepcopy(entry1)
 		smallr_ip = self.pick_smaller_ip(entry1["network"], entry2["network"])
 		cp["network"] = smallr_ip
-		cp["netmask"] = self.mask(nm_len)
+		cp["netmask"] = self.mask(nm_len - 1)
 		print(cp["netmask"])
 		cp["network"] = self.get_subnet(cp["network"], cp["netmask"])
 		return cp
@@ -361,9 +371,9 @@ class Router:
 		b_split = b.split(".")
 		for index, octet in enumerate(a_split):
 			if octet > b_split[index]:
-				return a
-			elif octet < b_split[index]:
 				return b
+			elif octet < b_split[index]:
+				return a
 
 	# -> void
 	def coalesce(self):
@@ -400,7 +410,11 @@ class Router:
 		if found:
 			print("TO ADD:{}".format(to_add))
 			self.fwd_table.extend(to_add)
-			self.fwd_table = [e for e in self.fwd_table if e not in to_remove]
+			temp = []
+			for each in self.fwd_table:
+				if each not in temp and each not in to_remove:
+					temp.append(each)
+			self.fwd_table = temp
 			print("FINAL: {}".format(self.fwd_table))
 
 			return True
@@ -414,7 +428,7 @@ class Router:
 		self.updates[packet["src"]] = packet
 		
 
-
+		
 		"""Add an entry to the forwarding table """
 		# TODO: Add functionality to prevent duplicate entries
 		self.fwd_table.append({"network": packet["msg"]["network"],
@@ -427,7 +441,8 @@ class Router:
 		print("Forwarding table before agg:\n{}".format(self.fwd_table))
 
 		if len(self.fwd_table) > 1:
-			self.coalesce()
+			while self.coalesce():
+				self.coalesce()
 
 		print("Forwarding Table after agg:\n{}".format(self.fwd_table))
 
