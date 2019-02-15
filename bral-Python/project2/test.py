@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse, socket, json, select, copy, logging
+import argparse, socket, json, select, copy
 
 DEBUG = True
 # DEBUG = False
@@ -19,7 +19,7 @@ FTableEntry = an entry in the forwarding table. ie:
     }
 
 '''''
-logging.basicConfig(filename="routerall",level=logging.INFO)
+
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
 args = parser.parse_args()
@@ -74,14 +74,14 @@ class Router:
 			# Ex: 192.168.0.2-peer
 			network, relation = relationship.split("-")  # network = "192.168.0.2", relation = "peer"
 			# if DEBUG:
-			logging.info(":INIT:Starting socket for {} - {}".format(network, relation))
+			print("Starting socket for {} - {}".format(network, relation))
 			self.sockets[network] = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 			self.sockets[network].setblocking(0)
 			self.sockets[network].connect(network)
 
 			self.relations[network] = relation
 
-		logging.info("\n\n\n\n END INIT")
+		print("\n\n\n\n")
 		return
 
 	def lookup_routes(self, daddr):
@@ -107,7 +107,7 @@ class Router:
 					num_matches += 1
 				else:
 					break
-			logging.info(":LOOKUP_ROUTES: {} vs {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
+			print("Compared {} and {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
 
 			if num_matches > curr_max_match:
 				curr_max_match = num_matches
@@ -126,12 +126,11 @@ class Router:
 		for route in routes:
 			if curr_shortest_as is None:
 				curr_shortest_as = len(route["ASPath"])
-			logging.info(":SHORTEST_AS_P1:Current Shortest AS {}".format(len(route["ASPath"])))
+			print("Current Shortest AS set to {}".format(len(route["ASPath"])))
 			if len(route["ASPath"]) <= curr_shortest_as:
-				logging.info(":SHORTEST_AS_P2: New shoetest AS path found: {}".format(route["ASPath"]))
 				outroutes.append(route)
-		logging.info(":SHORTEST_AS_P3: {} routes with shortest_path".format(len(outroutes)))
-		logging.info(outroutes)
+			print("{} routes with shortest_path".format(len(outroutes)))
+		print(outroutes)
 		return outroutes
 
 	def get_highest_preference(self, routes):
@@ -165,7 +164,7 @@ class Router:
 		else:
 			for route in routes:
 				if route['selfOrigin'].decode('utf-8') == "True":
-					logging.info(":G_SELF_ORIGIN:Route added: {}".format(route))
+					print("Route added: {}".format(route))
 					outroutes.append(route)
 
 		return outroutes
@@ -196,36 +195,31 @@ class Router:
 
 	def filter_relationships(self, srcif, routes):
 		""" Don't allow Peer->Peer, Peer->Prov, or Prov->Peer forwards """
-
 		outroutes = []
 		if self.relations[srcif] == CUST:
-			logging.info(":FILTER_RELA1:{} SRCIF IS CUST . \n ROUTES NOW: {} \n".format(srcif, routes))
+			print("{} SRCIF IS CUST\n".format(srcif))
 			return routes
 		elif self.relations[srcif] == PEER:
-			logging.info("{} :FILTER_RELA2: SRCIF IS PEER\n".format(srcif))
+			print("{} SRCIF IS PEER\n".format(srcif))
 			for route in routes:
 				if self.relations[route["peer"]] == CUST:
 					outroutes.append(route)
 
 		else:
-			logging.info(":FILTER_RELA3: SRCIF IS PROV")
+			print("SRCIF IS PROV")
 			for route in routes:
-				peer = self.relations[route["peer"]]
-				if peer != PEER and peer != PROV:
+				if self.relations[route["peer"]] != PEER:
 					outroutes.append(route)
 
 		return outroutes[0] if len(outroutes) == 1 else None
-
 
 	def get_min_ip(self, routes):
 		temp = {}
 
 		for route in routes:
-			temp[int("".join(route["network"].split(".")))] = route
+			temp[int("".join(route["peer"].split(".")))] = route
 
-		min_ip = temp[min(list(temp.keys()))]["network"]
-		logging.info(":GET_MIN_IP: min = {}".format(min_ip))
-		return min_ip
+		return temp[min(list(temp.keys()))]["peer"]
 
 	def send_no_route(self, srcif, packet):
 		self.forward(srcif, {"src": srcif[:-1] + "1",
@@ -238,21 +232,20 @@ class Router:
 		# TODO
 		peer = None
 		routes = self.lookup_routes(daddr)
-		logging.info(":GET_ROUTE:0: srcif: {}   daddr: {} \n ROUTES:".format(srcif, daddr))
-		logging.info(routes)
+		print(routes)
 		if len(routes) == 0 or routes is None:
 			packet_copy = copy.deepcopy(daddr)
-			logging.info("No Routes Found\n")
+			print("No Routes Found\n")
 
 			# Forwards message back to sender
-			logging.info(":GET_ROUTE1:NOROUTEFOUND:Sending packet back {}\n".format(packet_copy))
+			print("Sending packet back {}\n".format(packet_copy))
 			self.send_no_route(srcif, packet_copy)
 
 			return
 
 		elif len(routes) == 1:
 			packet_copy = copy.deepcopy(daddr)
-			logging.info(":GET_ROUTE:2: route found, forwarding packet to {}".format(packet_copy["dst"]))
+			print("1 route found, forwarding packet to {}".format(packet_copy["dst"]))
 			# Forwards message using only available path
 			if self.filter_relationships(srcif, routes) is not None:
 				return self.forward(routes[0]["peer"], packet_copy)
@@ -261,64 +254,48 @@ class Router:
 
 		# Rules go here
 		else:
-			logging.info(":GET_ROUTE:3: {} routes found, finding best route\n".format(len(routes)))
+			print("{} routes found, finding best route\n".format(len(routes)))
 			# 1. Highest Preference
 			routes = self.get_highest_preference(routes)
-			logging.info(":GET_ROUTE:4:Route list after get_highest_preference: {}\n".format(routes))
+			print("Route list after get_highest_preference: {}\n".format(routes))
 			# 2. Self Origin
 			routes = self.get_self_origin(routes)
-			logging.info(":GET_ROUTE:5:Route list after get_self_origin: {}\n".format(routes))
+			print("Route list after get_self_origin: {}\n".format(routes))
 			# 3. Shortest ASPath
 			routes = self.get_shortest_as_path(routes)
-			logging.info(":GET_ROUTE:6:Route list after get_shortest_as_path: {}\n".format(routes))
+			print("Route list after get_shortest_as_path: {}\n".format(routes))
 			# 4. EGP > IGP > UNK
 			routes = self.get_origin_routes(routes)
-			logging.info(":GET_ROUTE:7::Route list after get_origin_routes: {}\n".format(routes))
+			print("Route list after get_origin_routes: {}\n".format(routes))
 			# 5. Lowest IP Address
 			# TODO assign peer to return of filter_relationships
 			# Once it is writter
 			# peer = self.get_min_ip(routes)
 			routes = self.get_min_ip(routes)
 			# Final check: enforce peering relationships
-
 			peer = self.filter_relationships(srcif, routes)
-
-			peer = self.longest_prefix_match(srcif, routes)
 
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
-	def longest_prefix_match(self, srcif, routes):
-		longest_prefix = 0
-		route_w_prefix = []
-		for r in routes:
-			bits, cur_prefix = self.prefix_len_from_netmask(r["netmask"])
-			if cur_prefix > longest_prefix:
-				longest_prefix = cur_prefix
-				route_w_prefix = r
-
-		return route_w_prefix if routes else None
-
-
-
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
-		logging.info(":FORWARD:Forwarding {} to {}".format(packet["type"], packet["dst"]))
-		logging.info(":FORWARD2:src= ".format(packet["src"]))
-
+		print("Forwarding {} to {}".format(packet["type"], packet["dst"]))
 
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
+		for each in self.fwd_table:
+			print(each)
+		print("\n")
 		return
 
 	# FWTableEntry -> [4]BinString
 	def get_nw_prefix_binary(self, entry):
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
-		logging.info(":GET_NW_PREFIX_BINARY")
-		logging.info(entry)
+		print(entry)
 		nw_split = entry["network"].split(".")
 		temp = []
 		for each in nw_split:
 			temp.append(bin(int(each)))
-		logging.info(temp)
+
 		return temp
 
 	# return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
@@ -335,7 +312,6 @@ class Router:
 		for i in range(netmask_len - 1):
 			if a[i] == b[i]:
 				matching += 1
-				logging.info(":nw_prefix_coalesce:")
 			else:
 				return False
 		return True
@@ -356,51 +332,38 @@ class Router:
 		else:
 			split_nm[target][split_nm[target].index("0") - 1] = 0
 
-		logging.info(":DECREMENT_NETMASK: {} converted to {}".format(netmask, ".".join(split_nm)))
+		print("{} converted to {}".format(netmask, ".".join(split_nm)))
 		return ".".join(split_nm)
 
 	# Int -> DDNetmaskString
 	def mask(self, i):
-		"generate a netmast strink from a prefix length"
+		# full_octets = i // 8
+		# not_full_octets = i % 8
+		# final = ""
+		# if full_octets < 4:
+		# final += "11111111." * full octets
+		# final += "1" * not_full_octets + "0" * 8 - not_full_octets
+		# for i in range(full_octets):
+		#		final += "1" * 8
+		# return ("1" * i)
+
 		if i <= 8:
-			out = str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
-			logging.log(":MASK1: int {} to mask {}".format(i, out))
-			return out
+			return str(int(("1" * i) + ("0" * (8 - i)), 2)) + ".0.0.0"
 		elif i <= 16:
-			out = "255." + str(int(("1" * (i - 8)) + ("0" * (8 - (i - 8))), 2)) + ".0.0"
-			logging.log(":MASK2: int {} to mask {}".format(i, out))
-			return out
+			return "255." + str(int(("1" * (i - 8)) + ("0" * (8 - (i - 8))), 2)) + ".0.0"
 		elif i <= 24:
-			out = "255.255." + str(int(("1" * (i - 16)) + ("0" * (8 - (i - 16))), 2)) + ".0"
-			logging.log(":MASK3: int {} to mask {}".format(i, out))
-			return out
+			return "255.255." + str(int(("1" * (i - 16)) + ("0" * (8 - (i - 16))), 2)) + ".0"
 		else:
-			out = "255.255.255." + str(int(("1" * (i - 24)) + ("0" * (8 - (i - 24))), 2))
-			logging.log(":MASK4: int {} to mask {}".format(i, out))
-			return out
+			return "255.255.255." + str(int(("1" * (i - 24)) + ("0" * (8 - (i - 24))), 2))
 
-
-	def prefix_len_from_netmask(self, netmask):
-		nm_split = netmask.split(".")
-		temp = []
-		for each in nm_split:
-			temp.append(bin(int(each)))
-
-		binary_netmask = temp
-		count = [x for y in binary_netmask for x in y].count("1")
-		return binary_netmask, count
-
-
-		# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
+	# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
 	def fwt_entry_from_coalesce(self, entry1, entry2, nm_len):
 		cp = copy.deepcopy(entry1)
 		smallr_ip = self.pick_smaller_ip(entry1["network"], entry2["network"])
 		cp["network"] = smallr_ip
 		cp["netmask"] = self.mask(nm_len - 1)
-		logging.info(":NEW_FWT_ENTRY: NETMASK =" + cp["netmask"])
+		print(cp["netmask"])
 		cp["network"] = self.get_subnet(cp["network"], cp["netmask"])
-		logging.info(":NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY")
-		logging.info(cp)
 		return cp
 
 	# (string, string) -> string
@@ -434,7 +397,7 @@ class Router:
 					# does the prefix allow for aggregation?
 					nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry), nm_length):
-						logging.info(":COALESCE:Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
+						print("Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
 						# to_remove.append(c_entry)
 						# to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(
@@ -447,14 +410,14 @@ class Router:
 						break
 
 		if found:
-			logging.info(":COALESCE:TO ADD:{}".format(to_add))
+			print("TO ADD:{}".format(to_add))
 			self.fwd_table.extend(to_add)
 			temp = []
 			for each in self.fwd_table:
 				if each not in temp and each not in to_remove:
 					temp.append(each)
 			self.fwd_table = temp
-			logging.info(":COALESCE:FINAL: {}".format(self.fwd_table))
+			print("FINAL: {}".format(self.fwd_table))
 
 			return True
 
@@ -475,15 +438,15 @@ class Router:
 							   "ASPath": packet["msg"]["ASPath"],
 							   "origin": packet["msg"]["origin"],
 							   "peer": packet["src"]})
-		logging.info(":UPDATE:Forwarding table before agg:\n{}".format(self.fwd_table))
+		print("Forwarding table before agg:\n{}".format(self.fwd_table))
 
 		if len(self.fwd_table) > 1:
 			while self.coalesce():
 				self.coalesce()
 
-		logging.info(":UPDATE:Forwarding Table after agg:\n{}".format(self.fwd_table))
+		print("Forwarding Table after agg:\n{}".format(self.fwd_table))
 
-		logging.info(":UPDATE:Got update from {}".format(srcif))
+		print("Got update from {}".format(srcif))
 
 		""" Update all neighbors if srcif is CUST
 			Update received from a customer: send updates to all other neighbors """
@@ -521,7 +484,7 @@ class Router:
 			for entry in self.fwd_table:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
 					"peer"] == packet["src"]:
-					logging.info("REVOKE:{} revoked".format(unreachable["network"]))
+					print("{} revoked".format(unreachable["network"]))
 					continue
 				else:
 					if entry not in temp:
@@ -552,7 +515,7 @@ class Router:
 	# Packet -> void
 	def dump(self, packet):
 		"""	handles dump table requests	"""
-		logging.info(packet)
+		print(packet)
 
 		""" Forward the current forwarding table for comparison.
 			Filters socket list to exclude socket that sent the packet then takes first of list
@@ -568,22 +531,22 @@ class Router:
 	def handle_packet(self, srcif, packet):
 		"""Switch over packet type and choose which action to take"""
 		if packet["type"] == UPDT:
-			logging.info(":handle_packet:Handling update")
+			print("Handling update")
 			self.update(srcif, packet)
 		if packet["type"] == DATA:
-			logging.info(":handle_packet:Checking for possible routes data message")
+			print("Checking for possible routes data message")
 			self.get_route(srcif, packet)
 		if packet["type"] == DUMP:
-			logging.info(":handle_packet:Dumping forwarding table")
+			print("Dumping forwarding table")
 			self.dump(packet)
 		if packet["type"] == RVKE:
-			logging.info(":handle_packet:Revoking entry in forwarding table")
+			print("Revoking entry in forwarding table")
 			self.revoke(srcif, packet)
 		if packet["type"] == NRTE:
-			logging.info(":handle_packet:No route for packet")
+			print("No route for packet")
 			self.send_no_route(srcif, packet)
 		if packet["type"] == "wait":
-			logging.info(":handle_packet:wait")
+			print("wait")
 			pass
 
 		return False
