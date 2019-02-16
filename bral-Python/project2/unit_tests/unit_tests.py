@@ -100,6 +100,14 @@ class MyTest(unittest.TestCase):
 		self.assertEqual(True, nw_prefix_coalesce(a1, a2, 17))
 
 
+	def test_failing_test_case_IPs_6_disaggregate(self):
+		self.assertEqual(False, nw_prefix_coalesce(
+			addr_to_binary("192.168.1.0"),
+			addr_to_binary("192.168.3.0"), 24))
+		# this rule should be false and it is in the test, but some reason
+		# in live runs we aggregate these two anyways...
+
+
 
 
 

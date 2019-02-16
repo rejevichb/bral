@@ -1,0 +1,581 @@
+INFO:root::INIT:Starting socket for 192.168.0.2 - cust
+INFO:root::INIT:Starting socket for 172.168.0.2 - cust
+INFO:root:
+
+
+
+ END INIT
+INFO:root::handle_packet:Handling update
+INFO:root::UPDATE:Forwarding table before agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Forwarding Table after agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Got update from 192.168.0.2
+INFO:root::FORWARD:Forwarding update to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Handling update
+INFO:root::UPDATE:Forwarding table before agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 23 to mask 255.255.254.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.254.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 23 to mask 255.255.254.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.254.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:TO ADD:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:FINAL: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Forwarding Table after agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Got update from 192.168.0.2
+INFO:root::FORWARD:Forwarding update to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Handling update
+INFO:root::UPDATE:Forwarding table before agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Forwarding Table after agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Got update from 172.168.0.2
+INFO:root::FORWARD:Forwarding update to 192.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Handling update
+INFO:root::UPDATE:Forwarding table before agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.2.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Forwarding Table after agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.2.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Got update from 192.168.0.2
+INFO:root::FORWARD:Forwarding update to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Handling update
+INFO:root::UPDATE:Forwarding table before agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.2.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.3.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.2.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.3.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 23 to mask 255.255.254.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.254.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.3.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.2.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 23 to mask 255.255.254.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.254.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:TO ADD:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:FINAL: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 22 to mask 255.255.252.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.252.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:Aggregating:
+{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.2.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+
+
+INFO:root::MASK3: int 22 to mask 255.255.252.0
+INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.252.0
+INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
+INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
+INFO:root::COALESCE:TO ADD:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::COALESCE:FINAL: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Forwarding Table after agg:
+[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::UPDATE:Got update from 192.168.0.2
+INFO:root::FORWARD:Forwarding update to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'81d52c71a69482cfdfce3b06bd9033db488c0aaa201839729f3400ddc97db72f1644eb5be93ded276e95c049fcca10a1', u'src': u'192.168.0.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'79f2d195504a9adb31a4230d01b12c342f190baa6cd3c1a06913e705cb383158d6bb9079f5b327055bdebff8f1820944', u'src': u'192.168.1.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'1d839a740e18b0c754205e5fa42288448897f397f80b59cc505087aa6e2d17241ee94817791f99770b7cdfc5097d8d93', u'src': u'172.169.0.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'05c2764971906b76263210b09205de34fbe1a28f232a603125aee775162668a630986b8cca212628e497332b6e5411c9', u'src': u'192.168.0.25', u'dst': u'192.168.2.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.2.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.2.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'76e413448180ccd9920af775470396200f6098c2493997acd94d9e4ab5da301bed821fe4ba16aac4085b5ba158fa5af0', u'src': u'172.169.0.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'c6a6797dbd28c577a9cda7139b099af078272becd069e11f368610e9162ffa3d0eff2e8dc1b39bb7ed8e0b0c0e9a6d15', u'src': u'192.168.2.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'4282556ba5f664721ba5f00c822028183273d1aafac3d4e39cec348e8c4643b235da030e919d07127c684e552c3f4646', u'src': u'172.169.0.25', u'dst': u'192.168.2.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.2.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.2.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'94bfa9a1d539c26501f3e193c97239324bb056916d306d99b3976a6963f7d822ad549b67f0d51423ff6e4f178b076065', u'src': u'192.168.0.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'ef14f7877ee2815d790838ac060e83ec9195e5aca1915c8b92067865d52dd747befc3f067c8046e2761f3a63a9858912', u'src': u'172.169.0.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'1b8d520ca165e75b4ea2fbd372265f31c6ff48ecc8121e8a015668a4744cec4cefde6f8bf0b9cb3cc290924d664bb5b3', u'src': u'192.168.3.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'e9c7f7da48d50290ca35816f09a5c330071d6dd84e2364038b40ff4749eebc772fa30eb4dd8469e6ad09aa9dba234aac', u'src': u'192.168.0.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'5f0946ba3dde21dcfc03d2fcdb7d20d2da85f14ea3009070e00372b501f37fa98d6bbb42d41f87884dc5fe92bb67e8b2', u'src': u'192.168.1.25', u'dst': u'192.168.2.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.2.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.2.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'9acf15cf9d95c44c65702bf3ceb0fa628a152ca80c560eaeb9c5ec96d9e429dcbfb9e024a8f291f38a791ddd85b0f0de', u'src': u'192.168.2.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'5445f494d729a20f9a09bfc7bee2e26e2b7c82bde0bee7c2eac3ec8d65c9494c9d43c4c65d348c3d8e4af8edbf3b6cb0', u'src': u'192.168.1.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'082aaa31a5b3fc25a452fc21925601e7b5b5677f594db9263aea170042b8030801e90bba485cae1c1101e2f3e9f8db5d', u'src': u'192.168.3.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'c294d673f651769c83eb766f1cf063ef23131f5a097cc1fbfcea2aee50ee6d60eea55eccce8a75851e5b7a92bb05f9e0', u'src': u'192.168.1.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'15042adafd06c9a58e5024ff750dd03c97cf1b3b358d3269113fb3b99cf875891fbd7e22bf17df4f5484ecc3cc5be552', u'src': u'192.168.2.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.2.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'6ccefa758390027ce63a26bc1d2d9724941268ff750b2ce83a00777ee4cb9736222a811f6fe030ee9f6de6ac7b7c1987', u'src': u'192.168.3.25', u'dst': u'192.168.2.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.2.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.2.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'814d278eac484ec74ff9373826f6984f87c4201a7d3b943c0373dd69363e0c3ab9b5f954d9a6ea9dd1f8432ef54ced54', u'src': u'192.168.2.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'4f70e3bda142d74f120a2a0ca2d008fbd0ad33493a9536b6e1c72005409523ee5379c4cb86e69f0f693aa628626c9f40', u'src': u'192.168.3.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Dumping forwarding table
+INFO:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+INFO:root::FORWARD:Forwarding table to 192.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Revoking entry in forwarding table
+INFO:root::FORWARD:Forwarding revoke to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'c07dc29148ec02333e7958a451e30b4e1a5ec01c481b0ab1b2b7f78ef536cda4bcb735c175c8807e1c24947cd476c8c5', u'src': u'192.168.3.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'3621337e788894d3c644142942be22449f0944dd3baa29870c61dc97b867173736dddf04ecb1daa69190701d17b751f9', u'src': u'192.168.3.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'95c9c23e32359bc9acd2c3105b7e53f693c8dd5b39aa23f232d9125d9ee7565ad9e2fcecb98c7cfa2888bc62c82a73f7', u'src': u'172.169.0.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'157464d83c08ef0f0bd7273fcdc1024876e852c8fe6db53d6addfb7fcf77a72c6470ce1da9a64f0a1148d2d28952291b', u'src': u'192.168.0.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'57ade36ae81c1fd6c5ab193cf0348a32e43ea8e7893320aa775661a95c2fdcad85b5bafd78bc4e5fa756d3008da2f705', u'src': u'172.169.0.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'59cb19d32808db0a9aa9eb61073895fadda44a801ce18ba7aaf3dd7d29336ed4d9153e2c6cc61ba661f6b22b1d09f8a0', u'src': u'192.168.3.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'19b6f800764772a975658fd5fdf98d9e3f546114c6aabd01237953bf02899198d79708c469e85f57aba8a133594e6cac', u'src': u'172.169.0.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'8c9dd57544a3fea5d488d7957eb6e11ba3b14815a1c8726f72daaf27a96a3f1562302b7c9d69812e0e1671d450972a68', u'src': u'192.168.1.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'9262ac1ad96e7c8733b6671e201ecb2ac8d2b1e79de8c401110bc60407122f3000f25b877a83c08700558673aa0d95d9', u'src': u'192.168.0.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'ee67520a9ad90293960560ab57ed5451e1c29b878b332070b39c9508c6e82cfe9cdb30dab560f258c832f917e8245245', u'src': u'192.168.1.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'c513e3c781934045772147b5ad388b72060671496bb0d1881276e0f11c1336103d8f6a287b734684d205901b8d494541', u'src': u'192.168.0.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.0.25 vs 192.168.0.0, found 3 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'066023d6a5e427a2d83e9778ec5a74fea7dae1d59714c82d05393a825fbc72cb2fd3581e07c1d741c754c4afd6967bf1', u'src': u'192.168.1.25', u'dst': u'192.168.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Dumping forwarding table
+INFO:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+INFO:root::FORWARD:Forwarding table to 192.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Revoking entry in forwarding table
+INFO:root::FORWARD:Forwarding revoke to 172.168.0.2
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'0a2578c6b84d870f2f27211b6bf6a6e6d17d5ed88917bc885acc6ccfd91930acd7e42f6219e7255ac07b15b2c3333c45', u'src': u'192.168.3.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'df8f037dc70b7c6f815ada9f210c15e5d7f2d1e0639b7c5555e95543e154f9f28ff2e4a2c53684df687ee9b77789e8b5', u'src': u'192.168.3.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'ae6e72d48408622eb98302af73564f8d320ea60c1994dd8d67fe0ee4848ac7f9a13f44819cef77ab2522e2714813a923', u'src': u'172.169.0.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.3.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'9c41e86aaeb53d70a26ce3303487b0bd6971709bfa007bd5d12b663fe71647377626fcc5104b79cf5ba2ace5d5d822bc', u'src': u'192.168.1.25', u'dst': u'192.168.3.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.3.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.3.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 172.169.0.0, found 0 octet matches
+INFO:root::LOOKUP_ROUTES: 192.168.1.25 vs 192.168.0.0, found 2 octet matches
+INFO:root::GET_ROUTE:0: srcif: 172.168.0.2   daddr: {u'msg': u'1fc23a0aea782f99220b9130c4d5d5cce3caad3eb803f813204f538ce237de58f116e0454a2893b9eafa5ebc3f2dfb42', u'src': u'172.169.0.25', u'dst': u'192.168.1.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 192.168.1.25
+INFO:root::FILTER_RELA1:172.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.252.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 192.168.1.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Checking for possible routes data message
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 172.169.0.0, found 3 octet matches
+INFO:root::LOOKUP_ROUTES: 172.169.0.25 vs 192.168.0.0, found 0 octet matches
+INFO:root::GET_ROUTE:0: srcif: 192.168.0.2   daddr: {u'msg': u'94e79e454a596aee8cfde191120027cf53761319d9c6e70333eb45eaf086b45252ea333c603faa8973a7c6234857c89e', u'src': u'192.168.1.25', u'dst': u'172.169.0.25', u'type': u'data'}
+ ROUTES:
+INFO:root:[{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+INFO:root::GET_ROUTE:2: route found, forwarding packet to 172.169.0.25
+INFO:root::FILTER_RELA1:192.168.0.2 SRCIF IS CUST .
+ ROUTES NOW: [{'origin': u'EGP', 'localpref': u'100', 'network': u'172.169.0.0', 'ASPath': [u'2'], 'netmask': u'255.255.0.0', 'peer': u'172.168.0.2', 'selfOrigin': u'True'}]
+
+INFO:root::FORWARD:Forwarding data to 172.169.0.25
+INFO:root::FORWARD2:src=
+INFO:root::handle_packet:Dumping forwarding table
+INFO:root:{u'msg': u'', u'src': u'192.168.0.2', u'dst': u'192.168.0.1', u'type': u'dump'}
+INFO:root::FORWARD:Forwarding table to 192.168.0.2
+INFO:root::FORWARD2:src=

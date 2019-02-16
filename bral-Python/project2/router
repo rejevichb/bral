@@ -413,7 +413,7 @@ class Router:
 						to_add.append(
 							self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
 						for each in [entry, c_entry]:
-							if each not in to_add:
+							if each not in to_remove:
 								to_remove.append(each)
 						found = True
 
