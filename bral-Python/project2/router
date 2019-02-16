@@ -408,15 +408,12 @@ class Router:
 					nm_length = self.get_nm_length(nm)
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry['network']), nm_length):
 						logging.info(":COALESCE:Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
-						# to_remove.append(c_entry)
-						# to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(
 							self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
-						for each in [entry, c_entry]:
+						for each in entry:
 							if each not in to_remove:
 								to_remove.append(each)
 						found = True
-
 						break
 
 		if found:

@@ -4,7 +4,7 @@ INFO:root:
 
 
 
- END INIT
+END INIT
 INFO:root::handle_packet:Handling update
 INFO:root::UPDATE:Forwarding table before agg:
 [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
@@ -12,10 +12,17 @@ INFO:root::UPDATE:Forwarding Table after agg:
 [{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
 INFO:root::UPDATE:Got update from 192.168.0.2
 INFO:root::FORWARD:Forwarding update to 172.168.0.2
+
+
+
+
+
 INFO:root::FORWARD2:src=
 INFO:root::handle_packet:Handling update
 INFO:root::UPDATE:Forwarding table before agg:
-[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+[{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, 
+{'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
 INFO:root::COALESCE:Aggregating:
 {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.0.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
 {'origin': u'EGP', 'localpref': u'100', 'network': u'192.168.1.0', 'ASPath': [u'1'], 'netmask': u'255.255.255.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
@@ -34,7 +41,12 @@ INFO:root::MASK3: int 23 to mask 255.255.254.0
 INFO:root::NEW_FWT_ENTRY: NETMASK =255.255.254.0
 INFO:root::NEW_FWT_ENTRY:RETURNING COPIED NEW ENTRY
 INFO:root:{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}
-INFO:root::COALESCE:TO ADD:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
+ARE WE ADDING DUPLICATE ENTRY?
+
+INFO:root::COALESCE:TO ADD:[{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}, 
+                            {'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
+
 INFO:root::COALESCE:FINAL: [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]
 INFO:root::UPDATE:Forwarding Table after agg:
 [{'origin': u'EGP', 'localpref': u'100', 'network': '192.168.0.0', 'ASPath': [u'1'], 'netmask': '255.255.254.0', 'peer': u'192.168.0.2', 'selfOrigin': u'True'}]

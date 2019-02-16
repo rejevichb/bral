@@ -20,12 +20,15 @@ def addr_to_binary(address):
 	out = [x for y in temp for x in y]
 	return ''.join(map(str, out))
 
+
 def get_nw_prefix_binary(entry):
 	"""get the network prefix in a list of 4 chunks of 8 bytes"""
 	return addr_to_binary(entry)
 
+
 def get_nm_length(address):
 	return addr_to_binary(address).count("1")
+
 
 def nw_prefix_coalesce(binary_addr1, binary_addr2, nm_len):
 	""" can the entry be aggregated based on length of prefix"""
@@ -36,6 +39,19 @@ def nw_prefix_coalesce(binary_addr1, binary_addr2, nm_len):
 		else:
 			return False
 	return True
+
+
+def get_subnet(ip, netmask):
+	"""returns subnet of IP based on netmask"""
+	split_ip = ip.split(".")
+	split_nm = netmask.split(".")
+	temp = []
+
+	# For each chunk of IP, bitwise-AND with netmask and append to temp
+	for index, each in enumerate(split_ip):
+		temp.append(str(int(each) & int(split_nm[index])))
+
+	return ".".join(temp)
 
 
 # Int -> DDNetmaskString
@@ -55,7 +71,7 @@ def mask(i):
 		return out
 
 
-class MyTest(unittest.TestCase):
+class RouterUnitTest(unittest.TestCase):
 
 	def test_smaller_ip(self):
 		self.assertEqual("162.32.0.5", pick_smaller_ip("192.32.0.6","162.32.0.5"))
@@ -82,13 +98,11 @@ class MyTest(unittest.TestCase):
 		self.assertEqual(21, get_nm_length("255.255.248.0"))
 		self.assertEqual(27, get_nm_length("255.255.255.224"))
 
-
 	def test_mask(self):
 		self.assertEqual("255.255.255.0", mask(24))
 		self.assertEqual("255.224.0.0", mask(11))
 		self.assertEqual("255.255.248.0", mask(21))
 		self.assertEqual("255.255.255.224", mask(27))
-
 
 	def test_coalesce_rule(self):
 		# False (/18) - (they differ before the 18th bit)
@@ -99,13 +113,27 @@ class MyTest(unittest.TestCase):
 		# True (/17) - (they difffer on the 17th string)
 		self.assertEqual(True, nw_prefix_coalesce(a1, a2, 17))
 
-
 	def test_failing_test_case_IPs_6_disaggregate(self):
 		self.assertEqual(False, nw_prefix_coalesce(
 			addr_to_binary("192.168.1.0"),
 			addr_to_binary("192.168.3.0"), 24))
 		# this rule should be false and it is in the test, but some reason
 		# in live runs we aggregate these two anyways...
+
+	def test_failing_test_case_IPs_6_disaggregate(self):
+		self.assertEqual(True, nw_prefix_coalesce(
+			addr_to_binary("192.168.0.0"),
+			addr_to_binary("192.168.1.0"), 24))
+		# this rule should be true and we are in fact aggregating in teset.
+
+	def test_sneaky_pete(self):
+		#self.assertEqual(,get_subnet(""))
+		yield
+
+
+
+
+
 
 
 
