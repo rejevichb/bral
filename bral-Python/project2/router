@@ -19,7 +19,7 @@ FTableEntry = an entry in the forwarding table. ie:
     }
 
 '''''
-logging.basicConfig(filename="6-disaggregate.txt",level=logging.INFO)
+logging.basicConfig(filename="6-disaggregate.txt", level=logging.INFO)
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
 args = parser.parse_args()
@@ -65,7 +65,7 @@ class Router:
 
 	def __init__(self, networks):
 		self.routes = {}
-		self.updates = {}  # Save update annoucements as { src : annoucement_msg }
+		self.updates = []  # Save update annoucements as { src : annoucement_msg }
 		self.relations = {}  # {"192.168.0.2" : "peer"}
 		self.sockets = {}  # socket.socket() for "192.168.0.2"
 		self.fwd_table = []  #
@@ -107,7 +107,8 @@ class Router:
 					num_matches += 1
 				else:
 					break
-			logging.info(":LOOKUP_ROUTES: {} vs {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
+			logging.info(
+				":LOOKUP_ROUTES: {} vs {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
 
 			if num_matches > curr_max_match:
 				curr_max_match = num_matches
@@ -216,7 +217,6 @@ class Router:
 
 		return outroutes[0] if len(outroutes) == 1 else None
 
-
 	def get_min_ip(self, routes):
 		temp = {}
 
@@ -232,6 +232,14 @@ class Router:
 							 "dst": packet["src"],
 							 "type": "no route",
 							 "msg": {}})
+
+	def addr_to_binary(self, address):
+		nw_split = address.split(".")
+		temp = []
+		for each in nw_split:
+			temp.append(bin(int(each)).format(14, '08b'))
+		out = [x for y in temp for x in y]
+		return out
 
 	def get_route(self, srcif, daddr):
 		"""	Select the best route for a given address	"""
@@ -283,7 +291,7 @@ class Router:
 
 			peer = self.filter_relationships(srcif, routes)
 
-			#peer = self.longest_prefix_match(srcif, routes)
+			peer = self.longest_prefix_match(srcif, peer)
 
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
@@ -291,51 +299,37 @@ class Router:
 		longest_prefix = 0
 		route_w_prefix = []
 		for r in routes:
-			bits, cur_prefix = self.prefix_len_from_netmask(r["netmask"])
+			bits, cur_prefix = self.prefix_len_from_netmask(r["msg"]["netmask"])
 			if cur_prefix > longest_prefix:
 				longest_prefix = cur_prefix
 				route_w_prefix = r
 
 		return route_w_prefix if routes else None
 
-
-
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
 		logging.info(":FORWARD:Forwarding {} to {}".format(packet["type"], packet["dst"]))
 		logging.info(":FORWARD2:src= ".format(packet["src"]))
 
-
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
 		return
 
-	# FWTableEntry -> [4]BinString
+	# FWTableEntry -> BinString
 	def get_nw_prefix_binary(self, entry):
 		"""get the network prefix in a list of 4 chunks of 8 bytes"""
-		logging.info(":GET_NW_PREFIX_BINARY")
-		logging.info(entry)
-		nw_split = entry["network"].split(".")
-		temp = []
-		for each in nw_split:
-			temp.append(bin(int(each)))
-		logging.info(temp)
-		return temp
+		logging.info(":GET_NW_PREFIX_BINARY: {}".format(entry))
+		return self.addr_to_binary(entry["netmask"])
 
-	# return list(map(lambda x: format(int(bin(int(x))), "08b"), nw_split))
+	def get_nm_length(self, address):
+		return self.addr_to_binary(address).count("1")
 
 	# ([4]byte, [4]byte, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, netmask_len):
 		""" can the entry be aggregated based on length of prefix"""
 		matching = 0
-		a = ""
-		b = ""
-		for index, each in enumerate(binary_addr1):
-			a += bin(int(each[2:]))[2:]
-			b += bin(int(binary_addr2[index][2:]))[2:]
 		for i in range(netmask_len - 1):
-			if a[i] == b[i]:
+			if binary_addr1[i] == binary_addr2[i]:
 				matching += 1
-				logging.info(":nw_prefix_coalesce:")
 			else:
 				return False
 		return True
@@ -379,19 +373,16 @@ class Router:
 			logging.info(":MASK4: int {} to mask {}".format(i, out))
 			return out
 
-
 	def prefix_len_from_netmask(self, netmask):
 		nm_split = netmask.split(".")
 		temp = []
 		for each in nm_split:
-			temp.append(bin(int(each)))
-
+			temp.append(bin(int(each)).format(14, '08b'))
 		binary_netmask = temp
-		count = [x for y in binary_netmask for x in y].count("1")
-		return binary_netmask, count
+		flat_netmask = [x for y in binary_netmask for x in y]
+		return flat_netmask, flat_netmask.count("1")
 
-
-		# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
+	# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
 	def fwt_entry_from_coalesce(self, entry1, entry2, nm_len):
 		cp = copy.deepcopy(entry1)
 		smallr_ip = self.pick_smaller_ip(entry1["network"], entry2["network"])
@@ -432,18 +423,23 @@ class Router:
 				# must match exactly on netmask and peer, and must ignore comparing entry to self.
 				if entry != c_entry and nm == entry["netmask"] and peer == entry["peer"]:
 					# does the prefix allow for aggregation?
-					nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
-					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry), nm_length):
-						logging.info(":COALESCE:Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
+					# nm_length = "".join(map(lambda x: format(int(x), "08b"), nm.split("."))).count("1")
+					nm_length = self.get_nm_length(nm)
+					logging.warning("COALESCE:netmask length: {}".format(nm_length))
+					prefix2 = self.get_nw_prefix_binary(entry)
+					logging.warning("COALESCE: PREFIXES 1 {} , 2 {}".format(prefix, prefix2))
+					can_aggregate = self.nw_prefix_coalesce(prefix, prefix2, nm_length)
+					logging.warning("COALESCE:CAN_AGGREGATE = {}".format(can_aggregate))
+					if can_aggregate:
+						logging.warning(":COALESCE:AGGREGATING\n{}\n{}\n\n".format(c_entry, entry))
 						# to_remove.append(c_entry)
 						# to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(
 							self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
 						for each in [entry, c_entry]:
-							if each not in to_add:
+							if each not in to_remove:
 								to_remove.append(each)
 						found = True
-
 						break
 
 		if found:
@@ -464,7 +460,7 @@ class Router:
 	def update(self, srcif, packet):
 		"""	handle update packets	"""
 		# Save update message for later
-		self.updates[packet["src"]] = packet
+		self.updates.append(packet)
 
 		"""Add an entry to the forwarding table """
 		# TODO: Add functionality to prevent duplicate entries
@@ -512,24 +508,133 @@ class Router:
 		return
 
 	# (DDAddressString, Packet) -> bool
+	# def revoke(self, srcif, packet):
+	# 	"""	handle revoke packets	"""
+	# 	rev_msg = packet["msg"]  # packet message contents
+	# 	temp = []
+	#
+	# 	# delete forwarding table entry if necessary
+	# 	for entry in self.fwd_table:
+	# 		for unreachable in rev_msg:
+	# 			if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
+	# 				"peer"] == packet["src"]:
+	# 				logging.info("REVOKE:{} revoked".format(unreachable["network"]))
+	# 			else:
+	# 				if entry not in temp:
+	# 					temp.append(entry)
+	# 		self.fwd_table = temp
+	#
+	# 	#must pass on to neighbors
+	# 	if self.relations[srcif] == CUST:
+	# 		for sock in self.sockets:
+	# 			if sock != packet["src"]:
+	# 				packet_copy = copy.deepcopy(packet)
+	# 				""" Update is received at the router and passed to other sockets
+	# 					so old dst becomes new src and sock becomes new dst """
+	# 				packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+	# 				self.forward(sock, packet_copy)
+	# 	else:
+	# 		for sock in self.sockets:
+	# 			if sock != packet["src"] and self.relations[sock] == CUST:
+	# 				packet_copy = copy.deepcopy(packet)
+	# 				packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
+	#
+	# 				self.forward(sock, packet_copy)
+	#
+	# 	# TODO
+	# 	return True
+
 	def revoke(self, srcif, packet):
+		# print("Curr Routing Table")
+		# for entry in self.fwd_table:
+		# print(entry)
 		"""	handle revoke packets	"""
-		rev_msg = packet["msg"]  # packet message contents
-		temp = []
+		# remove from updates
+		rev_msg = packet["msg"]  # packet message contentsi
+		new_updates = []
+		for unreachable in rev_msg:
+			for msg in self.updates:
+				if packet["src"] == msg['src'] and msg["msg"]["network"] == unreachable['network'] \
+						and msg["msg"]["netmask"] == unreachable['netmask']:
+					continue
+				new_updates.append(msg)
+		self.updates = copy.deepcopy(new_updates)
+		#
+		# temp = []
+		# removed = False
+		# for unreachable in rev_msg:
+		# 	for entry in self.fwd_table:
+		# 		if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
+		# 			"peer"] == packet["src"]:
+		# 			##print("{} revoked".format(unreachable["network"]))
+		# 			removed = True
+		# 			continue
+		# 		else:
+		# 			if entry not in temp:
+		# 				temp.append(entry)
+		#
+		# 	self.fwd_table = temp
 
-		# delete forwarding table entry if necessary
-		for entry in self.fwd_table:
-			for unreachable in rev_msg:
-				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
-					"peer"] == packet["src"]:
-					logging.info("REVOKE:{} revoked".format(unreachable["network"]))
-					self.fwd_table.remove(entry)
+		# if not removed:
+		# do rebuild
 
-		#must pass on to neighbors
+		print("BEFORE REVOKE:")
+		print(self.fwd_table)
+
+		new_fwd = []
+		for v in self.updates:
+			new_fwd.append({"network": v["msg"]["network"],
+							"netmask": v["msg"]["netmask"],
+							"localpref": v["msg"]["localpref"],
+							"selfOrigin": v["msg"]["selfOrigin"],
+							"ASPath": v["msg"]["ASPath"],
+							"origin": v["msg"]["origin"],
+							"peer": v['src']})  # packet src from key
+
+		self.fwd_table = copy.deepcopy(new_fwd)
+
+		print("FWD TABLE AFTER REVOKE {}".format(self.fwd_table))
+		while self.coalesce():
+			self.coalesce()
+		print("FWD TABLE AFTER REVOKE+COALESCE {}".format(self.fwd_table))
+
+		"""for rev in rev_msg:
+				#print(rev)
+				for k,v in self.aggregated.items():
+					if rev in v:
+						#print("matched found to disaggregate {}".format(k))
+						for agg in v:
+							if agg != rev:
+
+								nm_length = "".join(map(lambda x: format(int(x), "08b"), agg["netmask"].split("."))).count("1")
+								#print("entry being added: {}".format(agg))
+								self.fwd_table.append({"network": agg["network"],
+								   "netmask": self.mask(nm_length),
+								   "localpref": self.route_info[agg["network"]]["localpref"],
+								   "selfOrigin": self.route_info[agg["network"]]["selfOrigin"],
+								   "ASPath": self.route_info[agg["network"]]["ASPath"],
+								   "origin": self.route_info[agg["network"]]["origin"],
+								   "peer": self.route_info[agg["network"]]["peer"]})
+				for entry in self.fwd_table:
+					if self.found_revoked
+						temp = [x for x in entry["agg_routes"] if x != each]
+						for each in temp:
+
+			temp = []		
+			for entry in self.fwd_table:
+				if entry not in temp:
+					temp.append(entry)
+			self.fwd_table = temp	
+		"""
+		# print("FWD TABLE AFTER REVOKE:")
+		# for entry in self.fwd_table:
+		# print(entry)
+
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:
 					packet_copy = copy.deepcopy(packet)
+
 					""" Update is received at the router and passed to other sockets
 						so old dst becomes new src and sock becomes new dst """
 					packet_copy["src"], packet_copy["dst"] = packet_copy["dst"], sock
@@ -563,7 +668,6 @@ class Router:
 	# Packet -> bool
 	def handle_packet(self, srcif, packet):
 		"""Switch over packet type and choose which action to take"""
-		logging.info("HANDLE_PACKET_CONTENTS {}".format(packet))
 		if packet["type"] == UPDT:
 			logging.info(":handle_packet:Handling update")
 			self.update(srcif, packet)
