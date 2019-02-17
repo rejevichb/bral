@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse, socket, json, select, copy, logging
+#from typing import Dict, List, Any
 
 DEBUG = True
 # DEBUG = False
@@ -19,7 +20,7 @@ FTableEntry = an entry in the forwarding table. ie:
     }
 
 '''''
-logging.basicConfig(filename="6-disaggregate.txt",level=logging.INFO)
+logging.basicConfig(filename="6-disaggregate.txt", level=logging.INFO)
 parser = argparse.ArgumentParser(description='route packets')
 parser.add_argument('networks', metavar='networks', type=str, nargs='+', help="networks")
 args = parser.parse_args()
@@ -62,6 +63,7 @@ class Router:
 	relations = None
 	sockets = None
 	fwd_table = None
+	aggregated = None
 
 	def __init__(self, networks):
 		self.routes = {}
@@ -69,6 +71,7 @@ class Router:
 		self.relations = {}  # {"192.168.0.2" : "peer"}
 		self.sockets = {}  # socket.socket() for "192.168.0.2"
 		self.fwd_table = []  #
+		self.aggregated = {}
 
 		for relationship in networks:
 			# Ex: 192.168.0.2-peer
@@ -102,7 +105,8 @@ class Router:
 					num_matches += 1
 				else:
 					break
-			logging.info(":LOOKUP_ROUTES: {} vs {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
+			logging.info(
+				":LOOKUP_ROUTES: {} vs {}, found {} octet matches".format(daddr["dst"], entry["network"], num_matches))
 
 			if num_matches > curr_max_match:
 				curr_max_match = num_matches
@@ -205,7 +209,6 @@ class Router:
 
 		return outroutes[0] if len(outroutes) == 1 else None
 
-
 	def get_min_ip(self, routes):
 		temp = {}
 		for route in routes:
@@ -268,7 +271,7 @@ class Router:
 			routes = self.filter_relationships(srcif, routes)
 
 			peer = routes
-			# peer = self.longest_prefix_match(srcif, routes)
+		# peer = self.longest_prefix_match(srcif, routes)
 
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
@@ -276,12 +279,11 @@ class Router:
 		longest_prefix = 0
 		route_w_prefix = []
 		for r in routes:
-			bits, cur_prefix = self.prefix_len_from_netmask(r["netmask"])
+			bits, cur_prefix = self.get_nm_length(r["netmask"])
 			if cur_prefix > longest_prefix:
 				longest_prefix = cur_prefix
 				route_w_prefix = r
 		return route_w_prefix if routes else None
-
 
 	def forward(self, srcif, packet):
 		"""	Forward a data packet	"""
@@ -289,8 +291,6 @@ class Router:
 		logging.info(":FORWARD2:src= ".format(packet["src"]))
 		self.sockets[srcif].sendto(json.dumps(packet), packet["dst"])
 		return
-
-
 
 	# (binstring32long x 2, int) -> bool
 	def nw_prefix_coalesce(self, binary_addr1, binary_addr2, nm_len):
@@ -352,16 +352,14 @@ class Router:
 		out = [x for y in temp for x in y]
 		return ''.join(map(str, out))
 
-
-	#tested
+	# tested
 	def get_nw_prefix_binary(self, entry):
-			"""get the network prefix in a list of 4 chunks of 8 bytes"""
-			return self.addr_to_binary(entry)
+		"""get the network prefix in a list of 4 chunks of 8 bytes"""
+		return self.addr_to_binary(entry)
 
-	#tested
+	# tested
 	def get_nm_length(self, address):
 		return self.addr_to_binary(address).count("1")
-
 
 	# (FWTableEntry, FWTableEntry, int) -> FWTableEntry
 	def fwt_entry_from_coalesce(self, entry1, entry2, nm_len):
@@ -389,7 +387,6 @@ class Router:
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# if we do end up coalescing, we will need to both add and remove routes from table
-		old = copy.deepcopy(self.fwd_table)
 		to_remove = []
 		to_add = []
 		found = False
@@ -406,12 +403,19 @@ class Router:
 					# does the prefix allow for aggregation?
 					nm_length = self.get_nm_length(nm)
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry['network']), nm_length):
+						new_addr = self.fwt_entry_from_coalesce(c_entry, entry, nm_length)
 						logging.info(":COALESCE:Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
-						to_add.append(
-							self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
+						to_add.append(new_addr)  # calculate the new entry to add
 
 						if entry not in to_remove:
 							to_remove.append(entry)
+
+							"""	DICT OF TUPLES  
+									Key:old network addr
+									Value:Tuple:(new_addr, this_old_addr_full_entry, corresponding_old_addr_full_entry)
+								"""
+						self.aggregated[entry['network']] = (new_addr, entry, c_entry)
+						self.aggregated[c_entry['network']] = (new_addr, c_entry, entry)
 
 						found = True
 						break
@@ -480,18 +484,72 @@ class Router:
 					self.forward(sock, packet_copy)
 		return
 
+	def remove_table_entry(self, table, entries):
+		if entries < 1:
+			return table
+		elif len(entries) == 1:
+			while entries in table:
+				table.remove(entries)
+		else:
+			for e in entries:
+				while e in table:
+					table.remove(e)
+
+	def entries_from_network(self, network_addr):
+		out = []
+		for e in self.fwd_table:
+			if e['network'] == network_addr:
+				out.append(e)
+		return out
+
+
+
+	"""	DICT OF TUPLES  
+			Key:old network addr
+			Value:Tuple:
+				(new_addr, 
+				this_old_addr_full_entry, 
+				corresponding_old_addr_full_entry)"""
+
+	def handle_revoke(self, packet):
+		found = False
+		# for each packet we are about to revoke
+		for e in packet['msg']:
+			# we have previously aggregated route
+			if e['network'] in self.aggregated.keys():
+				# undo aggregation
+				# load old addr and corresponding aggregation entry
+				tup = self.aggregated.get(e['network'])
+				current_addr_to_remove = tup[0]  # string nw address that we need to search for & remove
+				full_entries_to_reload = tup[1:]  # two old table entry to add back to the table.
+				# lookup full entry to remove based on the address that we
+				# changed the old IP to in the coalesce, and remove that entry.
+				for entry in self.entries_from_network(current_addr_to_remove):
+					if entry['network'] == e['network']:
+						self.fwd_table.remove(entry)
+				# add old entries back
+				self.fwd_table.extend(full_entries_to_reload)
+				self.aggregated.remove(tup[1])
+				self.aggregated.remove(tup[2])
+				found = True
+		return found
+
 	# (DDAddressString, Packet) -> bool
 	def revoke(self, srcif, packet):
 		"""	handle revoke packets	"""
 		rev_msg = packet["msg"]  # packet message contents
 		temp = []
-		
-		#for each entry in the revoke message, remove it and remake the self.updates table
-		for each in packet["msg"]:
+
+		# for each entry in the revoke message, remove it and remake the self.updates table
+		for each in rev_msg:
 			self.filter_updates(packet)
 
+		handle_revoke_result = self.handle_revoke(packet)
+		print(":REVOKE:HANDLE_REVOKE_RESULT: {}".format(handle_revoke_result))
+
+
 		# delete forwarding table entry if necessary
-		"""for entry in self.fwd_table:
+		for entry in self.fwd_table:
 			for unreachable in rev_msg:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
 					"peer"] == packet["src"]:
@@ -499,23 +557,26 @@ class Router:
 				else:
 					if entry not in temp:
 						temp.append(entry)
-			self.fwd_table = temp"""
+			self.fwd_table = copy.deepcopy(temp)
+
+		#recoalesce
+		while self.coalesce():
+			self.coalesce()
 
 		print("FWD TABLE BEFORE: {}".format(self.fwd_table))
 		self.fwd_table = []
 		for entry in self.updates:
-	
-			self.fwd_table.append({"network":entry[1]["network"],
-						"netmask":entry[1]["netmask"],
-						"localpref":entry[1]["localpref"],
-						"selfOrigin":entry[1]["selfOrigin"],
-						"ASPath":entry[1]["ASPath"],
-						"origin":entry[1]["origin"],
-						"peer":entry[0]})	
-						
+			self.fwd_table.append({"network": entry[1]["network"],
+								   "netmask": entry[1]["netmask"],
+								   "localpref": entry[1]["localpref"],
+								   "selfOrigin": entry[1]["selfOrigin"],
+								   "ASPath": entry[1]["ASPath"],
+								   "origin": entry[1]["origin"],
+								   "peer": entry[0]})
+
 		print("FWD TABLE AFTER: {}".format(self.fwd_table))
 
-		#must pass on to neighbors
+		# must pass on to neighbors
 		if self.relations[srcif] == CUST:
 			for sock in self.sockets:
 				if sock != packet["src"]:
@@ -533,7 +594,12 @@ class Router:
 					self.forward(sock, packet_copy)
 
 		return True
-	
+
+	#key of updates should be
+	# value of updates should be either two things
+		# 1. a list (meaning it is an 'update' message)
+		# 2. a tuple, (a forwarding table entry)
+	# the way this should be done is taking in the packet,
 	def filter_updates(self, packet):
 		"""Remove all relevant entries in the self.updates table
 			if it is contained in the packet (REVOKE MSG)"""
@@ -542,12 +608,12 @@ class Router:
 			print("\n\n")
 			print(entry)
 			if entry[0] != packet["src"] and entry[1] != packet["msg"]:
-				temp.append((entry[0],entry[1]))
+				temp.append((entry[0], entry[1]))
 				continue
-				
+
 			print("FOUND MATCHES TO REMOVE FROM UPDATES")
 
-		self.updates = temp
+		self.updates = copy.deepcopy(temp)
 
 	# Packet -> void
 	def dump(self, packet):
@@ -626,7 +692,9 @@ class Router:
 					return
 
 		return
-	#dfsafsadgsdag
+
+
+# dfsafsadgsdag
 
 
 if __name__ == "__main__":
