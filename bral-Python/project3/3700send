@@ -72,14 +72,17 @@ def send_next_packet():
         log("Index: {}, Packet: {}".format(index, packet))
         if index >= CURR_WINDOW:
             break
-        # sock.sendto returns length of msg sent
-        # checks that msg was fully sent
-        if sock.sendto(SENDING_QUEUE[packet], dest) < len(SENDING_QUEUE[packet]):
 
-            log("[error] unable to fully send packet")
-        else:
-            log("[send data] " + str(SEQUENCE) + " (" + str(len(SENDING_QUEUE[packet])) + ")")
+        try:
+            # sock.sendto returns length of msg sent
+            # checks that msg was fully sent
+            if sock.sendto(SENDING_QUEUE[packet], dest) < len(SENDING_QUEUE[packet]):
 
+                log("[error] unable to fully send packet")
+            else:
+                log("[send data] " + str(SEQUENCE) + " (" + str(len(SENDING_QUEUE[packet])) + ")")
+        except KeyError:
+            break
 
 
 
