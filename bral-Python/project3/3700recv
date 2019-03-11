@@ -1,7 +1,8 @@
 #!/usr/bin/python -u
 #
 # Project 2 Starter Code
-#
+
+# 3700recv that receives data and prints it out in-order
 
 import sys
 import socket
@@ -21,7 +22,7 @@ UDP_IP = "127.0.0.1"
 UDP_PORT = 0
 
 # Set up the socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 sock.settimeout(TIMEOUT)
 
@@ -31,36 +32,45 @@ log("[bound] " + str(UDP_PORT))
 
 # Now listen for packets
 while True:
-  result = sock.recvfrom(MSG_SIZE)
+	result = sock.recvfrom(MSG_SIZE)
 
-  # If nothing is ready, we hit the timeout
-  if result:
-    (data, addr) = result
+	# If nothing is ready, we hit the timeout
+	if result:
+		(data, addr) = result
 
-    try:
-      decoded = json.loads(data)
+		try:
+			decoded = json.loads(data)
 
-      # If the EOF flag is set, exit
-      if (decoded['eof']):
-        log("[completed]")
-        sys.exit(0)
+			# If the EOF flag is set, exit
+			if (decoded['eof']):
+				log("[completed]")
+				sys.exit(0)
 
-      # If there is data, we accept it and print it out
-      if (decoded['data']):
-        # If we receive data, we assume it's in-order
-        # You will need to do much more here
-        log("[recv data] " + str(decoded['sequence']) + " (" + str(len(decoded['data'])) + ") ACCEPTED (in-order)")
-        sys.stdout.write(decoded['data'])
+			# If there is data, we accept it and print it out
+			if (decoded['data']):
+				# If we receive data, we assume it's in-order
+				# You will need to do much more here
 
-      # Send back an ack to the sender
-      msg = json.dumps({"ack": decoded['sequence'] + len(decoded['data'])})
-      log("ABOUT TO SEND " + msg)
-      if sock.sendto(msg, addr) < len(msg):
-        log("[error] unable to fully send packet")
+				# check is data in order? If not, reorder.
+				# check is this a duplicate?
+				# is the data correct? i.e. checksum?? /parity bits?
+				# is the data segmented? do we need to reassemble?
+				# 
 
-    except (ValueError, KeyError, TypeError) as e:
-      log("[recv corrupt packet]")
-      raise e
-  else:
-    log("[error] timeout")
-    sys.exit(-1)
+
+				log("[recv data] " + str(decoded['sequence']) + " (" + str(
+					len(decoded['data'])) + ") ACCEPTED (in-order)")
+				sys.stdout.write(decoded['data'])
+
+			# Send back an ack to the sender
+			msg = json.dumps({"ack": decoded['sequence'] + len(decoded['data'])})
+			log("ABOUT TO SEND " + msg)
+			if sock.sendto(msg, addr) < len(msg):
+				log("[error] unable to fully send packet")
+
+		except (ValueError, KeyError, TypeError) as e:
+			log("[recv corrupt packet]")
+			raise e
+	else:
+		log("[error] timeout")
+		sys.exit(-1)
