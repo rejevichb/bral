@@ -2,6 +2,7 @@
 #
 # Project 2 Starter Code
 
+
 # 3700recv that receives data and prints it out in-order
 
 import sys
@@ -10,9 +11,12 @@ import time
 import datetime
 import select
 import json
+import queue
+
 
 def log(string):
-  sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
+	sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
+
 
 MSG_SIZE = 1500
 TIMEOUT = 30
@@ -30,6 +34,73 @@ sock.settimeout(TIMEOUT)
 UDP_PORT = sock.getsockname()[1]
 log("[bound] " + str(UDP_PORT))
 
+
+# PACKET -> BOOL
+# check this packet against previous packet(s?) to detect out of order delivery
+# Returns true if it passes the check
+def ordered_check(packet, q):
+	return True
+
+
+# PACKET -> BOOL
+# check if this packet has already been received.
+# ***** RETURNS TRUE IF IT PASSES THE CHECK (i.e. TRUE IF NO DUPLICATES)
+def duplicate_check(packet, q):
+	return True
+
+
+# PACKET -> BOOL
+# check for data corruption via checksum or parity bits
+# ***** RETURNS TRUE IF IT PASSES THE CHECK (i.e. TRUE IF NOT CORRUPT)
+def corrupted_check(packet):
+	return True
+
+
+# PACKET -> BOOL
+# is this packet the last in a series of fragments?
+def last_fragment(packet):
+	return packet['offset'] != 0 and packet['flag'] == ''
+
+
+# PACKET -> BOOL
+# Is this packet an entire frame or has it been fragmented?
+def fragmented(packet):
+	if packet['flag'] == 'MF':
+		return True
+	elif packet['offset'] != 0:
+		return True
+	else:
+		return False
+
+
+# If this packet is valid (i.e. in order, detectably uncorrupted, not duplicated etc)
+# return True. If the packet is not valid, send an error ACK accordingly and then return false
+def validate_packet(packet, fgmtd, q):
+	if fgmtd:
+		if not ordered_check(packet, q):
+			# TODO send back error ACK or figure out what to do here
+			return False
+		if not duplicate_check(packet, q):
+			# TODO Handle this
+			return False
+		if not corrupted_check(packet):
+			# handle corrupted case
+			return False
+		# TODO am I missing any checks?
+		else:
+			return True
+	else:
+		if not corrupted_check(packet):
+			# corrupted data.
+			return False
+		else:
+			return True
+
+
+def reassemble(q):
+	yield
+
+
 # Now listen for packets
 while True:
 	result = sock.recvfrom(MSG_SIZE)
@@ -40,23 +111,38 @@ while True:
 
 		try:
 			decoded = json.loads(data)
-
+			log("DECODED: " + str(decoded))
 			# If the EOF flag is set, exit
 			if (decoded['eof']):
 				log("[completed]")
 				sys.exit(0)
 
+			# do we need queue? what do we use with respect to ordered or unordered data.
+			assemblyQueue = queue.Queue(maxsize=0)
+			# check is data in order? If not, reorder.
+			# check is this a duplicate?
+			# is the data correct? i.e. checksum?? /parity bits?
+			# is the data segmented? do we need to reassemble?
+			# is this packet one off or is it fragmented?
+
+			# if this packet has been fragmented, add to assembly queue and perform validation
+			if fragmented(decoded):
+				assemblyQueue.put(decoded)
+				# if this packet fails validation, validate would have already responded with an ACK
+				# indicating an error, so we have already responded and skip back to the top of loop
+				if not validate_packet(decoded, True, assemblyQueue):
+					continue
+				# if this is the last fragment, reassemble the frame from the given queue.  (it has already been added
+				# to queue)
+				if last_fragment(decoded):
+					frame = reassemble(assemblyQueue)
+			# reset q
+			# TODO - NEED TO PRINT FRAME AFTER REASSEMBLY
+
 			# If there is data, we accept it and print it out
 			if (decoded['data']):
 				# If we receive data, we assume it's in-order
 				# You will need to do much more here
-
-				# check is data in order? If not, reorder.
-				# check is this a duplicate?
-				# is the data correct? i.e. checksum?? /parity bits?
-				# is the data segmented? do we need to reassemble?
-				# 
-
 
 				log("[recv data] " + str(decoded['sequence']) + " (" + str(
 					len(decoded['data'])) + ") ACCEPTED (in-order)")
