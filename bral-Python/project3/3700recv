@@ -11,8 +11,10 @@ import datetime
 import select
 import json
 
+
 def log(string):
-  sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
+	sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
+
 
 MSG_SIZE = 1500
 TIMEOUT = 30
@@ -33,18 +35,13 @@ log("[bound] " + str(UDP_PORT))
 # Now listen for packets
 while True:
 	result = sock.recvfrom(MSG_SIZE)
-
+	log("RECV reading result")
 	# If nothing is ready, we hit the timeout
 	if result:
 		(data, addr) = result
 
 		try:
 			decoded = json.loads(data)
-
-			# If the EOF flag is set, exit
-			if (decoded['eof']):
-				log("[completed]")
-				sys.exit(0)
 
 			# If there is data, we accept it and print it out
 			if (decoded['data']):
@@ -55,18 +52,22 @@ while True:
 				# check is this a duplicate?
 				# is the data correct? i.e. checksum?? /parity bits?
 				# is the data segmented? do we need to reassemble?
-				# 
-
-
 				log("[recv data] " + str(decoded['sequence']) + " (" + str(
 					len(decoded['data'])) + ") ACCEPTED (in-order)")
 				sys.stdout.write(decoded['data'])
 
 			# Send back an ack to the sender
-			msg = json.dumps({"ack": decoded['sequence'] + len(decoded['data'])})
+			msg = json.dumps({"ack": decoded['sequence']}) #+ len(decoded['data'])})
 			log("ABOUT TO SEND " + msg)
 			if sock.sendto(msg, addr) < len(msg):
 				log("[error] unable to fully send packet")
+
+			else:
+				# TODO: Add this back in later on
+				# If the EOF flag is set, exit
+				if (decoded['eof']):
+					log("[completed]")
+					sys.exit(0)
 
 		except (ValueError, KeyError, TypeError) as e:
 			log("[recv corrupt packet]")
