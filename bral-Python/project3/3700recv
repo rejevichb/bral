@@ -12,12 +12,30 @@ import select
 import json
 
 
+
+
 def log(string):
 	sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
 
 MSG_SIZE = 1500
 TIMEOUT = 30
+
+# Total expected bytes to receive based on command line args
+# TODO: Figure this part out
+EXPECTED_TOTAL = 0
+
+# Dict of packets that have been received so far in format { SEQ # : DATA }
+RECV_PACKETS = {}
+
+# Count of bytes received so far, to be compared against EXPECTED_TOTAL later as a completion test
+RECV_BYTES = 0
+
+# Boolean that indicates packets have been received Out Of Order. Will save computation at the end if packets do not
+# Need to be reordered before printing to STDOUT
+RECV_OOO = False
+
+
 
 # Bind to localhost and an ephemeral port
 UDP_IP = "127.0.0.1"
