@@ -65,7 +65,7 @@ class Router:
 
 	def __init__(self, networks):
 		self.routes = {}
-		self.updates = []  # Save update annoucements as ( src ,  annoucement_msg )
+		self.updates = {}  # Save update annoucements as { src : annoucement_msg }
 		self.relations = {}  # {"192.168.0.2" : "peer"}
 		self.sockets = {}  # socket.socket() for "192.168.0.2"
 		self.fwd_table = []  #
@@ -109,6 +109,7 @@ class Router:
 				outroutes = [entry]
 			elif num_matches == curr_max_match:
 				outroutes.append(entry)
+
 		return outroutes
 
 	def get_shortest_as_path(self, routes):
@@ -267,16 +268,16 @@ class Router:
 			# Final check: enforce peering relationships
 			routes = self.filter_relationships(srcif, routes)
 
-			peer = routes
-			# peer = self.longest_prefix_match(srcif, routes)
+			#peer = routes
+			peer = self.longest_prefix_match(srcif, routes)
 
 		return self.forward(peer, daddr) if peer is not None else self.send_no_route(srcif, daddr)
 
-	def longest_prefix_match(self, srcif, routes):
+	def longest_prefix_match(self, routes):
 		longest_prefix = 0
 		route_w_prefix = []
 		for r in routes:
-			bits, cur_prefix = self.prefix_len_from_netmask(r["netmask"])
+			bits, cur_prefix = self.get_nm_length(r["netmask"])
 			if cur_prefix > longest_prefix:
 				longest_prefix = cur_prefix
 				route_w_prefix = r
@@ -389,6 +390,7 @@ class Router:
 	def coalesce(self):
 		"""	coalesce any routes that are right next to each other	"""
 		# if we do end up coalescing, we will need to both add and remove routes from table
+
 		old = copy.deepcopy(self.fwd_table)
 		to_remove = []
 		to_add = []
@@ -407,13 +409,16 @@ class Router:
 					nm_length = self.get_nm_length(nm)
 					if self.nw_prefix_coalesce(prefix, self.get_nw_prefix_binary(entry['network']), nm_length):
 						logging.info(":COALESCE:Aggregating:\n{}\n{}\n\n".format(c_entry, entry))
+						logging.info(":COALESCE:TABLE BEFORE COALESCE: {}".format(self.fwd_table))
+						# to_remove.append(c_entry)
+						# to_remove.append(entry)  # aggregate the two routes to remove
 						to_add.append(
 							self.fwt_entry_from_coalesce(c_entry, entry, nm_length))  # calculate the new entry to add
-
-						if entry not in to_remove:
-							to_remove.append(entry)
-
+						for each in entry:
+							if each not in to_remove:
+								to_remove.append(each)
 						found = True
+
 						break
 
 		if found:
@@ -424,8 +429,7 @@ class Router:
 				if each not in temp and each not in to_remove:
 					temp.append(each)
 			self.fwd_table = temp
-			logging.info(":COALESCE:FINAL: {}".format(self.fwd_table))
-
+			logging.info(":COALESCE:TABLE AFTER COALESCE: {}".format(self.fwd_table))
 			return True
 
 		return False
@@ -434,7 +438,8 @@ class Router:
 	def update(self, srcif, packet):
 		"""	handle update packets	"""
 		# Save update message for later
-		self.updates.append((packet["src"], packet["msg"]))
+		self.updates[packet["src"]] = packet
+
 		"""Add an entry to the forwarding table """
 		# TODO: Add functionality to prevent duplicate entries
 		self.fwd_table.append({"network": packet["msg"]["network"],
@@ -444,6 +449,7 @@ class Router:
 							   "ASPath": packet["msg"]["ASPath"],
 							   "origin": packet["msg"]["origin"],
 							   "peer": packet["src"]})
+
 		logging.info(":UPDATE:Forwarding table before agg:\n{}".format(self.fwd_table))
 
 		if len(self.fwd_table) > 1:
@@ -485,13 +491,10 @@ class Router:
 		"""	handle revoke packets	"""
 		rev_msg = packet["msg"]  # packet message contents
 		temp = []
-		
-		#for each entry in the revoke message, remove it and remake the self.updates table
-		for each in packet["msg"]:
-			self.filter_updates(packet)
+
 
 		# delete forwarding table entry if necessary
-		"""for entry in self.fwd_table:
+		for entry in self.fwd_table:
 			for unreachable in rev_msg:
 				if entry["network"] == unreachable["network"] and entry["netmask"] == unreachable["netmask"] and entry[
 					"peer"] == packet["src"]:
@@ -499,21 +502,7 @@ class Router:
 				else:
 					if entry not in temp:
 						temp.append(entry)
-			self.fwd_table = temp"""
-
-		print("FWD TABLE BEFORE: {}".format(self.fwd_table))
-		self.fwd_table = []
-		for entry in self.updates:
-	
-			self.fwd_table.append({"network":entry[1]["network"],
-						"netmask":entry[1]["netmask"],
-						"localpref":entry[1]["localpref"],
-						"selfOrigin":entry[1]["selfOrigin"],
-						"ASPath":entry[1]["ASPath"],
-						"origin":entry[1]["origin"],
-						"peer":entry[0]})	
-						
-		print("FWD TABLE AFTER: {}".format(self.fwd_table))
+			self.fwd_table = temp
 
 		#must pass on to neighbors
 		if self.relations[srcif] == CUST:
@@ -533,21 +522,6 @@ class Router:
 					self.forward(sock, packet_copy)
 
 		return True
-	
-	def filter_updates(self, packet):
-		"""Remove all relevant entries in the self.updates table
-			if it is contained in the packet (REVOKE MSG)"""
-		temp = []
-		for entry in self.updates:
-			print("\n\n")
-			print(entry)
-			if entry[0] != packet["src"] and entry[1] != packet["msg"]:
-				temp.append((entry[0],entry[1]))
-				continue
-				
-			print("FOUND MATCHES TO REMOVE FROM UPDATES")
-
-		self.updates = temp
 
 	# Packet -> void
 	def dump(self, packet):
@@ -626,7 +600,6 @@ class Router:
 					return
 
 		return
-	#dfsafsadgsdag
 
 
 if __name__ == "__main__":
