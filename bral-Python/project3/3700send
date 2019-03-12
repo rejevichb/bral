@@ -62,14 +62,15 @@ def send_next_packet():
     global SEQUENCE
     global EOF_DETECTED
 
-    if EOF_DETECTED:
-        return
+
+
 
     # Although TCP needs to wait for all packets to ACK back before sending more packets, we should
     # allow for continuous sending and then reorder everything at the end
     # Keys of SENDING_QUEUE are seq # so we sort to make sure packets are sent in order
     for index, packet in enumerate(sorted(SENDING_QUEUE)):
         log("Index: {}, Packet: {}".format(index, packet))
+        log(SENDING_QUEUE[packet])
         if index >= CURR_WINDOW:
             break
 
@@ -85,6 +86,9 @@ def send_next_packet():
         except KeyError:
             break
 
+        if EOF_DETECTED:
+            return
+
 
 
 def setup_handshake():
@@ -95,6 +99,7 @@ def read_user_input():
     global SENDING_QUEUE
     global EOF_DETECTED
     global CURR_WINDOW
+    global DATA_SIZE
 
     # LOAD ALL PACKETS AT ONCE INTO SENDING_QUEUE
     # Load packets up to CURR_WINDOW, then increment
@@ -102,27 +107,34 @@ def read_user_input():
     while not EOF_DETECTED:
         # Get data for the packet
         data = sys.stdin.read(DATA_SIZE)
-
-        if EOF_DETECTED:
-            break
+        log(data)
 
         if len(data) > 0:
+            if len(data) < DATA_SIZE:
+                log("File size less than global DATA_SIZE")
+                EOF_DETECTED = True
+
             msg = json.dumps({"sequence": SEQUENCE, "data": data, "ack": False, "eof": EOF_DETECTED})
             # Add msg to queue with seq # as key
             SENDING_QUEUE[SEQUENCE] = msg
             # Safely increment SEQUENCE (handles wraparound)
+            log(SENDING_QUEUE[SEQUENCE])
             increment_seq(len(data))
 
-        else:
-            continue
-
-        # have we reached EOF?
-        if data[-2:] == "\\n":
-            EOF_DETECTED = True
 
         else:
-            # TODO: possibly log an error?
-            return
+            temp = json.loads(SENDING_QUEUE[SEQUENCE - DATA_SIZE])
+            temp["eof"] = True
+            SENDING_QUEUE[SEQUENCE - DATA_SIZE] = json.dumps(temp)
+            log("Breaking out of read")
+            log(SENDING_QUEUE[SEQUENCE - DATA_SIZE])
+            break
+
+
+        # else:
+        #     log("returned from reading")
+        #     # TODO: possibly log an error?
+        #     return
 
 
 # int -> void
