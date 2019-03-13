@@ -70,7 +70,7 @@ while True:
 				# check is this a duplicate?
 				# is the data correct? i.e. checksum?? /parity bits?
 				# is the data segmented? do we need to reassemble?
-				log("[recv data] " + str(decoded['sequence']) + " (" + str(
+				log("[recv data] " + "SEQUENCE #:" + str(decoded['sequence']) + " (" + str(
 					len(decoded['data'])) + ") ACCEPTED (in-order)")
 				sys.stdout.write(decoded['data'])
 
