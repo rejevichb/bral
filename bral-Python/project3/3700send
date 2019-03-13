@@ -23,6 +23,8 @@ MSG_SIZE = 1500
 # Total size of the data portion of the packet only
 DATA_SIZE = 1000
 
+
+
 # Roundtrip timeout setting
 TIMEOUT = 30
 
@@ -167,11 +169,11 @@ def connection_teardown():
 
 
 # float, float, float -> float
-def estimate_roundtrip(old_rtt, new_sample, alpha=0.875):
+def estimate_roundtrip(old_rtt, new_sample, alpha=0.01):
 
     # Needed for first estimation where there is no old
     if old_rtt is None:
-        old_rtt = TIMEOUT
+        old_rtt = new_sample
 
     return alpha * old_rtt + (1 - alpha) * new_sample
 
@@ -187,6 +189,7 @@ def check():
 
 
 def mainHelper(result):
+
     if result:
         log("In result block")
         (data, addr) = result
@@ -234,16 +237,23 @@ def mainHelper(result):
 
 def main(packets):
     # Read in all user input and set timeout clock
+    result = None
+
     if len(packets) == 0:
     # Now send packets
         for i in range(0,len(TO_SEND)):
             log("TOP OF SEND LOOP")
+            start = time.time()
             send_next_packet(i) #idx
             # maybe add a timer
-            result = sock.recvfrom(MSG_SIZE)
+
+            end = time.time()
             log(str(result))
             # ACKS_RECIEVED.sort()
-            mainHelper(result)
+            # mainHelper(result)
+            #RTT = estimate_roundtrip(RTT, end - start)
+            #sock.settimeout(RTT )
+
     else:
         log("finish me should be here!!!!!!!!!!!!!!!!")
         # iterate through packets given thru args packets
@@ -251,8 +261,11 @@ def main(packets):
             log("TOP OF !!ReSEND!! LOOP")
             send_next_packet(packet)  # idx
             # maybe add a timer
-            result = sock.recvfrom(MSG_SIZE)
-            mainHelper(result)
+            #result = sock.recvfrom(MSG_SIZE)
+            # mainHelper(result)
+
+    result = sock.recvfrom(MSG_SIZE)
+    mainHelper(result)
 
 
 ############  CONTROL ##############
