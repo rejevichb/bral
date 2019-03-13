@@ -27,7 +27,7 @@ DATA_SIZE = 1000
 TIMEOUT = 30
 
 # Current sequence number to be incremented
-SEQUENCE = 1
+SEQUENCE = 0
 
 # Contains msgs that have been read from STDIN
 # as a dict where key is seq # of packet
@@ -67,7 +67,7 @@ def log(string):
     sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
 
-def send_next_packet():
+def send_next_packet(p):
     global SEQUENCE
     global EOF_DETECTED
     global INFLIGHT
@@ -80,8 +80,9 @@ def send_next_packet():
     # Although TCP needs to wait for all packets to ACK back before sending more packets, we should
     # allow for continuous sending and then reorder everything at the end
     # Keys of SENDING_QUEUE are seq # so we sort to make sure packets are sent in order
-    for index, packet in enumerate(sorted(TO_SEND), 1):
-        log("Index: {}, Packet: {}".format(index, packet))
+    # for packet in p:
+    #     log("This is the packet in send: " + str(packet))
+        #log("Index: {}, Packet: {}".format(index, packet))
 
         # Sets INFLIGHT counter to the length of the dict of msgs currently in transit
         # If that number is greater than the current window, we return True instead of breaking to
@@ -91,26 +92,23 @@ def send_next_packet():
         # if INFLIGHT > CURR_WINDOW:
         #     log("Window hit")
         #     return True
-
-        try:
-            # sock.sendto returns length of msg sent
-            # checks that msg was fully sent
-            if sock.sendto(TO_SEND[packet], dest) < len(TO_SEND[packet]):
-
-                log("[error] unable to fully send packet")
-            # If successfully sent, add the current packet to the INFLIGHT_MSGS dict
-            # Then pop from the SENDING_QUEUE dict
-            else:
-                INFLIGHT_MSGS[packet] = TO_SEND[packet]
-                log("[send data] " + str(SEQUENCE) + " (" + str(len(TO_SEND[packet])) + ")")
-        except KeyError:
-            log("Continuing on KeyError in send")
-            continue
-
-        # If an EOF packet is detected, return null to signal to the main method that there are no more packets to send
-        if EOF_DETECTED:
-            log("EOF Return from sending")
-            return
+    try:
+        # sock.sendto returns length of msg sent
+        # checks that msg was fully sent
+        if sock.sendto(TO_SEND[p], dest) < len(TO_SEND[p]):
+            log("[error] unable to fully send packet")
+        # If successfully sent, add the current packet to the INFLIGHT_MSGS dict
+        # Then pop from the SENDING_QUEUE dict
+        else:
+            INFLIGHT_MSGS[p] = TO_SEND[p]
+            log("[send data] " + str(SEQUENCE) + " (" + str(len(TO_SEND[p])) + ")")
+    except KeyError:
+        log("Continuing on KeyError in send")
+        return
+    # If an EOF packet is detected, return null to signal to the main method that there are no more packets to send
+    if EOF_DETECTED:
+        log("EOF Return from sending")
+        return
 
 
 def setup_handshake():
@@ -179,75 +177,91 @@ def estimate_roundtrip(old_rtt, new_sample, alpha=0.875):
 
 
 def check():
-	diff = set(TO_SEND.keys()).difference(set(ACKS_RECIEVED))
-	log("JAMESON ACKS RECIEVED: " + str(set(ACKS_RECIEVED)) + "   TO_SEND: " + str(TO_SEND.keys()))
-	if len(diff) == 0:
-		return True
-	else:
-		return diff
+    diff = set(TO_SEND.keys()).difference(set(ACKS_RECIEVED))
+    log("JAMESON ACKS RECIEVED: " + str(set(ACKS_RECIEVED)) + "   TO_SEND: " + str(TO_SEND.keys()))
+    if len(diff) == 0:
+        return True
+    else:
+        return diff
+
+
+
+def mainHelper(result):
+    if result:
+        log("In result block")
+        (data, addr) = result
+        try:
+            decoded = json.loads(data)
+            ACKS_RECIEVED.append(decoded['ack'])
+            log(str(ACKS_RECIEVED))
+            # If ACK is valid (in the keyset of INFLIGHT_MSGS dict),
+            # reset timeout clock, pop the relevant packet from INFLIGHT_MSGS, reset the length of
+            # INFLIGHT_MSGS, increment CURR_WINDOW by 1, and send next packet
+
+            # This may be needed later
+            # if decoded['ack'] in INFLIGHT_MSGS:
+            # 	start = time.time()
+            # 	INFLIGHT_MSGS.pop(decoded['ack'])
+            # 	INFLIGHT = len(INFLIGHT_MSGS)
+            # 	CURR_WINDOW += 1
+            # 	log("[recv ack] " + str(decoded['ack']))
+
+            # Try to send next packet; break if no more data
+
+            # Might not be right
+            # if not check() == True:
+            #     log("broke")
+            #     break
+            # else:
+            #     log("Back to top of loop")
+            #     continue
+
+        except (ValueError, KeyError, TypeError):
+            log("[recv corrupt packet]")
+
+    # fix this
+    # # If timeout has not been reached, try to send again
+    # elif (time.time() - start) / 1000000 < TIMEOUT:
+    #     continue
+
+    # If timeout has been reached, exit
+    else:
+        log("[error] timeout")
+        sys.exit(-1)
 
 
 
 
-
-def main():
+def main(packets):
     # Read in all user input and set timeout clock
-
+    if len(packets) == 0:
     # Now send packets
-    while True:
-        log("TOP OF SEND LOOP")
-        send_next_packet() #idx
-        # maybe add a timer
-        result = sock.recvfrom(MSG_SIZE)
-        # ACKS_RECIEVED.sort()
+        for i in range(0,len(TO_SEND)):
+            log("TOP OF SEND LOOP")
+            send_next_packet(i) #idx
+            # maybe add a timer
+            result = sock.recvfrom(MSG_SIZE)
+            log(str(result))
+            # ACKS_RECIEVED.sort()
+            mainHelper(result)
+    else:
+        log("finish me should be here!!!!!!!!!!!!!!!!")
+        # iterate through packets given thru args packets
+        for packet in packets:
+            log("TOP OF !!ReSEND!! LOOP")
+            send_next_packet(packet)  # idx
+            # maybe add a timer
+            result = sock.recvfrom(MSG_SIZE)
+            mainHelper(result)
 
-        if result:
-            log("In result block")
-            (data, addr) = result
-            try:
-                decoded = json.loads(data)
-                ACKS_RECIEVED.append(decoded['ack'])
-                # If ACK is valid (in the keyset of INFLIGHT_MSGS dict),
-                # reset timeout clock, pop the relevant packet from INFLIGHT_MSGS, reset the length of
-                # INFLIGHT_MSGS, increment CURR_WINDOW by 1, and send next packet
-
-
-                # This may be needed later
-                # if decoded['ack'] in INFLIGHT_MSGS:
-                # 	start = time.time()
-                # 	INFLIGHT_MSGS.pop(decoded['ack'])
-                # 	INFLIGHT = len(INFLIGHT_MSGS)
-                # 	CURR_WINDOW += 1
-                # 	log("[recv ack] " + str(decoded['ack']))
-
-                # Try to send next packet; break if no more data
-                if not send_next_packet():
-                    log("broke")
-                    break
-                else:
-                    log("Back to top of loop")
-                    continue
-
-            except (ValueError, KeyError, TypeError):
-                log("[recv corrupt packet]")
-
-        # If timeout has not been reached, try to send again
-        elif (time.time() - start) / 1000000 < TIMEOUT:
-            continue
-
-        # If timeout has been reached, exit
-        else:
-            log("[error] timeout")
-            sys.exit(-1)
 
 ############  CONTROL ##############
 start = time.time()
 read_user_input()
 idx = []
 while True:
-    main()
-
-    if check():
+    main(idx)
+    if check() == True:
         log("Exited with no more packets to send")
         sock.sendto(json.dumps({"eof": True, "data": "", "sequence": SEQUENCE, "ack": False}), dest)
         sys.exit(0)
