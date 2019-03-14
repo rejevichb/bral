@@ -1,6 +1,6 @@
 #!/usr/bin/python -u
 #
-# Project 2 Starter Code
+# Project 3 Starter Code
 
 # 3700recv that receives data and prints it out in-order
 
@@ -11,31 +11,47 @@ import datetime
 import select
 import json
 
-
+ADDR = None
 
 
 def log(string):
 	sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
+# float, float, float -> float
+def estimate_roundtrip(old_rtt, new_sample, alpha=0.9):
+
+    # Needed for first estimation where there is no old
+    if old_rtt is None:
+        old_rtt = new_sample
+
+    updated = alpha * old_rtt + (1 - alpha) * new_sample
+    log("NEW RTT IS " + str(updated))
+    return updated
 
 MSG_SIZE = 1500
-TIMEOUT = 30
 
-# Total expected bytes to receive based on command line args
-# TODO: Figure this part out
-EXPECTED_TOTAL = 0
+# !!!!!!!!!!FIXME: Make this better because it sucks right now!!!!!!!!!!
+TIMEOUT = 1
+
+RTT = None
 
 # Dict of packets that have been received so far in format { SEQ # : DATA }
-RECV_PACKETS = {}
+ACKS_TO_SEND = set()
 
 # Count of bytes received so far, to be compared against EXPECTED_TOTAL later as a completion test
 RECV_BYTES = 0
 
-# Boolean that indicates packets have been received Out Of Order. Will save computation at the end if packets do not
-# Need to be reordered before printing to STDOUT
-RECV_OOO = False
+# In case we get the packets out of order, we can know ahead of time how many total need to be collected
+SEQ_OF_FINAL = None
 
+# !!!!!!!! TODO: Use CL args to find optimal value if possible!!!!!!!!!
+MAX_AVAIL = 10
 
+# Pretty self-explanatory, could probably be removed if we used len(RECV_PACKETS)
+NUM_PACKETS_RECEIVED = 0
+
+# Dict of packets received so they can be reordered before writing to sys.stdout
+RECV_PACKETS = {}
 
 # Bind to localhost and an ephemeral port
 UDP_IP = "127.0.0.1"
@@ -50,46 +66,103 @@ sock.settimeout(TIMEOUT)
 UDP_PORT = sock.getsockname()[1]
 log("[bound] " + str(UDP_PORT))
 
+
+# Writes data to sys.stdout in sorted order
+def write_data():
+	for p in sorted(RECV_PACKETS):
+		sys.stdout.write(RECV_PACKETS[p]['data'])
+
+	kill = json.dumps({'ack': ['kill']})
+	log(str(kill))
+	sock.sendto(kill, ADDR)
+	log("GOT PAST THE KILL SEND")
+
+
 # Now listen for packets
 while True:
-	result = sock.recvfrom(MSG_SIZE)
-	log("RECV reading result")
-	# If nothing is ready, we hit the timeout
-	if result:
-		(data, addr) = result
 
+	# Loop here using a while and break if timeout occurs
+	# with a timeout, send batch of packets
+	log("TOP OF RECV LOOP")
+
+	# Start off as an empty set and collect ACKs from result to be sent off in bulk
+	# Using set protects against duplicates
+	ACKS_TO_SEND = set()
+
+	# !!!!!!!!FIXME: MAX_AVAIL value was arbitrary and can be optimized!!!!!!!!!!
+	while len(ACKS_TO_SEND) < MAX_AVAIL:
 		try:
-			decoded = json.loads(data)
+			result = sock.recvfrom(MSG_SIZE)
+			log("RECV reading result")
+			# If nothing is ready, we hit the timeout
+			if result:
+				(data, addr) = result
+				ADDR = addr
 
-			# If there is data, we accept it and print it out
-			if (decoded['data']):
-				# If we receive data, we assume it's in-order
-				# You will need to do much more here
+				try:
+					decoded = json.loads(data)
 
-				# check is data in order? If not, reorder.
-				# check is this a duplicate?
-				# is the data correct? i.e. checksum?? /parity bits?
-				# is the data segmented? do we need to reassemble?
-				log("[recv data] " + str(decoded['sequence']) + " (" + str(
-					len(decoded['data'])) + ") ACCEPTED (in-order)")
-				sys.stdout.write(decoded['data'])
+					if decoded['data']:
+						if len(RECV_PACKETS) > 0 and decoded['sequence'] < max(RECV_PACKETS):
+							log("[recv data] " + str(decoded['sequence']) + " (" + str(
+								len(decoded['data'])) + ") ACCEPTED (out-of-order)")
+						else:
+							log("[recv data] " + str(decoded['sequence']) + " (" + str(
+								len(decoded['data'])) + ") ACCEPTED (in-order)")
 
-			# Send back an ack to the sender
-			msg = json.dumps({"ack": decoded['sequence']}) #+ len(decoded['data'])})
-			log("ABOUT TO SEND " + msg)
-			if sock.sendto(msg, addr) < len(msg):
-				log("[error] unable to fully send packet")
+						# Add to the set of ACKs to send, cache the data in our RECV_PACKETS dict, and possibly
+						# Increment NUM_PACKETS_RECEIVED
+						ACKS_TO_SEND.add(decoded['sequence'])
+						RECV_PACKETS[decoded['sequence']] = decoded
+						NUM_PACKETS_RECEIVED = len(RECV_PACKETS)
 
-			else:
-				# TODO: Add this back in later on
-				# If the EOF flag is set, exit
-				if (decoded['eof']):
-					log("[completed]")
-					sys.exit(0)
+					# If we found the EOF packet, set SEQ_OF_FINAL to relevant value
+					if decoded['eof']:
+						SEQ_OF_FINAL = decoded['sequence']
+						#break
 
-		except (ValueError, KeyError, TypeError) as e:
-			log("[recv corrupt packet]")
-			raise e
-	else:
-		log("[error] timeout")
-		sys.exit(-1)
+				except (ValueError, KeyError, TypeError) as e:
+					log("[recv corrupt packet]")
+					raise e
+
+		# If there was a timeout, break and send off the latest batch of ACKs
+		except socket.timeout:
+			log("RECV timed out")
+			break
+
+	try:
+		# Send back an ack to the sender
+		if len(ACKS_TO_SEND) == 0:
+			log("None in ACKS TO SEND")
+			continue
+		msg = json.dumps({"ack": list(ACKS_TO_SEND)}) #+ len(decoded['data'])})
+		log("ABOUT TO SEND " + msg)
+		if sock.sendto(msg, ADDR) < len(msg):
+			log("[error] unable to fully send packet")
+
+		else:
+			# TODO: Add this back in later on
+			# If the EOF flag is set, exit
+			log("SEQ OF FINAL VAL IS {} AND NUM PACKETS RECEIVED IS {}".format(SEQ_OF_FINAL, NUM_PACKETS_RECEIVED))
+			if SEQ_OF_FINAL is not None and NUM_PACKETS_RECEIVED == SEQ_OF_FINAL + 1:
+				log("[completed]")
+				write_data()
+
+				sys.exit(0)
+		continue
+
+	except (ValueError, KeyError, TypeError) as e:
+		pass
+		log("[recv corrupt packet]")
+		raise e
+	#else:
+#		log("[error] timeout")
+#		sys.exit(-1)
+
+
+
+
+
+
+
+
