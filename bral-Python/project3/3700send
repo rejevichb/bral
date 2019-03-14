@@ -105,7 +105,9 @@ def send_next_packet(p):
         # Then pop from the SENDING_QUEUE dict
         else:
             INFLIGHT_MSGS[p] = TO_SEND[p]
+
             log("[send data] " + str(p) + " (" + str(len(TO_SEND[p])) + ")")
+
     except KeyError:
         log("Continuing on KeyError in send")
         return
@@ -172,6 +174,7 @@ def connection_teardown():
 
 # float, float, float -> float
 def estimate_roundtrip(old_rtt, new_sample, alpha=0.4):
+
 
     # Needed for first estimation where there is no old
     if old_rtt is None:
@@ -255,7 +258,8 @@ def main(packets):
         for packet in packets:
             log("TOP OF !!ReSEND!! LOOP")
             start = time.time()
-            send_next_packet(packet)
+            send_next_packet(packet)  # idx
+
             # maybe add a timer
             #result = sock.recvfrom(MSG_SIZE)
             # mainHelper(result)
