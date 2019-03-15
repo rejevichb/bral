@@ -1,60 +1,35 @@
 #!/usr/bin/python -u
-#
-# Project 3 Starter Code
-#
-
-# PLAN: BUILD OUT TCP RENO THEN GET RID OF SLOW START
-# Because minimum and maximum bandwidth, latency, etc will be passed on the command line, we will have that information.
-# Essentially, we can use it to start at a higher initial value for cwnd that allows us to be more efficient
-
 
 import sys
 import socket
 import time
 import datetime
-import select
 import json
-import unittest
-import random
-
-# Size of each message
-MSG_SIZE = 1500
-
-# Total size of the data portion of the packet only
-DATA_SIZE = 1000
 
 
+MSG_SIZE = 1500  # Size of each message
 
-# Roundtrip timeout setting
-TIMEOUT = 2
+DATA_SIZE = 1000  # Total size of the data portion of the packet only
 
-RTT = None
+TIMEOUT = 2  # Roundtrip timeout setting
 
-# Current sequence number to be incremented
-SEQUENCE = 0
+RTT = None  # Roundtrip time
 
-# Contains msgs that have been read from STDIN
-# as a dict where key is seq # of packet
-TO_SEND = {}
+SEQUENCE = 0  # Current sequence number to be incremented
 
-# Contains msgs that are currently in flight
-ACKS_RECIEVED = []
+TO_SEND = {}  # Contains msgs that have been read from STDIN as a dict where key is seq # of packet
 
-# Determine if newline has been detected in loaded packets
-EOF_DETECTED = False
+ACKS_RECEIVED = []  # Contains msgs that have been received by receiver
 
-# Used for slow start/congestion control to determine how many packets to load
-# at once
-CURR_WINDOW = 1
+EOF_DETECTED = False  # Determine if newline has been detected in loaded packets
 
-# Current number of packets that are on the way
-INFLIGHT = 0
+CURR_WINDOW = 1  # Used for slow start/congestion control to determine how many packets to load at once
 
-# Counts duplicate ACKs for fast retransmit
-DUP_ACKS = 0
+INFLIGHT = 0  # Current number of packets that are on the way
 
-# TODO DELETE
-INFLIGHT_MSGS = {}
+DUP_ACKS = 0  # Counts duplicate ACKs for fast retransmit
+
+INFLIGHT_MSGS = {}  # Messages that we have sent but not received an ack for
 
 # Bind to localhost and an ephemeral port
 IP_PORT = sys.argv[1]
@@ -78,24 +53,9 @@ def send_next_packet(p):
     global CURR_WINDOW
     global INFLIGHT_MSGS
 
-    #log("Current Window: {}".format(CURR_WINDOW))
-    #log("Current # of msgs Inflight: {}".format(INFLIGHT))
-
     # Although TCP needs to wait for all packets to ACK back before sending more packets, we should
     # allow for continuous sending and then reorder everything at the end
     # Keys of SENDING_QUEUE are seq # so we sort to make sure packets are sent in order
-    # for packet in p:
-    #     log("This is the packet in send: " + str(packet))
-        #log("Index: {}, Packet: {}".format(index, packet))
-
-        # Sets INFLIGHT counter to the length of the dict of msgs currently in transit
-        # If that number is greater than the current window, we return True instead of breaking to
-        # Signal to the main method that there are more packets to come in the next round
-
-        # INFLIGHT = len(INFLIGHT_MSGS)
-        # if INFLIGHT > CURR_WINDOW:
-        #     log("Window hit")
-        #     return True
     try:
         # sock.sendto returns length of msg sent
         # checks that msg was fully sent
@@ -105,7 +65,6 @@ def send_next_packet(p):
         # Then pop from the SENDING_QUEUE dict
         else:
             INFLIGHT_MSGS[p] = TO_SEND[p]
-
             log("[send data] " + str(p) + " (" + str(len(TO_SEND[p])) + ")")
 
     except KeyError:
@@ -117,10 +76,7 @@ def send_next_packet(p):
         return
 
 
-def setup_handshake():
-    pass
-
-
+# reads user input and stores it in TO_SEND
 def read_user_input():
     global SEQUENCE
     global TO_SEND
@@ -168,14 +124,8 @@ def increment_seq(msg_size):
     return SEQUENCE
 
 
-def connection_teardown():
-    pass
-
-
 # float, float, float -> float
 def estimate_roundtrip(old_rtt, new_sample, alpha=0.4):
-
-
     # Needed for first estimation where there is no old
     if old_rtt is None:
         old_rtt = new_sample
@@ -186,8 +136,7 @@ def estimate_roundtrip(old_rtt, new_sample, alpha=0.4):
 
 
 def check():
-    diff = set(TO_SEND.keys()).difference(set(ACKS_RECIEVED))
-    log("JAMESON ACKS RECIEVED: " + str(set(ACKS_RECIEVED)) + "   TO_SEND: " + str(TO_SEND.keys()))
+    diff = set(TO_SEND.keys()).difference(set(ACKS_RECEIVED))
     if len(diff) == 0:
         return True
     else:
@@ -196,11 +145,8 @@ def check():
 
 
 def mainHelper(result):
-
     if result:
-        log("In result block")
         (data, addr) = result
-        log("data is " + str(data))
         decoded = json.loads(data)
         for entry in decoded['ack']:
             try:
@@ -209,29 +155,8 @@ def mainHelper(result):
                     log("Exiting after kill")
                     sys.exit(0)
 
-                ACKS_RECIEVED.append(entry)
-                log(str(ACKS_RECIEVED))
-                # If ACK is valid (in the keyset of INFLIGHT_MSGS dict),
-                # reset timeout clock, pop the relevant packet from INFLIGHT_MSGS, reset the length of
-                # INFLIGHT_MSGS, increment CURR_WINDOW by 1, and send next packet
-
-                # This may be needed later
-                # if decoded['ack'] in INFLIGHT_MSGS:
-                # 	start = time.time()
-                # 	INFLIGHT_MSGS.pop(decoded['ack'])
-                # 	INFLIGHT = len(INFLIGHT_MSGS)
-                # 	CURR_WINDOW += 1
-                # 	log("[recv ack] " + str(decoded['ack']))
-
-                # Try to send next packet; break if no more data
-
-                # Might not be right
-                # if not check() == True:
-                #     log("broke")
-                #     break
-                # else:
-                #     log("Back to top of loop")
-                #     continue
+                ACKS_RECEIVED.append(entry)
+                log(str(ACKS_RECEIVED))
 
             except (ValueError, KeyError, TypeError) as e:
                 log(str(e))
@@ -244,13 +169,11 @@ def main(packets):
     result = None
 
     if len(packets) == 0:
-    # Now send packets
+        # Now send packets
         for i in range(0,len(TO_SEND)):
             log("TOP OF SEND LOOP")
             start = time.time()
             send_next_packet(i)
-            #RTT = estimate_roundtrip(RTT, end - start)
-            #sock.settimeout(RTT)
 
     else:
         log("finish me should be here!!!!!!!!!!!!!!!!")
@@ -260,16 +183,10 @@ def main(packets):
             start = time.time()
             send_next_packet(packet)  # idx
 
-            # maybe add a timer
-            #result = sock.recvfrom(MSG_SIZE)
-            # mainHelper(result)
-
-    log("ABOUT TO LISTEN FOR RESULT")
     try:
         result = sock.recvfrom(MSG_SIZE)
         end = time.time()
         RTT = estimate_roundtrip(RTT, end - start)
-        log("FINISHED LISTENING FOR RESULT")
     except socket.timeout:
         log("SENDING timeout while waiting on result")
         pass

@@ -6,52 +6,31 @@
 
 import sys
 import socket
-import time
 import datetime
-import select
 import json
 
 ADDR = None
 
+MSG_SIZE = 1500
+
+TIMEOUT = 1
+RTT = None
+ACKS_TO_SEND = set() # Dict of packets that have been received so far in format { SEQ # : DATA }
+
+RECV_BYTES = 0 # Count of bytes received so far, to be compared against EXPECTED_TOTAL later as a completion test
+
+SEQ_OF_FINAL = None # In case we get the packets out of order, we can know ahead of time how
+# many total need to be collected
+
+MAX_AVAIL = 10 # Highest number of acks we can send at once
+
+NUM_PACKETS_RECEIVED = 0 # Pretty self-explanatory, could probably be removed if we used len(RECV_PACKETS)
+
+RECV_PACKETS = {} # Dict of packets received so they can be reordered before writing to sys.stdout
 
 def log(string):
 	sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
-# float, float, float -> float
-def estimate_roundtrip(old_rtt, new_sample, alpha=0.9):
-
-    # Needed for first estimation where there is no old
-    if old_rtt is None:
-        old_rtt = new_sample
-
-    updated = alpha * old_rtt + (1 - alpha) * new_sample
-    log("NEW RTT IS " + str(updated))
-    return updated
-
-MSG_SIZE = 1500
-
-# !!!!!!!!!!FIXME: Make this better because it sucks right now!!!!!!!!!!
-TIMEOUT = 1
-
-RTT = None
-
-# Dict of packets that have been received so far in format { SEQ # : DATA }
-ACKS_TO_SEND = set()
-
-# Count of bytes received so far, to be compared against EXPECTED_TOTAL later as a completion test
-RECV_BYTES = 0
-
-# In case we get the packets out of order, we can know ahead of time how many total need to be collected
-SEQ_OF_FINAL = None
-
-# !!!!!!!! TODO: Use CL args to find optimal value if possible!!!!!!!!!
-MAX_AVAIL = 10
-
-# Pretty self-explanatory, could probably be removed if we used len(RECV_PACKETS)
-NUM_PACKETS_RECEIVED = 0
-
-# Dict of packets received so they can be reordered before writing to sys.stdout
-RECV_PACKETS = {}
 
 # Bind to localhost and an ephemeral port
 UDP_IP = "127.0.0.1"
@@ -67,15 +46,26 @@ UDP_PORT = sock.getsockname()[1]
 log("[bound] " + str(UDP_PORT))
 
 
+# float, float, float -> float
+def estimate_roundtrip(old_rtt, new_sample, alpha=0.9):
+	# Needed for first estimation where there is no old
+	if old_rtt is None:
+		old_rtt = new_sample
+
+	updated = alpha * old_rtt + (1 - alpha) * new_sample
+	log("NEW RTT IS " + str(updated))
+	return updated
+
+
 # Writes data to sys.stdout in sorted order
 def write_data():
 	for p in sorted(RECV_PACKETS):
 		sys.stdout.write(RECV_PACKETS[p]['data'])
 
-	kill = json.dumps({'ack': ['kill']})
-	log(str(kill))
-	sock.sendto(kill, ADDR)
-	log("GOT PAST THE KILL SEND")
+		kill = json.dumps({'ack': ['kill']})
+		log(str(kill))
+		sock.sendto(kill, ADDR)
+		log("GOT PAST THE KILL SEND")
 
 
 # Now listen for packets
@@ -85,11 +75,9 @@ while True:
 	# with a timeout, send batch of packets
 	log("TOP OF RECV LOOP")
 
-	# Start off as an empty set and collect ACKs from result to be sent off in bulk
-	# Using set protects against duplicates
+	# Use set (protects against duplicates) to collect ACKs from result to be sent off in bulk
 	ACKS_TO_SEND = set()
 
-	# !!!!!!!!FIXME: MAX_AVAIL value was arbitrary and can be optimized!!!!!!!!!!
 	while len(ACKS_TO_SEND) < MAX_AVAIL:
 		try:
 			result = sock.recvfrom(MSG_SIZE)
@@ -98,10 +86,8 @@ while True:
 			if result:
 				(data, addr) = result
 				ADDR = addr
-
 				try:
 					decoded = json.loads(data)
-
 					if decoded['data']:
 						if len(RECV_PACKETS) > 0 and decoded['sequence'] < max(RECV_PACKETS):
 							log("[recv data] " + str(decoded['sequence']) + " (" + str(
@@ -119,7 +105,7 @@ while True:
 					# If we found the EOF packet, set SEQ_OF_FINAL to relevant value
 					if decoded['eof']:
 						SEQ_OF_FINAL = decoded['sequence']
-						#break
+					#break
 
 				except (ValueError, KeyError, TypeError) as e:
 					log("[recv corrupt packet]")
@@ -141,13 +127,11 @@ while True:
 			log("[error] unable to fully send packet")
 
 		else:
-			# TODO: Add this back in later on
 			# If the EOF flag is set, exit
 			log("SEQ OF FINAL VAL IS {} AND NUM PACKETS RECEIVED IS {}".format(SEQ_OF_FINAL, NUM_PACKETS_RECEIVED))
 			if SEQ_OF_FINAL is not None and NUM_PACKETS_RECEIVED == SEQ_OF_FINAL + 1:
 				log("[completed]")
 				write_data()
-
 				sys.exit(0)
 		continue
 
@@ -155,7 +139,3 @@ while True:
 		pass
 		log("[recv corrupt packet]")
 		raise e
-	#else:
-#		log("[error] timeout")
-#		sys.exit(-1)
-
