@@ -1,47 +1,35 @@
 #!/usr/bin/python -u
-#
-# Project 3 Starter Code
-#
-
-# PLAN: BUILD OUT TCP RENO THEN GET RID OF SLOW START
-# Because minimum and maximum bandwidth, latency, etc will be passed on the command line, we will have that information.
-# Essentially, we can use it to start at a higher initial value for cwnd that allows us to be more efficient
-
 
 import sys
 import socket
 import time
 import datetime
-import select
 import json
-import unittest
-import random
 
-# Size of each message
-MSG_SIZE = 1500
 
-# Total size of the data portion of the packet only
-DATA_SIZE = 1000
+MSG_SIZE = 1500  # Size of each message
 
-# Roundtrip timeout setting
-TIMEOUT = 30
+DATA_SIZE = 1000  # Total size of the data portion of the packet only
 
-# Current sequence number to be incremented
-SEQUENCE = random.randint(0, (2**32) - 1)
+TIMEOUT = 2  # Roundtrip timeout setting
 
-# Contains msgs that have been read from STDIN
-# as a dict where key is seq # of packet
-SENDING_QUEUE = {}
+RTT = None  # Roundtrip time
 
-# Determine if newline has been detected in loaded packets
-EOF_DETECTED = False
+SEQUENCE = 0  # Current sequence number to be incremented
 
-# Used for slow start/congestion control to determine how many packets to load
-# at once
-CURR_WINDOW = 1
+TO_SEND = {}  # Contains msgs that have been read from STDIN as a dict where key is seq # of packet
 
-# Counts duplicate ACKs for fast retransmit
-DUP_ACKS = 0
+ACKS_RECEIVED = []  # Contains msgs that have been received by receiver
+
+EOF_DETECTED = False  # Determine if newline has been detected in loaded packets
+
+CURR_WINDOW = 1  # Used for slow start/congestion control to determine how many packets to load at once
+
+INFLIGHT = 0  # Current number of packets that are on the way
+
+DUP_ACKS = 0  # Counts duplicate ACKs for fast retransmit
+
+INFLIGHT_MSGS = {}  # Messages that we have sent but not received an ack for
 
 # Bind to localhost and an ephemeral port
 IP_PORT = sys.argv[1]
@@ -58,136 +46,165 @@ def log(string):
     sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
 
-def send_next_packet():
+def send_next_packet(p):
     global SEQUENCE
     global EOF_DETECTED
-
-    if EOF_DETECTED:
-        return
+    global INFLIGHT
+    global CURR_WINDOW
+    global INFLIGHT_MSGS
 
     # Although TCP needs to wait for all packets to ACK back before sending more packets, we should
     # allow for continuous sending and then reorder everything at the end
     # Keys of SENDING_QUEUE are seq # so we sort to make sure packets are sent in order
-    for index, packet in enumerate(sorted(SENDING_QUEUE)):
-        log("Index: {}, Packet: {}".format(index, packet))
-        if index >= CURR_WINDOW:
-            break
+    try:
+        # sock.sendto returns length of msg sent
+        # checks that msg was fully sent
+        if sock.sendto(TO_SEND[p], dest) < len(TO_SEND[p]):
+            log("[error] unable to fully send packet")
+        # If successfully sent, add the current packet to the INFLIGHT_MSGS dict
+        # Then pop from the SENDING_QUEUE dict
+        else:
+            INFLIGHT_MSGS[p] = TO_SEND[p]
+            log("[send data] " + str(p) + " (" + str(len(TO_SEND[p])) + ")")
 
-        try:
-            # sock.sendto returns length of msg sent
-            # checks that msg was fully sent
-            if sock.sendto(SENDING_QUEUE[packet], dest) < len(SENDING_QUEUE[packet]):
-
-                log("[error] unable to fully send packet")
-            else:
-                SENDING_QUEUE.pop(packet)
-                log("[send data] " + str(SEQUENCE) + " (" + str(len(SENDING_QUEUE[packet])) + ")")
-        except KeyError:
-            break
+    except KeyError:
+        log("Continuing on KeyError in send")
+        return
+    # If an EOF packet is detected, return null to signal to the main method that there are no more packets to send
+    if EOF_DETECTED:
+        log("EOF Return from sending")
+        return
 
 
-
-def setup_handshake():
-    pass
-
+# reads user input and stores it in TO_SEND
 def read_user_input():
     global SEQUENCE
-    global SENDING_QUEUE
+    global TO_SEND
     global EOF_DETECTED
     global CURR_WINDOW
+    global DATA_SIZE
 
     # LOAD ALL PACKETS AT ONCE INTO SENDING_QUEUE
-    # Load packets up to CURR_WINDOW, then increment
-    # for i in range(CURR_WINDOW):
     while not EOF_DETECTED:
         # Get data for the packet
         data = sys.stdin.read(DATA_SIZE)
 
-        if EOF_DETECTED:
-            break
-
+        # If there is data to be added, check that it is of size DATA_SIZE (global variable)
+        # If not, it must be the last packet, so set EOF_DETECTED to True
         if len(data) > 0:
+            if len(data) < DATA_SIZE:
+                log("File size less than global DATA_SIZE")
+                EOF_DETECTED = True
+
+            # Add to the SENDING_QUEUE dict at the current SEQUENCE number, then increment SEQUENCE safely
             msg = json.dumps({"sequence": SEQUENCE, "data": data, "ack": False, "eof": EOF_DETECTED})
-            # Add msg to queue with seq # as key
-            SENDING_QUEUE[SEQUENCE] = msg
-            # Safely increment SEQUENCE (handles wraparound)
-            increment_seq(len(data))
+            TO_SEND[SEQUENCE] = msg
+            SEQUENCE += 1
 
+        # If data is of length 0, replace the most recent entry to SENDING_QUEUE with a copy where the only change
+        # Is that "eof" is set to True instead of False. Then break out of look
         else:
-            continue
-
-        # have we reached EOF?
-        if data[-2:] == "\\n":
-            EOF_DETECTED = True
-
-        else:
-            # TODO: possibly log an error?
-            return
+            temp = json.loads(TO_SEND[SEQUENCE - 1])
+            temp["eof"] = True
+            TO_SEND[SEQUENCE - 1] = json.dumps(temp)
+            log("Breaking out of read")
+            break
 
 
 # int -> void
 # safely wraps seq # if it exceeds 32-bit value
 def increment_seq(msg_size):
     global SEQUENCE
-
     # Uses absolute value to deal with wraparound
     if SEQUENCE + msg_size > 2**32 - 1:
         SEQUENCE = abs((2**32 - 1) - (SEQUENCE + msg_size))
     else:
         SEQUENCE += msg_size
 
-
-def connection_teardown():
-    pass
+    return SEQUENCE
 
 
 # float, float, float -> float
-def estimate_roundtrip(old_rtt, new_sample, alpha=0.875):
-
+def estimate_roundtrip(old_rtt, new_sample, alpha=0.4):
     # Needed for first estimation where there is no old
     if old_rtt is None:
-        old_rtt = TIMEOUT
+        old_rtt = new_sample
 
-    return alpha * old_rtt + (1 - alpha) * new_sample
+    updated = alpha * old_rtt + (1 - alpha) * new_sample
+    log("NEW RTT IS " + str(updated))
+    return updated
 
 
-# Send first packet and track time
-start = time.time()
-read_user_input()
-send_next_packet()
+def check():
+    diff = set(TO_SEND.keys()).difference(set(ACKS_RECEIVED))
+    if len(diff) == 0:
+        return True
+    else:
+        return diff
 
-# Now read in data, send packets
-while True:
-    log("ABOUT TO SLEEP")
 
-    print(SENDING_QUEUE)
-    result = sock.recvfrom(MSG_SIZE)
 
+def mainHelper(result):
     if result:
         (data, addr) = result
-        try:
-            decoded = json.loads(data)
+        decoded = json.loads(data)
+        for entry in decoded['ack']:
+            try:
+                log("ENTRY IN DECODED IS " + str(entry))
+                if entry == 'kill':
+                    log("Exiting after kill")
+                    sys.exit(0)
 
-            # If there is an ack, send next packet and reset timeout counter
-            if decoded['ack'] == SEQUENCE:
-                start = time.time()
-                log("[recv ack] " + str(SEQUENCE))
+                ACKS_RECEIVED.append(entry)
+                log(str(ACKS_RECEIVED))
 
-                # Try to send next packet; break if no more data
-                if not send_next_packet():
-                    log("broke")
-                    break
-        except (ValueError, KeyError, TypeError):
-            log("[recv corrupt packet]")
+            except (ValueError, KeyError, TypeError) as e:
+                log(str(e))
+                log("[recv corrupt packet]")
 
-    # If timeout has not been reached, try to send again
-    elif (time.time() - start) / 1000000 < TIMEOUT:
+
+def main(packets):
+    # Read in all user input and set timeout clock
+    global RTT
+    result = None
+
+    if len(packets) == 0:
+        # Now send packets
+        for i in range(0,len(TO_SEND)):
+            log("TOP OF SEND LOOP")
+            start = time.time()
+            send_next_packet(i)
+
+    else:
+        log("finish me should be here!!!!!!!!!!!!!!!!")
+        # iterate through packets given thru args packets
+        for packet in packets:
+            log("TOP OF !!ReSEND!! LOOP")
+            start = time.time()
+            send_next_packet(packet)  # idx
+
+    try:
+        result = sock.recvfrom(MSG_SIZE)
+        end = time.time()
+        RTT = estimate_roundtrip(RTT, end - start)
+    except socket.timeout:
+        log("SENDING timeout while waiting on result")
         pass
 
-    # If timeout has been reached, exit
-    else:
-        log("[error] timeout")
-        sys.exit(-1)
+    sock.settimeout(estimate_roundtrip(RTT, time.time() - start))
+    mainHelper(result)
 
-sock.sendto(json.dumps({"eof": True, "data": "", "sequence": SEQUENCE, "ack": False}), dest)
-sys.exit(0)
+
+############  CONTROL ##############
+start = time.time()
+read_user_input()
+idx = []
+while True:
+    main(idx)
+    if check() == True:
+        log("Exited with no more packets to send")
+        sock.sendto(json.dumps({"eof": True, "data": "", "sequence": SEQUENCE, "ack": False}), dest)
+        sys.exit(0)
+    else:
+        # either boolean (sent everything) or a list
+        idx = sorted(check())
