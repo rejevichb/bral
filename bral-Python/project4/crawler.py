@@ -37,6 +37,7 @@ class Crawler:
                            "Connection: keep-alive\r\n"
                            "Cookie: {}\r\n\r\n".format(page, self.cookie)).encode("utf-8"))
             self.curr_page = self.sock.recv(4096).decode("utf-8")
+            self.get_cookie(self.curr_page)  # cookie changes between requests
             #print("Curr Page: {}".format(self.curr_page))
         return self.curr_page
 
