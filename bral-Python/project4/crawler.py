@@ -30,14 +30,14 @@ class Crawler:
             self.sock.send("GET /{}/ HTTP/1.1\r\nHost: fring.ccs.neu.edu\r\n\r\n".format(page).encode())
             self.curr_page = self.sock.recv(4096).decode("utf-8")
             self.get_cookie(self.curr_page)
-
+            print("Curr Page: {}".format(self.curr_page))
         else:
             self.sock.send(str("GET /fakebook/{}/ HTTP/1.1\r\n" +
                            "Host: fring.ccs.neu.edu\r\n"
                            "Connection: keep-alive\r\n"
-                           "Cookie: {}\r\n\r\n".format(page, self.cookie)).encode())
+                           "Cookie: {}\r\n\r\n".format(page, self.cookie)).encode("utf-8"))
             self.curr_page = self.sock.recv(4096).decode("utf-8")
-
+            #print("Curr Page: {}".format(self.curr_page))
         return self.curr_page
 
     def get_links_to_visit(self):
@@ -45,11 +45,10 @@ class Crawler:
 
         for link in parsed.find_all("a"):
             if link not in self.seen:
-                self.fringe.add(link)
-
+                self.fringe.add(link['href'])
 
     def login(self, username, pw):
-        jamesonRequest = str("POST /accounts/login/ HTTP/1.1\r\n" +
+        request = str("POST /accounts/login/ HTTP/1.1\r\n" +
                              "Host: fring.ccs.neu.edu\r\n" +
                              "Content-Length: 92\r\n" +
                              "Connection: Keep-Alive\r\n" +
@@ -57,13 +56,14 @@ class Crawler:
                              "Content-Type: text/html; charset=utf-8\r\n\r\n" +
                              "username={}&password={}&csrfmiddlewaretoken={}&next=%2Ffakebook%2F\r\n".format(USERNAME, PW, self.csrf))
 
-        self.sock.send(jamesonRequest.encode())
+        self.sock.send(request.encode())
         acc = ""
-        print(self.session)
+        #print(self.session)
         for i in range(5):
             print(self.sock.recv(1024))
             acc += str(self.sock.recv(1024).decode())
-        return acc
+            print("ACC : {}".format(acc))
+        return str(self.sock.recv(1024).decode())
 
     def get_cookie(self, res):
         csrf = res[res.find("csrftoken="):]
@@ -82,18 +82,21 @@ def main():
     crawl.send_fb_get("accounts/login/?next=/fakebook")
     login = crawl.login(USERNAME, PW)
     crawl.get_cookie(login)
+    #crawl.send_fb_get("")
     #print("Response: {}".format(crawl.send_fb_get("fakebook")))
     crawl.get_links_to_visit()
     print("Current fringe: {}".format(crawl.fringe))
 
     counter = 0
-    while counter > 5:
-        for link in crawl.fringe:
+    while counter < 5:
+        fringe_now = crawl.fringe.copy()  # get_links_to_visit adds to fringe
+                                          # we cannot add to a set while iterating over it.
+        for link in fringe_now:
             crawl.send_fb_get(link)
             crawl.get_links_to_visit()
             crawl.seen.add(link)
 
-            counter+= 1
+            #counter+= 1
     print("Current fringe: {}".format(crawl.fringe))
 
 
