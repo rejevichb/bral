@@ -2,7 +2,7 @@
 
 import socket
 import sys
-from bs4 import BeautifulSoup
+import bs4
 
 
 USERNAME = sys.argv[1]
@@ -60,7 +60,7 @@ class Crawler:
         return self.curr_page
 
     def get_links(self, page):
-        parsed = BeautifulSoup(page, "html.parser")
+        parsed = bs4.BeautifulSoup(page, "html.parser")
         for link in parsed.find_all("a"):
             if link['href'] in self.links.keys():
                 continue
@@ -115,7 +115,7 @@ class Crawler:
 
     def find_flag(self):
         # Convert page to searchable bs4 object and look for h2 heading with class of "secret_flag"
-        parsed = BeautifulSoup(self.curr_page, "html.parser")
+        parsed = bs4.BeautifulSoup(self.curr_page, "html.parser")
         flag_search = parsed.find("h2", {"class": "secret_flag"})
         #print(flag_search)
 
