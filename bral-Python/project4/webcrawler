@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import subprocess
-subprocess.run("source venv/bin/activate").split()
+import os
+os.system("source venv/bin/activate")
 
 
 import socket
