@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 
 import socket
-import threading
-
+import sys
 import bs4
-import time
 
 
-#FUTURE_USERNAME = sys.argv[1]
-#FUTURE_PW = sys.argv[2]
-
-USERNAME = "001655997"
-PW = "ONO8WGDJ"
-
+USERNAME = sys.argv[1]
+PW = sys.argv[2]
 
 class Crawler:
 
@@ -55,8 +49,10 @@ class Crawler:
         acc = ""
         for i in range(5):
             acc += self.sock.recv(4096).decode()
-        print(self.curr_page[9:12])
+        #print(self.curr_page[9:12])
         if self.curr_page[9:12] == '500':
+            #print(msg)
+            self.curr_page = acc
             return self.curr_page[9:12]
 
         self.links[page] = True
@@ -125,7 +121,7 @@ class Crawler:
 
         # if it is found, print the flag and return True so the main knows to increment counter
         if flag_search is not None:
-            print(flag_search)
+            print(flag_search.getText()[6:])
             return True
 
         return False
@@ -141,31 +137,21 @@ def main():
 
     #login to the page given the user and pw and using initial cookie
     crawl.login(USERNAME, PW)
-    print("Logged in")
     homepage = crawl.get("/fakebook/")
     crawl.get_links(homepage)
 
-    #TODO: Some people will have multiple pages of friends, which are paginated as /PROFILE_ID/friends/PAGE_NUM
-
-    #TODO: Handle 500 errors with retry
-
-    ##### maybe not a big deal
-    #TODO: Handle non fring.ccs.neu.edu domains with simple skip
-
     flags_found = 0
-    while flags_found < 5:
+    while True:
         # Copy fringe to prevent errors from modifying set during iteration
         fringe = crawl.links.copy()
         # t1 = threading.Thread(target=print_square, args=(10,))
         # t2 = threading.Thread(target=print_cube, args=(10,))
-        #print(fringe)
-        print(crawl.links)
-        assert crawl.links == fringe
+
 
         for link, hasSeen in fringe.items():
                 #print(link, hasSeen)
                 if not hasSeen:
-                    print(link)
+                    #print(link)
                     linkpage = crawl.get(link)
                     if linkpage != '500':
 
@@ -174,14 +160,14 @@ def main():
 
                         if crawl.find_flag():
                             flags_found += 1
-                            print("FLAG FOUND!!!!")
-                            return
+                            if flags_found == 5:
+                                return
+                            #print("FLAG FOUND!!!!")
+                            #return
                     else:
                         #handle the 500 case
-                        while linkpage == '500':
-                            linkpage = crawl.get(link)
-                            print("retrying.....")
-                            print(link)
+                        if linkpage == '500':
+                            fringe[link] = False
 
 
                     #crawl.links[link] = True
