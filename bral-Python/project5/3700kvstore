@@ -31,7 +31,7 @@ while True:
 				okmsg = {"src": msg['dst'], "dst": msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID'],
 							"value": store[msg['key']]}
 
-				sock.send(json.loads(okmsg))
+				sock.send(json.loads(str(okmsg)))
 
 			# return an empty string
 			else:
@@ -41,7 +41,7 @@ while True:
 		if msg["type"] == 'put':
 			store[msg["key"]] = msg['value']
 			okmsg = {"src": msg['dst'], 'dst': msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
-			sock.send(json.loads(okmsg))
+			sock.send(json.loads(str(okmsg)))
 
 		# Handle noop messages. This may be removed from your final implementation
 		elif msg['type'] == 'noop':
