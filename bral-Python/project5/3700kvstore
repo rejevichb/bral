@@ -14,6 +14,7 @@ sock = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 sock.connect(my_id)
 
 last = 0
+store = {}
 
 while True:
 	ready = select.select([sock], [], [], 0.1)[0]
@@ -24,9 +25,23 @@ while True:
 		if len(msg_raw) == 0: continue
 		msg = json.loads(msg_raw)
 		
-		# For now, ignore get() and put() from clients
-		if msg['type'] in ['get', 'put']:
-                        pass
+		# handle get() and put() from clients
+		if msg['type'] == 'get':
+			if msg['key'] in store:
+				okmsg = {"src": msg['dst'], "dst": msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID'],
+							"value": store[msg['key']]}
+
+				sock.send(json.loads(okmsg))
+
+			# return an empty string
+			else:
+				print("NOT IN STORE")
+				sock.send(json.loads(""))
+
+		if msg["type"] == 'put':
+			store[msg["key"]] = msg['value']
+			okmsg = {"src": msg['dst'], 'dst': msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+			sock.send(json.loads(okmsg))
 
 		# Handle noop messages. This may be removed from your final implementation
 		elif msg['type'] == 'noop':
