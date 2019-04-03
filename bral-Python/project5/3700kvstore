@@ -31,17 +31,17 @@ while True:
 				okmsg = {"src": msg['dst'], "dst": msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID'],
 							"value": store[msg['key']]}
 
-				sock.send(json.loads(str(okmsg)))
+				sock.send(json.dumps(okmsg))
 
 			# return an empty string
 			else:
 				print("NOT IN STORE")
-				sock.send(json.loads(""))
+				sock.send(json.dumps(""))
 
 		if msg["type"] == 'put':
 			store[msg["key"]] = msg['value']
 			okmsg = {"src": msg['dst'], 'dst': msg['src'], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
-			sock.send(json.loads(str(okmsg)))
+			sock.send(json.dumps(okmsg))
 
 		# Handle noop messages. This may be removed from your final implementation
 		elif msg['type'] == 'noop':
