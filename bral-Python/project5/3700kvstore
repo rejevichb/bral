@@ -15,8 +15,8 @@ sock.connect(my_id)
 
 last = 0
 store = {}
-
-LEADER = None
+ranks = {x: hex(x) for x in replica_ids}
+LEADER = min(map(lambda x: hex(x), replica_ids))
 
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
