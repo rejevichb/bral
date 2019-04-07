@@ -15,8 +15,76 @@ sock.connect(my_id)
 
 last = 0
 store = {}
-ranks = {x: hex(x) for x in replica_ids}
-LEADER = min(map(lambda x: hex(x), replica_ids))
+replica_ids.append(my_id)
+
+
+def initial_election():
+    ranks = {x: int(x, 16) for x in replica_ids}
+    min_id = min(ranks.values())
+
+    for replica in ranks:
+        if ranks[replica] == min_id:
+            return replica
+
+
+def send_redirect(msg):
+    redirect_msg = {"src": msg['dst'], "dst": msg["src"], "leader": LEADER_ID, "type": "redirect", "MID": msg['MID']}
+    sock.send(json.dumps(redirect_msg))
+
+
+def answer_get(msg):
+    if msg['key'] in store:
+        return_msg = {"src": msg['dst'],
+                      "dst": msg['src'],
+                      "leader": msg['leader'],
+                      "type": "ok",
+                      "MID": msg['MID'],
+                      "value": store[msg['key']]}
+    else:
+        return_msg = {"src": msg['dst'],
+                      "dst": msg['src'],
+                      "leader": msg['leader'],
+                      "type": "fail",
+                      "MID": msg['MID'],
+                      "value": ""}
+
+    sock.send(json.dumps(return_msg))
+
+
+def answer_put(msg):
+    #Store data in store dict regardless of src address
+    store[msg["key"]] = msg['value']
+
+    # if leader, broadcast to followers
+    if IS_LEADER:
+        to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+        sock.send(json.dumps(to_followers))
+        wait_for_responses()
+
+    # If not leader and put came from leader (src == LEADER_ID), store data in store dict
+    else:
+        pass
+    to_client = {"src": msg['dst'], 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+
+
+    sock.send(json.dumps(to_client))
+
+def wait_for_responses():
+    # Make a timeout
+    pass
+
+
+
+
+
+
+
+#####################################################
+#                   Main Function                   #
+#####################################################
+
+LEADER_ID = initial_election()
+IS_LEADER = LEADER_ID == my_id
 
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
@@ -28,35 +96,29 @@ while True:
         msg = json.loads(msg_raw)
 
         # handle get() and put() from clients
-        if msg["leader"] != LEADER:
-            return_msg = {"src": msg['dst'], "dst": LEADER, "leader": LEADER, "type": "redirect", "MID": msg['MID']}
-            sock.send(json.dumps(return_msg))
-            print("REDIRECT SENT")
+        #print("{} {}".format(msg["dst"], LEADER_ID))
+        if msg["dst"] != LEADER_ID:
+            send_redirect(msg)
+            #print("REDIRECT SENT")
             continue
 
         if msg['type'] == 'get':
-            if msg['key'] in store:
-                return_msg = {"src": msg['dst'], "dst": LEADER, "leader": msg['leader'], "type": "fail", "MID": msg['MID'], "value": store[msg['key']]}
-            else:
-                return_msg = {"src": msg['dst'], "dst": LEADER, "leader": msg['leader'], "type": "fail", "MID": msg['MID'], "value": ""}
-
-            sock.send(json.dumps(return_msg))
+            answer_get(msg)
 
         elif msg["type"] == 'put':
-            store[msg["key"]] = msg['value']
-            okmsg = {"src": msg['dst'], 'dst': LEADER, "leader": msg['leader'], "type": "fail", "MID": msg['MID']}
-            sock.send(json.dumps(okmsg))
+            answer_put(msg)
 
         # Handle noop messages. This may be removed from your final implementation
         elif msg['type'] == 'noop':
-            pass
+            okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
+            sock.send(json.dumps(okmsg))
             #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
 
-    clock = time.time()
-    if clock - last > 2:
-        # Send a no-op message to a random peer every two seconds, just for fun
-        # You definitely want to remove this from your implementation
-        msg = {'src': my_id, 'dst': random.choice(replica_ids), 'leader': 'FFFF', 'type': 'noop'}
-        sock.send(json.dumps(msg))
-        #print('%s sending a NOOP to %s' % (msg['src'], msg['dst']))
-        last = clock
+    # clock = time.time()
+    # if clock - last > 2:
+    #     # Send a no-op message to a random peer every two seconds, just for fun
+    #     # You definitely want to remove this from your implementation
+    #     msg = {'src': my_id, 'dst': random.choice(replica_ids), 'leader': 'FFFF', 'type': 'noop'}
+    #     sock.send(json.dumps(msg))
+    #     #print('%s sending a NOOP to %s' % (msg['src'], msg['dst']))
+    #     last = clock
