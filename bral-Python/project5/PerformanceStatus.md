@@ -1,35 +1,35 @@
 
 
-###Passing:
+### Passing:
 **(70% of all tests)**
 
 ##### Simple 1 (all)
 - Simple-1 &nbsp; `(+ bonus x2)`
 - Simple-2 &nbsp; `(+ bonus)`
 
-#####Crash 
+##### Crash 
 - Crash-1 &nbsp; `(+ bonus)`
 - Crash-2 &nbsp; `(+ bonus)`
 
-#####Partition
+##### Partition
 - partition-1
 - partition-2 &nbsp; `(+ bonus)`
 - partition-3 
 
-#####Unreliable 
+##### Unreliable 
 - unreliable-1 &nbsp; `(+ bonus)`
 - unreliable-2 &nbsp; `(+ bonus)`
 - unreliable-3 &nbsp; `(+ bonus)`
 
 
-#####Advanced 
+##### Advanced 
 - advanced-1 
     -   Total Failures and Unanswered Requests: 58 < 100, `Partial credit, needs improvement`
 - advanced-4 &nbsp; `(+ bonus)`
 
 
 
-###Failing
+### Failing
 **(30% of all tests)**
 - Crash-3
     - 	insufficient get() requests answered (51 > 81 * 0.50)
