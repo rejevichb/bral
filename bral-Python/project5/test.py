@@ -3,7 +3,7 @@
 import getpass, os, argparse, atexit
 from run import Simulation
 
-LEADERBOARD_OUTPUT = '/course/cs3700sp16/stats/project5/'
+LEADERBOARD_OUTPUT = '/course/cs3700sp19/stats/project5/'
 
 # Constants for tuning the difficulty of the tests
 PACKETS_LOW = 500.0
