@@ -52,26 +52,48 @@ def answer_get(msg):
 
 
 def answer_put(msg):
-    #Store data in store dict regardless of src address
+    # Store data in store dict regardless of src address
     store[msg["key"]] = msg['value']
 
     # if leader, broadcast to followers
     if IS_LEADER:
-        to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
-        sock.send(json.dumps(to_followers))
-        wait_for_responses()
+        for rep in replica_ids:
+            if rep == LEADER_ID:
+                continue
+            to_followers = {"src": LEADER_ID, 'dst': rep, "leader": msg['leader'], "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
+            sock.send(json.dumps(to_followers))
 
-    # If not leader and put came from leader (src == LEADER_ID), store data in store dict
-    else:
-        pass
-    to_client = {"src": msg['dst'], 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+        #if len(wait_for_responses()) == len(replica_ids):
+        to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+        sock.send(json.dumps(to_client))
 
+    #elif msg["src"] == LEADER_ID:
+    #    # If a put is received from the leader, send an ACK back to the leader
+    #    to_leader = {"src": msg['dst'], 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
+    #    sock.send(json.dumps(to_leader))
 
-    sock.send(json.dumps(to_client))
 
 def wait_for_responses():
     # Make a timeout
-    pass
+    timer_start = time.time()
+    responses = {}
+
+    while time.time() - timer_start < 2:
+        ready = select.select([sock], [], [], 0.1)[0]
+        for s in ready:
+            msg_raw = s.recv(32768)
+
+            if len(msg_raw) == 0: continue
+            msg = json.loads(msg_raw)
+
+            if len(msg) != 0:
+                responses[msg["src"]] = msg
+
+    #for k,v in responses.items():
+        #print("{} : {}".format(k,v))
+
+    print("{} : {}".format(len(responses), len(replica_ids)))
+    return responses
 
 
 
@@ -96,10 +118,8 @@ while True:
         msg = json.loads(msg_raw)
 
         # handle get() and put() from clients
-        #print("{} {}".format(msg["dst"], LEADER_ID))
         if msg["dst"] != LEADER_ID:
             send_redirect(msg)
-            #print("REDIRECT SENT")
             continue
 
         if msg['type'] == 'get':
