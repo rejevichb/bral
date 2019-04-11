@@ -54,23 +54,22 @@ def answer_get(msg):
 def answer_put(msg):
     # Store data in store dict regardless of src address
     store[msg["key"]] = msg['value']
+    #print(store)
 
     # if leader, broadcast to followers
     if IS_LEADER:
         for rep in replica_ids:
-            if rep == LEADER_ID:
-                continue
-            to_followers = {"src": LEADER_ID, 'dst': rep, "leader": msg['leader'], "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
+            to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
             sock.send(json.dumps(to_followers))
 
-        #if len(wait_for_responses()) == len(replica_ids):
-        to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
-        sock.send(json.dumps(to_client))
+        if len(wait_for_responses()) >= len(replica_ids) // 2 + 1:
+            to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+            sock.send(json.dumps(to_client))
 
-    #elif msg["src"] == LEADER_ID:
-    #    # If a put is received from the leader, send an ACK back to the leader
-    #    to_leader = {"src": msg['dst'], 'dst': msg["src"], "leader": msg['leader'], "type": "ok", "MID": msg['MID']}
-    #    sock.send(json.dumps(to_leader))
+    elif msg["src"] == LEADER_ID:
+        # If a put is received from the leader, send an ACK back to the leader
+        to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+        sock.send(json.dumps(to_leader))
 
 
 def wait_for_responses():
@@ -78,27 +77,24 @@ def wait_for_responses():
     timer_start = time.time()
     responses = {}
 
-    while time.time() - timer_start < 2:
+    while time.time() - timer_start < .01:
         ready = select.select([sock], [], [], 0.1)[0]
         for s in ready:
             msg_raw = s.recv(32768)
 
             if len(msg_raw) == 0: continue
+
             msg = json.loads(msg_raw)
 
-            if len(msg) != 0:
-                responses[msg["src"]] = msg
+            if msg["src"] not in replica_ids: continue
+
+            responses[msg["src"]] = msg
 
     #for k,v in responses.items():
         #print("{} : {}".format(k,v))
 
-    print("{} : {}".format(len(responses), len(replica_ids)))
+    #print("{} : {}".format(len(responses), len(replica_ids)))
     return responses
-
-
-
-
-
 
 
 #####################################################
@@ -118,21 +114,22 @@ while True:
         msg = json.loads(msg_raw)
 
         # handle get() and put() from clients
-        if msg["dst"] != LEADER_ID:
+        if msg["dst"] == LEADER_ID or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
+
+            if msg['type'] == 'get':
+                answer_get(msg)
+
+            elif msg["type"] == 'put':
+                answer_put(msg)
+
+            # Handle noop messages. This may be removed from your final implementation
+            elif msg['type'] == 'noop':
+                okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
+                sock.send(json.dumps(okmsg))
+                #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
+        else:
             send_redirect(msg)
             continue
-
-        if msg['type'] == 'get':
-            answer_get(msg)
-
-        elif msg["type"] == 'put':
-            answer_put(msg)
-
-        # Handle noop messages. This may be removed from your final implementation
-        elif msg['type'] == 'noop':
-            okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
-            sock.send(json.dumps(okmsg))
-            #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
 
     # clock = time.time()
     # if clock - last > 2:
