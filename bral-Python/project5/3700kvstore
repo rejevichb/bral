@@ -134,7 +134,7 @@ while True:
         if msg["src"] in replica_ids and msg["dst"] == LEADER_ID and msg["type"] == "ok":
             print("here")
             messageLog[msg["MID"]] += 1
-            if messageLog[msg["MID"]] >= len(replica_ids):
+            if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
                 to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
                 sock.send(json.dumps(to_client))
 
