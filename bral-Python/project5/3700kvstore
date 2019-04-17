@@ -3,6 +3,8 @@
 
 ######################TODO LIST############################
 
+
+## SO this is finished but rolled back
 #TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
     # Tried to add commit_to_store() this is really ineffecient and is bringing down our performance by a lot maybe
     # we just commit right when we see the put?  -- This seems like the wrong thing to do though when looking over 2PC
@@ -175,10 +177,25 @@ while True:
 
             # msg["dst"] in replica_ids and
         elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
+
+
+            # start heartbeat timer
+
+            # if heartbeat timeout
+            #    send heartbeat to leader
+            # if no response
+            #    call your elections
+
+
             if msg["type"] == 'put':
+                # reset hbtimer
                 answer_put(msg)
-            if msg["type"] == 'commit':
-                store[msg["key"]] = msg['value']
+
+
+
+            # For commit actions
+            # if msg["type"] == 'commit':
+            #     store[msg["key"]] = msg['value']
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
         else:
