@@ -7,7 +7,6 @@ my_id = sys.argv[1]
 
 # The ID numbers of all the other replicas
 replica_ids = sys.argv[2:]
-print(replica_ids)
 
 # Connect to the network. All messages to/from other replicas and clients will
 # occur over this socket
@@ -54,6 +53,7 @@ def answer_get(msg):
 
 def answer_put(msg, messageLog):
     # Store data in store dict regardless of src address
+    # This needs to be changed we should only commit to the store when we know all replicas have the change
     store[msg["key"]] = msg['value']
 
     # if leader, broadcast to followers
@@ -138,7 +138,10 @@ while True:
 
             # msg["dst"] in replica_ids and
         elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
-            answer_put(msg, messageLog)
+            print("Message Type:")
+            print(msg['type'])
+            if msg["type"] == 'put':
+                answer_put(msg, messageLog)
 
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
