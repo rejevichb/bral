@@ -35,7 +35,7 @@ def send_redirect(msg):
 
 def answer_get(msg):
     if msg['key'] in store:
-        return_msg = {"src": msg['dst'],
+        return_msg = {"src": LEADER_ID,
                       "dst": msg['src'],
                       "leader": msg['leader'],
                       "type": "ok",
@@ -65,8 +65,7 @@ def answer_put(msg, messageLog):
     # ADD ME BACK IN!!
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
-        print("Follower is acking now")
-        to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+        to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
         sock.send(json.dumps(to_leader))
 
 
@@ -128,7 +127,7 @@ while True:
                         print("firing ok to client")
                         to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
                         sock.send(json.dumps(to_client))
-                        messageLog.pop(msg["MID"])
+
 
             # Handle noop messages. This may be removed from your final implementation
             # elif msg['type'] == 'noop':
