@@ -128,7 +128,9 @@ while True:
             #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
             #     sock.send(json.dumps(okmsg))
                 #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
-        if msg["dst"] in replica_ids and msg["src"] == LEADER_ID:
+
+            # msg["dst"] in replica_ids and
+        if msg["src"] == LEADER_ID:
             if msg["type"] =='put':
                 answer_put(msg, messageLog)
 
