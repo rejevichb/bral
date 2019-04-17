@@ -129,6 +129,7 @@ while True:
                 print("here")
                 messageLog[msg["MID"]] += 1
                 if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
+                    print("firing ok to client")
                     to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
                     sock.send(json.dumps(to_client))
             # Handle noop messages. This may be removed from your final implementation
