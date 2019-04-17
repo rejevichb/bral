@@ -60,6 +60,7 @@ def answer_put(msg, messageLog):
     if IS_LEADER:
         messageLog[msg["MID"]] = 0
         for rep in replica_ids:
+            print("in answer put LEADER")
             to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
             sock.send(json.dumps(to_followers))
 
@@ -68,6 +69,7 @@ def answer_put(msg, messageLog):
         #     sock.send(json.dumps(to_client))
 
     elif msg["src"] == LEADER_ID:
+        print("in answer put Follower")
         # If a put is received from the leader, send an ACK back to the leader
         to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
         sock.send(json.dumps(to_leader))
