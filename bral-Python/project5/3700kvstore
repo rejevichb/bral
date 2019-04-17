@@ -133,7 +133,7 @@ while True:
         # Need new logic here... This way we can keep track of how many acks we have gotten
         elif msg["src"] in replica_ids and msg["dst"] == LEADER_ID and msg["type"] == "ok":
             messageLog[msg["MID"]] += 1
-            if messageLog[msg["MID"]] >= len(replica_ids) // 2 + 1:
+            if messageLog[msg["MID"]] >= len(replica_ids):
                 to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
                 sock.send(json.dumps(to_client))
 
