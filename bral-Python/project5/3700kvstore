@@ -57,7 +57,7 @@ def answer_put(msg, messageLog):
 
     # if leader, broadcast to followers
     if IS_LEADER:
-        messageLog[msg["MID"]] = 0
+        messageLog[msg["MID"]] = 1
         for rep in replica_ids:
             print("in answer put LEADER")
             to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
