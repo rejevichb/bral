@@ -29,7 +29,7 @@ def initial_election():
 	ranks = {x: int(x, 16) for x in replica_ids}
 	min_id = min(ranks.values())
 	global term
-	term += 1
+	term += 1 #increment term on every election
 
 	for replica in ranks:
 		if ranks[replica] == min_id:
@@ -88,6 +88,7 @@ def answer_put(msg):
 							'key': msg['key'], 'value': msg['value']}
 			sock.send(json.dumps(to_followers))
 
+		#only commit to official log when majority of replicas have responded
 		if len(wait_for_responses()) >= len(replica_ids) // 2 + 1:
 			to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
 			commit_msg(msg)
@@ -96,7 +97,6 @@ def answer_put(msg):
 	elif msg["src"] == LEADER_ID:
 		# If a put is received from the leader, send an ACK back to the leader
 		to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-		print("ACK")
 		sock.send(json.dumps(to_leader))
 
 
@@ -107,7 +107,6 @@ def commit_msg(msg):
 
 
 def wait_for_responses():
-	# Make a timeout
 	timer_start = time.time()
 	responses = {}
 
@@ -115,19 +114,16 @@ def wait_for_responses():
 		ready = select.select([sock], [], [], 0.1)[0]
 		for s in ready:
 			msg_raw = s.recv(32768)
-
 			if len(msg_raw) == 0:
 				continue
 
 			msg = json.loads(msg_raw)
 
-			if msg["src"] not in replica_ids: continue
+			#what if im the leader and a new replica comes online?
+			if msg["src"] not in replica_ids:
+				continue
 
 			responses[msg["src"]] = msg
-
-	# for k,v in responses.items():
-	# print("{} : {}".format(k,v))
-
 	return responses
 
 
@@ -140,8 +136,9 @@ while True:
 
 	if sock in ready:
 		msg_raw = sock.recv(32768)
+		if len(msg_raw) == 0:
+			continue
 
-		if len(msg_raw) == 0: continue
 		msg = json.loads(msg_raw)
 
 		# handle get() and put() from clients
@@ -152,12 +149,6 @@ while True:
 
 			elif msg["type"] == 'put':
 				answer_put(msg)
-
-			# first attempt at getting a majority of 'ok's' before committing - see okays{} dict - is wait_for_response
-			# what we should use instead of okays dict?
-			elif msg['type'] == 'ok':
-				okays[msg['src']] = True
-				commit_msg(msg)
 
 		# only redirect if I am not the leader but the message I got thinks I am
 		elif not IS_LEADER & msg['leader'] == my_id:
