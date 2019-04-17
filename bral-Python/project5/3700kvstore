@@ -70,7 +70,7 @@ def answer_put(msg):
 
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
-        messageLog[msg["MID"]] = 1
+        messageLog[msg["MID"]] = []
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
@@ -84,7 +84,8 @@ def answer_put(msg):
 def receive_acks(msg):
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]] += 1
-        #Question?? Should this be 3 or should this be 2?  Leader must have got the ack on itself right????
+
+        #quorum should only be >= len(replica_ids) // 2 because we know the leader must have been ready to commit changes
         if messageLog[msg["MID"]] >= len(replica_ids) // 2:
             # print("firing ok to client")
             to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
@@ -92,8 +93,17 @@ def receive_acks(msg):
             messageLog.pop(msg["MID"])
             # This needs to be changed we should only commit to the store when we know all replicas have the change
             # We need to have this become a distributed commit
+            commit_to_store(msg)
 
-            store[msg["key"]] = msg['value']
+            # Can rollback via next line
+            #store[msg["key"]] = msg['value']
+
+
+def commit_to_store(msg):
+    to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
+    sock.send(json.dumps(to_replicas))
+
+
 
 
 
@@ -161,6 +171,8 @@ while True:
         elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
             if msg["type"] == 'put':
                 answer_put(msg)
+            if msg["type"] == 'commit':
+                store[msg["key"]] = msg['value']
 
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
