@@ -3,13 +3,14 @@
 
 ######################TODO LIST############################
 
-# The first thing we should do it make the store actually distributed and have the leader ask them to push to store
+#TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
 
-# Next we need to add in timers and election processes
 
-# Add in full message log with time series so that we can reconcile partitions
+#TODO Next we need to add in timers and election processes
 
-# Optimize
+#TODO Add in full message log with time series so that we can reconcile partitions
+
+#TODO Optimize
 
 
 import sys, socket, select, time, json, random
@@ -83,6 +84,8 @@ def answer_put(msg):
 def receive_acks(msg):
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]] += 1
+        print("REPLCIA ID length")
+        print(len(replica_ids))
         if messageLog[msg["MID"]] >= len(replica_ids) // 2 + 1:
             # print("firing ok to client")
             to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
@@ -90,6 +93,7 @@ def receive_acks(msg):
             messageLog.pop(msg["MID"])
             # This needs to be changed we should only commit to the store when we know all replicas have the change
             # We need to have this become a distributed commit
+
             store[msg["key"]] = msg['value']
 
 
