@@ -4,7 +4,10 @@
 ######################TODO LIST############################
 
 #TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
+    # Tried to add commit_to_store() this is really ineffecient and is bringing down our performance by a lot maybe
+    # we just commit right when we see the put?  -- This seems like the wrong thing to do though when looking over 2PC
 
+    # have rolled back please see first line in <def answer_put(msg)> function.
 
 #TODO Next we need to add in timers and election processes
 
@@ -65,16 +68,13 @@ def answer_get(msg):
 
 
 def answer_put(msg):
-    # Store data in store dict regardless of src address
-
-
+    store[msg["key"]] = msg['value']
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
         messageLog[msg["MID"]] = 0
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
-    # ADD ME BACK IN!!
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
         to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
@@ -93,16 +93,16 @@ def receive_acks(msg):
             messageLog.pop(msg["MID"])
             # This needs to be changed we should only commit to the store when we know all replicas have the change
             # We need to have this become a distributed commit
-            commit_to_store(msg)
+            # commit_to_store(msg)
 
             # Can rollback via next line
             #store[msg["key"]] = msg['value']
 
 
-def commit_to_store(msg):
-    store[msg["key"]] = msg['value']
-    to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
-    sock.send(json.dumps(to_replicas))
+# def commit_to_store(msg):
+#     store[msg["key"]] = msg['value']
+#     to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
+#     sock.send(json.dumps(to_replicas))
 
 
 
@@ -149,6 +149,12 @@ while True:
         if len(msg_raw) == 0: continue
         msg = json.loads(msg_raw)
 
+        # if not is_leader and (current_ms() - last_hearbeat >= election_timeout):
+        #     run_for_leader()
+        #
+        # if is_leader and (current_ms() - last_hearbeat > heartbeat_timeout):
+        #     send_heartbeat()
+
         # handle get() and put() from clients
         # or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
         if msg["dst"] == LEADER_ID:
@@ -162,7 +168,7 @@ while True:
             elif msg["type"] == "ok":
                 receive_acks(msg)
 
-            # Handle noop messages. This may be removed from your final implementation
+        #Handle noop messages. This may be removed from your final implementation
             # elif msg['type'] == 'noop':
             #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
             #     sock.send(json.dumps(okmsg))
@@ -175,7 +181,6 @@ while True:
             if msg["type"] == 'commit':
                 store[msg["key"]] = msg['value']
 
-
         # Need new logic here... This way we can keep track of how many acks we have gotten
         else:
             send_redirect(msg)
@@ -185,7 +190,7 @@ while True:
     # if clock - last > 2:
     #     # Send a no-op message to a random peer every two seconds, just for fun
     #     # You definitely want to remove this from your implementation
-    #     msg = {'src': my_id, 'dst': random.choice(replica_ids), 'leader': 'FFFF', 'type': 'noop'}
+    #     msg = {'src': my_id, 'dst': 'FFFF', 'leader': LEADER_ID, 'type': 'noop'}
     #     sock.send(json.dumps(msg))
     #     #print('%s sending a NOOP to %s' % (msg['src'], msg['dst']))
     #     last = clock
