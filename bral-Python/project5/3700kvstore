@@ -63,10 +63,10 @@ def answer_put(msg, messageLog):
         sock.send(json.dumps(to_followers))
 
     # ADD ME BACK IN!!
-    # elif msg["src"] == LEADER_ID and msg["dst"] in replica_ids:
-    #     # If a put is received from the leader, send an ACK back to the leader
-    #     to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-    #     sock.send(json.dumps(to_leader))
+    elif msg["src"] == LEADER_ID and msg["dst"] in replica_ids:
+        # If a put is received from the leader, send an ACK back to the leader
+        to_leader = {"src": msg['dst'], 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+        sock.send(json.dumps(to_leader))
 
 
 # def wait_for_responses():
