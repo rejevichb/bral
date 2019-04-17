@@ -64,7 +64,7 @@ def answer_put(msg, messageLog):
     # ADD ME BACK IN!!
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
-        to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"]}
+        to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_leader))
 
 
