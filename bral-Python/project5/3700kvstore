@@ -70,7 +70,7 @@ def answer_put(msg):
 
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
-        messageLog[msg["MID"]] = []
+        messageLog[msg["MID"]] = 0
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
