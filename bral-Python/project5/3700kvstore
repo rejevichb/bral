@@ -100,6 +100,7 @@ def receive_acks(msg):
 
 
 def commit_to_store(msg):
+    store[msg["key"]] = msg['value']
     to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
     sock.send(json.dumps(to_replicas))
 
