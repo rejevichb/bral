@@ -7,7 +7,7 @@
     # Tried to add commit_to_store() this is really ineffecient and is bringing down our performance by a lot maybe
     # we just commit right when we see the put?  -- This seems like the wrong thing to do though when looking over 2PC
 
-    # have rolled back please see first line in <def answer_put(msg)> function.
+    # have rolled back please see last line in <recieve_acks> function.
 
 #TODO Next we need to add in timers and election processes
 
@@ -68,7 +68,6 @@ def answer_get(msg):
 
 
 def answer_put(msg):
-    store[msg["key"]] = msg['value']
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
         messageLog[msg["MID"]] = 0
@@ -96,7 +95,7 @@ def receive_acks(msg):
             # commit_to_store(msg)
 
             # Can rollback via next line
-            #store[msg["key"]] = msg['value']
+            store[msg["key"]] = msg['value']
 
 
 # def commit_to_store(msg):
