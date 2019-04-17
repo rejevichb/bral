@@ -59,9 +59,8 @@ def answer_put(msg, messageLog):
     # if leader, broadcast to followers
     if IS_LEADER:
         messageLog[msg["MID"]] = 1
-        for rep in replica_ids:
-            to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
-            sock.send(json.dumps(to_followers))
+        to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
+        sock.send(json.dumps(to_followers))
 
     # ADD ME BACK IN!!
     # elif msg["src"] == LEADER_ID and msg["dst"] in replica_ids:
