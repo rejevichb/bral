@@ -53,8 +53,7 @@ def answer_get(msg):
 
 def answer_put(msg, messageLog):
     # Store data in store dict regardless of src address
-    # This needs to be changed we should only commit to the store when we know all replicas have the change
-    store[msg["key"]] = msg['value']
+
 
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
@@ -128,6 +127,8 @@ while True:
                         to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
                         sock.send(json.dumps(to_client))
                         messageLog.pop(msg["MID"])
+                        # This needs to be changed we should only commit to the store when we know all replicas have the change
+                        store[msg["key"]] = msg['value']
 
 
             # Handle noop messages. This may be removed from your final implementation
@@ -138,8 +139,6 @@ while True:
 
             # msg["dst"] in replica_ids and
         elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
-            print("Message Type:")
-            print(msg['type'])
             if msg["type"] == 'put':
                 answer_put(msg, messageLog)
 
