@@ -55,11 +55,10 @@ def answer_get(msg):
 def answer_put(msg, messageLog):
     # Store data in store dict regardless of src address
     store[msg["key"]] = msg['value']
-    messageLog[msg["MID"]] = 0
-
 
     # if leader, broadcast to followers
     if IS_LEADER:
+        messageLog[msg["MID"]] = 0
         for rep in replica_ids:
             to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
             sock.send(json.dumps(to_followers))
@@ -125,18 +124,21 @@ while True:
                 answer_put(msg, messageLog)
 
             # Handle noop messages. This may be removed from your final implementation
-            elif msg['type'] == 'noop':
-                okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
-                sock.send(json.dumps(okmsg))
+            # elif msg['type'] == 'noop':
+            #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
+            #     sock.send(json.dumps(okmsg))
                 #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
+        if msg["dst"] in replica_ids and msg["src"] == LEADER_ID:
+            if msg["type"] =='put':
+                answer_put(msg, messageLog)
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
-        if msg["src"] in replica_ids and msg["dst"] == LEADER_ID and msg["type"] == "ok":
-            print("here")
-            messageLog[msg["MID"]] += 1
-            if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
-                to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-                sock.send(json.dumps(to_client))
+            if msg["type"] == "ok":
+                print("here")
+                messageLog[msg["MID"]] += 1
+                if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
+                    to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+                    sock.send(json.dumps(to_client))
 
         else:
             send_redirect(msg)
