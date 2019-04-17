@@ -16,6 +16,7 @@ sock.connect(my_id)
 last = 0
 store = {}
 replica_ids.append(my_id)
+messageLog = {}
 
 
 def initial_election():
@@ -51,10 +52,11 @@ def answer_get(msg):
     sock.send(json.dumps(return_msg))
 
 
-def answer_put(msg):
+def answer_put(msg, messageLog):
     # Store data in store dict regardless of src address
     store[msg["key"]] = msg['value']
-    #print(store)
+    messageLog[msg["MID"]] = 0
+
 
     # if leader, broadcast to followers
     if IS_LEADER:
@@ -62,9 +64,9 @@ def answer_put(msg):
             to_followers = {"src": LEADER_ID, 'dst': rep, "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
             sock.send(json.dumps(to_followers))
 
-        if len(wait_for_responses()) >= len(replica_ids) // 2 + 1:
-            to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-            sock.send(json.dumps(to_client))
+        # if len(wait_for_responses()) >= len(replica_ids) // 2 + 1:
+        #     to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+        #     sock.send(json.dumps(to_client))
 
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
@@ -72,29 +74,29 @@ def answer_put(msg):
         sock.send(json.dumps(to_leader))
 
 
-def wait_for_responses():
-    # Make a timeout
-    timer_start = time.time()
-    responses = {}
-
-    while time.time() - timer_start < .01:
-        ready = select.select([sock], [], [], 0.1)[0]
-        for s in ready:
-            msg_raw = s.recv(32768)
-
-            if len(msg_raw) == 0: continue
-
-            msg = json.loads(msg_raw)
-
-            if msg["src"] not in replica_ids: continue
-
-            responses[msg["src"]] = msg
-
-    #for k,v in responses.items():
-        #print("{} : {}".format(k,v))
-
-    #print("{} : {}".format(len(responses), len(replica_ids)))
-    return responses
+# def wait_for_responses():
+#     # Make a timeout
+#     timer_start = time.time()
+#     responses = {}
+#
+#     while time.time() - timer_start < .01:
+#         ready = select.select([sock], [], [], 0.1)[0]
+#         for s in ready:
+#             msg_raw = s.recv(32768)
+#
+#             if len(msg_raw) == 0: continue
+#
+#             msg = json.loads(msg_raw)
+#
+#             if msg["src"] not in replica_ids: continue
+#
+#             responses[msg["src"]] = msg
+#
+#     #for k,v in responses.items():
+#         #print("{} : {}".format(k,v))
+#
+#     #print("{} : {}".format(len(responses), len(replica_ids)))
+#     return responses
 
 
 #####################################################
@@ -120,13 +122,21 @@ while True:
                 answer_get(msg)
 
             elif msg["type"] == 'put':
-                answer_put(msg)
+                answer_put(msg, messageLog)
 
             # Handle noop messages. This may be removed from your final implementation
             elif msg['type'] == 'noop':
                 okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
                 sock.send(json.dumps(okmsg))
                 #print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
+
+        # Need new logic here... This way we can keep track of how many acks we have gotten
+        elif msg["src"] in replica_ids and msg["dst"] == LEADER_ID and msg["type"] == "ok":
+            messageLog[msg["MID"]] += 1
+            if messageLog[msg["MID"]] >= len(replica_ids) // 2 + 1:
+                to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+                sock.send(json.dumps(to_client))
+
         else:
             send_redirect(msg)
             continue
