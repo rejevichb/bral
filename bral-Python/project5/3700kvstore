@@ -125,6 +125,12 @@ while True:
             elif msg["type"] == 'put':
                 answer_put(msg, messageLog)
 
+            if msg["type"] == "ok":
+                print("here")
+                messageLog[msg["MID"]] += 1
+                if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
+                    to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+                    sock.send(json.dumps(to_client))
             # Handle noop messages. This may be removed from your final implementation
             # elif msg['type'] == 'noop':
             #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
@@ -137,12 +143,7 @@ while True:
                 answer_put(msg, messageLog)
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
-            if msg["type"] == "ok":
-                print("here")
-                messageLog[msg["MID"]] += 1
-                if messageLog[msg["MID"]] >= len(replica_ids) //2 + 1:
-                    to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-                    sock.send(json.dumps(to_client))
+
 
         else:
             send_redirect(msg)
