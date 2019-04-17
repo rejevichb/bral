@@ -84,9 +84,8 @@ def answer_put(msg):
 def receive_acks(msg):
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]] += 1
-        print("REPLCIA ID length")
-        print(len(replica_ids))
-        if messageLog[msg["MID"]] >= len(replica_ids) // 2 + 1:
+        #Question?? Should this be 3 or should this be 2?  Leader must have got the ack on itself right????
+        if messageLog[msg["MID"]] >= len(replica_ids) // 2:
             # print("firing ok to client")
             to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
             sock.send(json.dumps(to_client))
