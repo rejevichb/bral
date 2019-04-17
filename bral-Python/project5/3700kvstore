@@ -57,7 +57,7 @@ def answer_put(msg, messageLog):
     store[msg["key"]] = msg['value']
 
     # if leader, broadcast to followers
-    if IS_LEADER:
+    if msg['dst'] == LEADER_ID:
         messageLog[msg["MID"]] = 1
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
@@ -122,13 +122,12 @@ while True:
                 answer_put(msg, messageLog)
 
             elif msg["type"] == "ok":
-                if msg["MID"] in messageLog.keys():
-                    messageLog[msg["MID"]] += 1
-                    if messageLog[msg["MID"]] >= len(replica_ids)//2 + 1:
-                        print("firing ok to client")
-                        to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-                        sock.send(json.dumps(to_client))
-                        messageLog.pop(msg["MID"])
+                messageLog[msg["MID"]] += 1
+                if messageLog[msg["MID"]] >= len(replica_ids)//2 + 1:
+                    print("firing ok to client")
+                    to_client = {"src": LEADER_ID, 'dst': msg["src"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+                    sock.send(json.dumps(to_client))
+                    messageLog.pop(msg["MID"])
 
             # Handle noop messages. This may be removed from your final implementation
             # elif msg['type'] == 'noop':
