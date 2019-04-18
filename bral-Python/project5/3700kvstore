@@ -39,6 +39,27 @@ rollback_temp = None
 quorum_cutoff = 1 #ms
 
 
+
+class messageLogEntry():
+    def __init__(self, timestamp, message):
+        self.timestamp = timestamp
+        self.listOfRepAcks = set()
+        self.message = message
+
+    def addRepAck(self, rep):
+        self.listOfRepAcks.add(rep)
+
+    def getListOfRepAck(self):
+        return self.listOfRepAcks
+
+    def getTimestamp(self):
+        return self.timestamp
+
+    def getMessage(self):
+        return self.message
+
+
+
 def initial_election():
     ranks = {x: int(x, 16) for x in replica_ids}
     min_id = min(ranks.values())
@@ -73,9 +94,9 @@ def answer_get(msg):
 
 def answer_put(msg):
     # if leader, broadcast to followers
-    global start_time, rollback_temp
+    global rollback_temp
     if msg["dst"] == LEADER_ID:
-        messageLog[msg["MID"]] = set()
+        messageLog[msg["MID"]] = messageLogEntry(time.time(), msg)
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
@@ -98,13 +119,11 @@ def quorum_timeout(start_time):
 
 
 def quorum(mid):
-    #print(mid)
-    #print(replica_ids)
     return len(mid) >= len(replica_ids) // 2
 
 
 def send_rollback(msg):
-    for src in messageLog[msg["MID"]]:
+    for src in messageLog[msg["MID"]].getListOfRepAck():
         rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
         sock.send(json.dumps(rollback_msg))
 
@@ -116,7 +135,6 @@ def answer_rollback(msg):
         store.pop(msg["key"])
 
 def quorum_reached(msg):
-    global start_time
 
     to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
     sock.send(json.dumps(to_client))
@@ -126,14 +144,13 @@ def quorum_reached(msg):
     # commit_to_store(msg)
     # Can rollback via next line
     store[msg["key"]] = msg['value']
-    start_time = time.time()
 
 
 def receive_acks(msg):
     #print(quorum_timeout(start_time))
     if msg["MID"] in messageLog.keys():
-        messageLog[msg["MID"]].add(msg['src'])
-        if quorum(messageLog[msg['MID']]):
+        messageLog[msg["MID"]].addRepAck(msg["src"])
+        if quorum(messageLog[msg['MID']].getListOfRepAck()):
             quorum_reached(msg)
 
 
@@ -189,7 +206,6 @@ def receive_acks(msg):
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
 state = False
-start_time = None
 
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
@@ -200,41 +216,36 @@ while True:
         if len(msg_raw) == 0: continue
         msg = json.loads(msg_raw)
 
-        # if not is_leader and (current_ms() - last_hearbeat >= election_timeout):
-        #     run_for_leader()
-        #
-        # if is_leader and (current_ms() - last_hearbeat > heartbeat_timeout):
-        #     send_heartbeat()
-
-        # handle get() and put() from clients
-        # or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
+        # From client to leader or from replica to the leader
         if msg["dst"] == LEADER_ID:
             if msg['type'] == 'get':
                 answer_get(msg)
 
             elif msg["type"] == 'put':
                 answer_put(msg)
-                start_time = time.time()
 
-            if time.time() - start_time <= quorum_cutoff:
-                if msg["type"] == "ok":
+            elif msg["type"] == "ok":
                     receive_acks(msg)
-            else:
-                send_rollback(msg)
-                start_time = time.time()
 
-
-        elif msg['src'] == LEADER_ID: #and msg['dst'] == 'FFFF':
+        # from the leader to the replicas
+        elif msg['src'] == LEADER_ID:
             if msg["type"] == 'put':
-                # reset hbtimer
                 answer_put(msg)
             if msg["type"] == 'rollback':
                 answer_rollback(msg)
 
-        # Need new logic here... This way we can keep track of how many acks we have gotten
+        # redirect
         else:
             #print(msg)
             send_redirect(msg)
+
+        if IS_LEADER:
+            for v in messageLog.values():
+                if time.time() - v.getTimestamp() >= quorum_cutoff:
+                    send_rollback(v.getMessage())
+
+
+
 
     # clock = time.time()
     # if clock - last > 2:
