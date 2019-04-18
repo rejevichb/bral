@@ -77,8 +77,8 @@ def answer_put(msg):
 
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
-        to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
-        sock.send(json.dumps(to_leader))
+        ack_to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
+        sock.send(json.dumps(ack_to_leader))
 
 
 def receive_acks(msg):
@@ -137,15 +137,16 @@ IS_LEADER = LEADER_ID == my_id
 
 # Timeout - Specific (all time represented in ms by calling ms
 election_cutoff = rand.randint(150, 300) #ms
-heartbeat_cutoff = 100 #ms
+heartbeat_cutoff =100 #ms
 time_ms =           lambda: int(round(time.time() * 1000))
+last_heartbeat = time_ms()
 heartbeat_timeout = lambda: time_ms() - last_heartbeat > heartbeat_cutoff
 election_timeout =  lambda: time_ms() - last_heartbeat >= election_cutoff
 
 
-def reset_election_timer():
-    global election_timeout
-    election_timeout = time_ms()
+# def reset_election_timer():
+#     global election_timeout
+#     election_timeout = time_ms()
 
 
 def reset_last_heartbeat():
@@ -153,14 +154,18 @@ def reset_last_heartbeat():
     last_heartbeat = time_ms()
 
 
-# sends a heartbeat request (from follower to leader)
-def send_heartbeat():
-    yield
+# sends a heartbeat from leader to all followers
+def send_heartbeat(dst):
+    if not IS_LEADER:
+        return
+    heartbeat = {'src': LEADER_ID, 'dst': dst, 'leader': LEADER_ID, 'type': 'noop'}
+    sock.send(json.dumps(heartbeat))
 
 
 # we haven't received anything from the leader in a while. is it still alive?
-def request_heartbeat():
-    yield
+# def request_heartbeat():
+#     req_leader_hb = {'src': my_id, 'dst': LEADER_ID, 'leader': LEADER_ID, 'type': 'noop'}
+#     sock.send(json.dumps(req_leader_hb))
 
 
 while True:
@@ -172,39 +177,42 @@ while True:
 
         msg = json.loads(msg_raw)
 
-        if not IS_LEADER and election_timeout():
-            run_for_leader()
+        # if not IS_LEADER and election_timeout():
+        #     run_for_leader()
 
         if IS_LEADER and heartbeat_timeout():
-            send_heartbeat()
+            send_heartbeat('FFFF')
 
         # handle get() and put() from clients
         # or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
         if msg["dst"] == LEADER_ID:
 
             if msg['type'] == 'get':
+                reset_last_heartbeat()
                 answer_get(msg)
 
             elif msg["type"] == 'put':
+                reset_last_heartbeat()
                 answer_put(msg)
 
             elif msg["type"] == "ok":
+                reset_last_heartbeat()
                 receive_acks(msg)
 
+            elif msg['type'] == 'noop':
+                send_heartbeat(msg['src'])
+
             # msg["dst"] in replica_ids and
-        elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
+        elif msg['src'] == LEADER_ID:  # and msg['dst'] == 'FFFF':
             reset_last_heartbeat()
 
-            # if heartbeat timeout
-            if time_ms() - last_heartbeat > heartbeat_cutoff:
-                request_heartbeat()
-            # if no response
+            # if heartbeat_timeout():
             #    call your elections
 
             if msg["type"] == 'put':
                 answer_put(msg)
-                reset_last_heartbeat()
-                reset_election_timer()
+                #reset_last_heartbeat()
+                # reset_election_timer()
 
             # For commit actions
             # if msg["type"] == 'commit':
@@ -214,6 +222,4 @@ while True:
         else:
             send_redirect(msg)
             continue
-
-
 
