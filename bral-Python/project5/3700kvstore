@@ -199,12 +199,12 @@ while True:
                 reset_last_heartbeat()
                 receive_acks(msg)
 
-            elif msg['type'] == 'noop':
-                send_heartbeat(msg['src'])
+            # elif msg['type'] == 'noop':
+            #     send_heartbeat(msg['src'])
 
             # msg["dst"] in replica_ids and
         elif msg['src'] == LEADER_ID:  # and msg['dst'] == 'FFFF':
-            reset_last_heartbeat()
+           # reset_last_heartbeat()
 
             # if heartbeat_timeout():
             #    call your elections
