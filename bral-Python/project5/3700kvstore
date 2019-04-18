@@ -35,6 +35,8 @@ last = 0
 store = {}
 replica_ids.append(my_id)
 messageLog = {}
+rollback_temp = None
+quorum_cutoff = 1 #ms
 
 
 def initial_election():
@@ -71,33 +73,79 @@ def answer_get(msg):
 
 def answer_put(msg):
     # if leader, broadcast to followers
+    global start_time, rollback_temp
     if msg["dst"] == LEADER_ID:
-        messageLog[msg["MID"]] = 0
+        messageLog[msg["MID"]] = set()
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
+    # replica answer put
     elif msg["src"] == LEADER_ID:
+        # store
+        if msg["key"] in store:
+            rollback_temp = store[msg["key"]]
+
+        store[msg["key"]] = msg['value']
         # If a put is received from the leader, send an ACK back to the leader
         to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_leader))
 
 
+
+def quorum_timeout(start_time):
+    print(time.time() - start_time)
+    return time.time() - start_time > quorum_cutoff
+
+
+def quorum(mid):
+    #print(mid)
+    #print(replica_ids)
+    return len(mid) >= len(replica_ids) // 2
+
+
+def send_rollback(msg):
+    for src in messageLog[msg["MID"]]:
+        rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
+        sock.send(json.dumps(rollback_msg))
+
+def answer_rollback(msg):
+    print("rolling back")
+    if rollback_temp is not None:
+        store[msg["key"]] = rollback_temp
+    else:
+        store.pop(msg["key"])
+
+def quorum_reached(msg):
+    global start_time
+
+    to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
+    sock.send(json.dumps(to_client))
+    messageLog.pop(msg["MID"])
+    # This needs to be changed we should only commit to the store when we know all replicas have the change
+    # We need to have this become a distributed commit
+    # commit_to_store(msg)
+    # Can rollback via next line
+    store[msg["key"]] = msg['value']
+    start_time = time.time()
+
+
 def receive_acks(msg):
+    #print(quorum_timeout(start_time))
     if msg["MID"] in messageLog.keys():
-        messageLog[msg["MID"]] += 1
+        messageLog[msg["MID"]].add(msg['src'])
+        if quorum(messageLog[msg['MID']]):
+            quorum_reached(msg)
 
-        #quorum should only be >= len(replica_ids) // 2 because we know the leader must have been ready to commit changes
-        if messageLog[msg["MID"]] >= len(replica_ids) // 2:
-            # print("firing ok to client")
-            to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
-            sock.send(json.dumps(to_client))
-            messageLog.pop(msg["MID"])
-            # This needs to be changed we should only commit to the store when we know all replicas have the change
-            # We need to have this become a distributed commit
-            # commit_to_store(msg)
 
-            # Can rollback via next line
-            store[msg["key"]] = msg['value']
+    # # quorum timeout reached - do fail
+    # fail_msg = {"src": msg['dst'], "dst": msg['origin'], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
+    # sock.send(json.dumps(fail_msg))
+    #
+    # #rollback
+    # if msg["key"] in store:
+    #     rollback_temp = store[msg["key"]]
+    # send_rollback(msg)
+
 
 
 # def commit_to_store(msg):
@@ -140,6 +188,8 @@ def receive_acks(msg):
 
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
+state = False
+start_time = None
 
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
@@ -159,46 +209,32 @@ while True:
         # handle get() and put() from clients
         # or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
         if msg["dst"] == LEADER_ID:
-
             if msg['type'] == 'get':
                 answer_get(msg)
 
             elif msg["type"] == 'put':
                 answer_put(msg)
+                start_time = time.time()
 
-            elif msg["type"] == "ok":
-                receive_acks(msg)
-
-        #Handle noop messages. This may be removed from your final implementation
-            # elif msg['type'] == 'noop':
-            #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
-            #     sock.send(json.dumps(okmsg))
-            #     print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
-
-            # msg["dst"] in replica_ids and
-        elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
+            if time.time() - start_time <= quorum_cutoff:
+                if msg["type"] == "ok":
+                    receive_acks(msg)
+            else:
+                send_rollback(msg)
+                start_time = time.time()
 
 
-            # start heartbeat timer
-
-            # if heartbeat timeout
-            #    send heartbeat to leader
-            # if no response
-            #    call your elections
-
-
+        elif msg['src'] == LEADER_ID: #and msg['dst'] == 'FFFF':
             if msg["type"] == 'put':
                 # reset hbtimer
                 answer_put(msg)
-
-            # For commit actions
-            # if msg["type"] == 'commit':
-            #     store[msg["key"]] = msg['value']
+            if msg["type"] == 'rollback':
+                answer_rollback(msg)
 
         # Need new logic here... This way we can keep track of how many acks we have gotten
         else:
+            #print(msg)
             send_redirect(msg)
-            continue
 
     # clock = time.time()
     # if clock - last > 2:
