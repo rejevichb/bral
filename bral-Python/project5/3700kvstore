@@ -5,19 +5,20 @@
 
 
 # SO this is finished but rolled back
-# TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
+#TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
     # Tried to add commit_to_store() this is really ineffecient and is bringing down our performance by a lot maybe
+    # we just commit right when we see the put?  -- This seems like the wrong thing to do though when looking over 2PC
 
     # have rolled back please see last line in <recieve_acks> function.
 
-# TODO Next we need to add in timers and election processes
+#TODO Next we need to add in timers and election processes
 
-# TODO Add in full message log with time series so that we can reconcile partitions
+#TODO Add in full message log with time series so that we can reconcile partitions
 
-# TODO Optimize
+#TODO Optimize
 
 
-import sys, socket, select, time, json, random as rand
+import sys, socket, select, time, json, random
 
 # Your ID number
 my_id = sys.argv[1]
@@ -77,15 +78,15 @@ def answer_put(msg):
 
     elif msg["src"] == LEADER_ID:
         # If a put is received from the leader, send an ACK back to the leader
-        ack_to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
-        sock.send(json.dumps(ack_to_leader))
+        to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
+        sock.send(json.dumps(to_leader))
 
 
 def receive_acks(msg):
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]] += 1
 
-        # quorum should only be >= len(replica_ids) // 2 because we know leader must have been ready to commit changes
+        #quorum should only be >= len(replica_ids) // 2 because we know the leader must have been ready to commit changes
         if messageLog[msg["MID"]] >= len(replica_ids) // 2:
             # print("firing ok to client")
             to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
@@ -101,15 +102,15 @@ def receive_acks(msg):
 
 # def commit_to_store(msg):
 #     store[msg["key"]] = msg['value']
-#     to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit",
-#                    "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
+#     to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
 #     sock.send(json.dumps(to_replicas))
 
-def run_for_leader():
-    yield
+
+
 
 
 # def wait_for_responses():
+#     # Make a timeout
 #     timer_start = time.time()
 #     responses = {}
 #
@@ -125,94 +126,70 @@ def run_for_leader():
 #             if msg["src"] not in replica_ids: continue
 #
 #             responses[msg["src"]] = msg
+#
+#     #for k,v in responses.items():
+#         #print("{} : {}".format(k,v))
+#
+#     #print("{} : {}".format(len(responses), len(replica_ids)))
 #     return responses
 
 
 #####################################################
 #                   Main Function                   #
 #####################################################
+
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
 
-
-# Timeout - Specific (all time represented in ms by calling ms
-election_cutoff = rand.randint(150, 300) #ms
-heartbeat_cutoff =100 #ms
-time_ms =           lambda: int(round(time.time() * 1000))
-last_heartbeat = time_ms()
-heartbeat_timeout = lambda: time_ms() - last_heartbeat > heartbeat_cutoff
-election_timeout =  lambda: time_ms() - last_heartbeat >= election_cutoff
-
-
-# def reset_election_timer():
-#     global election_timeout
-#     election_timeout = time_ms()
-
-
-def reset_last_heartbeat():
-    global last_heartbeat
-    last_heartbeat = time_ms()
-
-
-# sends a heartbeat from leader to all followers
-def send_heartbeat(dst):
-    if not IS_LEADER:
-        return
-    heartbeat = {'src': LEADER_ID, 'dst': dst, 'leader': LEADER_ID, 'type': 'noop'}
-    sock.send(json.dumps(heartbeat))
-
-
-# we haven't received anything from the leader in a while. is it still alive?
-# def request_heartbeat():
-#     req_leader_hb = {'src': my_id, 'dst': LEADER_ID, 'leader': LEADER_ID, 'type': 'noop'}
-#     sock.send(json.dumps(req_leader_hb))
-
-
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
+
     if sock in ready:
         msg_raw = sock.recv(32768)
 
         if len(msg_raw) == 0: continue
-
         msg = json.loads(msg_raw)
 
-        # if not IS_LEADER and election_timeout():
+        # if not is_leader and (current_ms() - last_hearbeat >= election_timeout):
         #     run_for_leader()
-
-        if IS_LEADER and heartbeat_timeout():
-            send_heartbeat('FFFF')
+        #
+        # if is_leader and (current_ms() - last_hearbeat > heartbeat_timeout):
+        #     send_heartbeat()
 
         # handle get() and put() from clients
         # or (msg["src"] == LEADER_ID and msg["dst"] in replica_ids):
         if msg["dst"] == LEADER_ID:
 
             if msg['type'] == 'get':
-                reset_last_heartbeat()
                 answer_get(msg)
 
             elif msg["type"] == 'put':
-                reset_last_heartbeat()
                 answer_put(msg)
 
             elif msg["type"] == "ok":
-                reset_last_heartbeat()
                 receive_acks(msg)
 
+        #Handle noop messages. This may be removed from your final implementation
             # elif msg['type'] == 'noop':
-            #     send_heartbeat(msg['src'])
+            #     okmsg = {"src": msg['dst'], 'dst': msg["src"], "leader": LEADER_ID, "type": "ok"}
+            #     sock.send(json.dumps(okmsg))
+            #     print('%s received a NOOP from %s' % (msg['dst'], msg['src']))
 
             # msg["dst"] in replica_ids and
-        elif msg['src'] == LEADER_ID:  # and msg['dst'] == 'FFFF':
-           # reset_last_heartbeat()
+        elif msg['src'] == LEADER_ID and msg['dst'] == 'FFFF':
 
-            # if heartbeat_timeout():
+
+            # start heartbeat timer
+
+            # if heartbeat timeout
+            #    send heartbeat to leader
+            # if no response
             #    call your elections
 
+
             if msg["type"] == 'put':
+                # reset hbtimer
                 answer_put(msg)
-                #reset_last_heartbeat()
-                # reset_election_timer()
 
             # For commit actions
             # if msg["type"] == 'commit':
@@ -223,3 +200,11 @@ while True:
             send_redirect(msg)
             continue
 
+    # clock = time.time()
+    # if clock - last > 2:
+    #     # Send a no-op message to a random peer every two seconds, just for fun
+    #     # You definitely want to remove this from your implementation
+    #     msg = {'src': my_id, 'dst': 'FFFF', 'leader': LEADER_ID, 'type': 'noop'}
+    #     sock.send(json.dumps(msg))
+    #     #print('%s sending a NOOP to %s' % (msg['src'], msg['dst']))
+    #     last = clock
