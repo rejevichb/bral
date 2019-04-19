@@ -54,6 +54,8 @@ election_time = None
 
 REQUEST_STASH = []
 
+LEADER_REC = {}
+
 
 class messageLogEntry():
     def __init__(self, timestamp, message):
@@ -122,6 +124,7 @@ def leader_send_redirect(msg):
 
 
 def answer_get(msg):
+
     if msg['key'] in store:
         return_msg = {"src": LEADER_ID,
                       "dst": msg['src'],
@@ -144,12 +147,14 @@ def answer_put(msg):
 
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
+        msg["origin"] = msg["src"]
         messageLog[msg["MID"]] = messageLogEntry(time.time(), msg)
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
     # replica answer put
     elif msg["src"] == LEADER_ID:
+
         # store
         if msg["key"] in store:
             rollback_temp = store[msg["key"]]
@@ -160,21 +165,24 @@ def answer_put(msg):
         to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_leader))
 
+    # If we get a msg from someone claiming to be leader who is not who I believe to be leader, reconcile leaders
     elif msg["src"] == msg["leader"] and msg["leader"] != LEADER_ID:
-        call_election()
+        start_leader_reconciliation()
+        print("reconciliation starting")
         msg["origin"] = msg["src"]
         REQUEST_STASH.append(msg)
         # to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
         # sock.send(json.dumps(to_client))
-        print("HERE")
-        print(msg)
 
 
 
+def start_leader_reconciliation():
+    global COMMIT_IDX, IS_LEADER
+    to_all = {"src": my_id, 'dst': "FFFF", "commitIdx": COMMIT_IDX, "leader": LEADER_ID, "type": "reconcile"}
+    sock.send(json.dumps(to_all))
 
 def quorum_timeout(start_time):
-    print(time.time() - start_time)
-    return time.time() - start_time > quorum_cutoff
+    return time.time() - start_time >= quorum_cutoff
 
 
 def quorum(mid):
@@ -183,16 +191,12 @@ def quorum(mid):
 
 def send_rollback(msg):
 
-    if quorum(messageLog[msg["MID"]].getListOfRepAck()):
-        quorum_reached(msg)
+    for src in messageLog[msg["MID"]].getListOfRepAck():
+        rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
+        sock.send(json.dumps(rollback_msg))
 
-    else:
-        for src in messageLog[msg["MID"]].getListOfRepAck():
-            rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
-            sock.send(json.dumps(rollback_msg))
-
-        to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
-        sock.send(json.dumps(to_client))
+    to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
+    sock.send(json.dumps(to_client))
 
     messageLog.pop(msg["MID"])
 
@@ -210,18 +214,17 @@ def answer_rollback(msg):
 def quorum_reached(msg):
     global COMMIT_IDX
 
+
     to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
     sock.send(json.dumps(to_client))
+    messageLog[msg["MID"]].setToAcked()
     # messageLog.pop(msg["MID"])
-    # This needs to be changed we should only commit to the store when we know all replicas have the change
-    # We need to have this become a distributed commit
-    # commit_to_store(msg)
-    # Can rollback via next line
     COMMIT_IDX += 1
     store[msg["key"]] = msg['value']
 
 
 def receive_acks(msg):
+
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]].addRepAck(msg["src"])
         if quorum(messageLog[msg['MID']].getListOfRepAck()):
@@ -244,20 +247,24 @@ def handle_msg_to_leader(msg):
     elif msg["type"] == "leader_redirect":
         leader_send_redirect(msg)
 
+    elif msg["type"] == "reconcile":
+        LEADER_REC[msg["src"]] = (msg["src"] == msg["leader"], msg["commitIdx"])
+
+
+
 
 def handle_msg_from_leader(msg):
     global LEADER_ALIVE, heartbeat, is_election
 
     if msg["type"] == 'put':
         answer_put(msg)
-        #print("{} answered a put from {}".format(my_id, LEADER_ID))
+
 
     elif msg["type"] == 'rollback':
         answer_rollback(msg)
-        #print("{} answered a rollback from {}".format(my_id, LEADER_ID))
+
 
     elif msg["type"] == "heartbeat":
-        #print("{} answered a rollback from {}".format(my_id, LEADER_ID))
         LEADER_ALIVE = True
         is_election = False
 
@@ -319,23 +326,36 @@ def handle_bid_or_kill_from_rep(msg):
 
 
 def check_messageLog():
+    # for each messageLogEntry object in the log
     for v in messageLog.values():
+
+        # check if it has met the quorum criteria
         if not v.getAcked():
+
+            # check if timeout is reached
             if time.time() - v.getTimestamp() >= quorum_cutoff:
-                send_rollback(v.getMessage())
+
+                # check for quorum, and if yes, set acked to True
+                if quorum(v.getListOfRepAck()):
+                    v.setToAcked()
+                    quorum_reached(v.getMessage())
+
+                # if timeout reached and no quorum, send rollback
+                else:
+                    send_rollback(v.getMessage())
 
 
 def determine_election_result():
-    global LEADER_ALIVE, is_election, LEADER_ID, election_time
+    global LEADER_ALIVE, is_election, LEADER_ID, election_time, heartbeat
 
+    # Get winners list, and if there are multiple, the tiebreaker is highest ID
     winners = {int(x, 16): x for x in ELECTION_RESULTS if ELECTION_RESULTS[x] == max(ELECTION_RESULTS.values())}
     if len(winners) > 0:
         LEADER_ID = winners[max(winners.keys())]
 
+        # If we end up as the LEADER, send the kill msg to end the election
         if LEADER_ID == my_id:
-            LEADER_ID = my_id
             send_kill = {"src": my_id, 'dst': "FFFF", "leader": my_id, "type": "kill"}
-            #print(send_kill)
             sock.send(json.dumps(send_kill))
 
         is_election = False
@@ -346,17 +366,16 @@ def determine_election_result():
 def handle_stash():
     global REQUEST_STASH, messageLog
 
-
     print("HANDLING STASH")
     for request in REQUEST_STASH:
-        print(request)
+        #print(request)
         if request["dst"] == LEADER_ID:
             handle_msg_to_leader(request)
-            if quorum(messageLog(request["MID"]).getListOfRepAck()):
+            if quorum(messageLog[request["MID"]].getListOfRepAck()):
                 messageLog[request["MID"]].setToAcked()
                 REQUEST_STASH.pop(request["MID"])
 
-        #if request["leader"] != LEADER_ID:
+        elif request["leader"] != LEADER_ID:
             leader_send_redirect(request)
 
 
@@ -387,7 +406,6 @@ while True:
                 handle_msg_to_leader(msg)
                 check_messageLog()
                 if len(REQUEST_STASH) > 0:
-
                     handle_stash()
 
             else:
@@ -425,25 +443,22 @@ while True:
                     send_redirect(msg)
 
                 else:
-                    print(msg)
+                    #print(msg)
+                    pass
 
             else:
                 heartbeat = None
-                if msg["src"] in replica_ids: #and msg["src"] != LEADER_ID:
+                if msg["src"] in replica_ids:
                     handle_bid_or_kill_from_rep(msg)
                     # TODO: add function to confirm kill auth
+
+                else:
+                    msg["origin"] = msg["src"]
+                    REQUEST_STASH.append(msg)
 
                 if election_time and time.time() - election_time >= election_cutoff:
                     determine_election_result()
                     heartbeat = None
-
-
-                elif msg["src"] not in replica_ids:
-                    msg["origin"] = msg["src"]
-                    REQUEST_STASH.append(msg)
-
-                else:
-                    pass
 
 
 
