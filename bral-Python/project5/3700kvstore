@@ -4,12 +4,7 @@
 ######################TODO LIST############################
 
 
-# SO this is finished but rolled back
-#TODO The first thing we should do it make the store actually distributed and have the leader ask them to push to store
-    # Tried to add commit_to_store() this is really ineffecient and is bringing down our performance by a lot maybe
-    # we just commit right when we see the put?  -- This seems like the wrong thing to do though when looking over 2PC
 
-    # have rolled back please see last line in <recieve_acks> function.
 
 #TODO Next we need to add in timers and election processes
 
@@ -36,7 +31,13 @@ store = {}
 replica_ids.append(my_id)
 messageLog = {}
 rollback_temp = None
-quorum_cutoff = 1 #ms
+quorum_cutoff = .3
+heartbeat_cutoff = .3
+
+
+
+
+
 
 
 
@@ -67,6 +68,19 @@ def initial_election():
     for replica in ranks:
         if ranks[replica] == min_id:
             return replica
+
+
+def election():
+    print("Election called")
+    return
+
+def send_heartbeat(dst):
+    to_leader = {"src": my_id, "dst": dst, "leader": LEADER_ID, "type": "heartbeat"}
+    sock.send(json.dumps(to_leader))
+
+
+
+
 
 
 def send_redirect(msg):
@@ -123,9 +137,15 @@ def quorum(mid):
 
 
 def send_rollback(msg):
+
     for src in messageLog[msg["MID"]].getListOfRepAck():
         rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
         sock.send(json.dumps(rollback_msg))
+
+    to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
+    sock.send(json.dumps(to_client))
+
+    messageLog.pop(msg["MID"])
 
 def answer_rollback(msg):
     print("rolling back")
@@ -154,58 +174,14 @@ def receive_acks(msg):
             quorum_reached(msg)
 
 
-    # # quorum timeout reached - do fail
-    # fail_msg = {"src": msg['dst'], "dst": msg['origin'], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
-    # sock.send(json.dumps(fail_msg))
-    #
-    # #rollback
-    # if msg["key"] in store:
-    #     rollback_temp = store[msg["key"]]
-    # send_rollback(msg)
-
-
-
-# def commit_to_store(msg):
-#     store[msg["key"]] = msg['value']
-#     to_replicas = {"src": LEADER_ID, 'dst': 'FFFF', "leader": LEADER_ID, "type": "commit", "MID": msg['MID'], 'key': msg["key"], 'value': msg['value']}
-#     sock.send(json.dumps(to_replicas))
-
-
-
-
-
-# def wait_for_responses():
-#     # Make a timeout
-#     timer_start = time.time()
-#     responses = {}
-#
-#     while time.time() - timer_start < .01:
-#         ready = select.select([sock], [], [], 0.1)[0]
-#         for s in ready:
-#             msg_raw = s.recv(32768)
-#
-#             if len(msg_raw) == 0: continue
-#
-#             msg = json.loads(msg_raw)
-#
-#             if msg["src"] not in replica_ids: continue
-#
-#             responses[msg["src"]] = msg
-#
-#     #for k,v in responses.items():
-#         #print("{} : {}".format(k,v))
-#
-#     #print("{} : {}".format(len(responses), len(replica_ids)))
-#     return responses
-
-
 #####################################################
 #                   Main Function                   #
 #####################################################
 
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
-state = False
+LEADER_ALIVE = True
+heartbeat = time.time()
 
 while True:
     ready = select.select([sock], [], [], 0.1)[0]
@@ -225,18 +201,24 @@ while True:
                 answer_put(msg)
 
             elif msg["type"] == "ok":
-                    receive_acks(msg)
+                receive_acks(msg)
+
+            elif msg["type"] == "heartbeat":
+                send_heartbeat(msg["src"])
 
         # from the leader to the replicas
         elif msg['src'] == LEADER_ID:
             if msg["type"] == 'put':
                 answer_put(msg)
-            if msg["type"] == 'rollback':
+            elif msg["type"] == 'rollback':
                 answer_rollback(msg)
+            elif msg["type"] == "heartbeat":
+                LEADER_ALIVE = True
+                heartbeat = time.time()
+
 
         # redirect
         else:
-            #print(msg)
             send_redirect(msg)
 
         if IS_LEADER:
@@ -244,14 +226,12 @@ while True:
                 if time.time() - v.getTimestamp() >= quorum_cutoff:
                     send_rollback(v.getMessage())
 
+        else:
+            if time.time() - heartbeat >= heartbeat_cutoff and LEADER_ALIVE:
+                send_heartbeat(LEADER_ID)
+                LEADER_ALIVE = False
+                heartbeat = time.time()
 
+            elif time.time() - heartbeat >= heartbeat_cutoff and not LEADER_ALIVE:
+                election()
 
-
-    # clock = time.time()
-    # if clock - last > 2:
-    #     # Send a no-op message to a random peer every two seconds, just for fun
-    #     # You definitely want to remove this from your implementation
-    #     msg = {'src': my_id, 'dst': 'FFFF', 'leader': LEADER_ID, 'type': 'noop'}
-    #     sock.send(json.dumps(msg))
-    #     #print('%s sending a NOOP to %s' % (msg['src'], msg['dst']))
-    #     last = clock
