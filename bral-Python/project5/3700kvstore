@@ -13,6 +13,7 @@
 #TODO Optimize
 
 
+from collections import OrderedDict
 import sys, socket, select, time, json, random
 
 # Your ID number
@@ -55,7 +56,7 @@ election_time = None
 
 reconcile_time = None
 
-REQUEST_STASH = {}
+REQUEST_STASH = OrderedDict()
 
 LEADER_REC = set()
 
@@ -65,6 +66,7 @@ class messageLogEntry():
         self.timestamp = timestamp
         self.listOfRepAcks = set()
         self.message = message
+        self.wasFromStash = False
 
     def addRepAck(self, rep):
         self.listOfRepAcks.add(rep)
@@ -77,6 +79,12 @@ class messageLogEntry():
 
     def getMessage(self):
         return self.message
+
+    def getWasFromStash(self):
+        return self.wasFromStash
+
+    def setWasFromStash(self, stash):
+        self.wasFromStash = stash
 
 
 def call_election():
@@ -261,7 +269,12 @@ def handle_msg_to_leader(msg):
         handle_reconcile(msg)
 
     elif msg["type"] == "stash":
-        REQUEST_STASH.update(msg["data"])
+        for req in msg["data"]:
+            messageFromStash = messageLogEntry(time.time(), req)
+            messageFromStash.setWasFromStash(True)
+
+            messageLog[req["MID"]] = messageFromStash
+
 
 
 def handle_msg_from_leader(msg):
@@ -347,7 +360,15 @@ def handle_bid_or_kill_from_rep(msg):
 def check_messageLog():
     # for each messageLogEntry object in the log
     for v in messageLog.values():
-        # check if timeout is reached
+
+        if v.getWasFromStash():
+            print("Message from Stash")
+            v.getMessage()["dst"] = my_id
+            v.getMessage()["leader"] = my_id
+            handle_msg_to_leader(v.getMessage())
+            v.setWasFromStash(False)
+
+            # check if timeout is reached
         if time.time() - v.getTimestamp() >= quorum_cutoff:
             # check for quorum, and if yes, set acked to True
             if quorum(v.getListOfRepAck()):
@@ -377,30 +398,31 @@ def determine_election_result():
 
 
 def handle_stash():
-    global REQUEST_STASH, messageLog
-
-    print("HANDLING STASH")
-    for request in REQUEST_STASH:
-        #print(request)
-        if request["dst"] == LEADER_ID:
-            handle_msg_to_leader(request)
-            if time.time() - request.getTimestamp() >= quorum_cutoff:
-                # check for quorum, and if yes, set acked to True
-                if quorum(request.getListOfRepAck()):
-                    quorum_reached(request.getMessage())
-
-                # if timeout reached and no quorum, send rollback
-                else:
-                    send_rollback(request.getMessage())
-
-                REQUEST_STASH.pop(request["MID"])
+    pass
+    # global REQUEST_STASH, messageLog
+    #
+    # print("HANDLING STASH")
+    # for request in REQUEST_STASH.values():
+    #     #print(request)
+    #     #if request.getMessage()["dst"] == LEADER_ID:
+    #     handle_msg_to_leader(request.getMessage())
+    #     if time.time() - request.getTimestamp() >= quorum_cutoff:
+    #         # check for quorum, and if yes, set acked to True
+    #         if quorum(request.getListOfRepAck()):
+    #             quorum_reached(request.getMessage())
+    #
+    #         # if timeout reached and no quorum, send rollback
+    #         else:
+    #             send_rollback(request.getMessage())
+    #
+    #             REQUEST_STASH.pop(request.getMessage()["MID"])
 
         # elif request["leader"] != LEADER_ID:
         #     leader_send_redirect(request)
 
 
 def finalize_leader_rec():
-    global reconcile_time, LEADER_REC
+    global reconcile_time, LEADER_REC, LEADER_ID, REQUEST_STASH
 
     opponents = filter(lambda x: x[1], LEADER_REC)
     winner = None
@@ -419,10 +441,21 @@ def finalize_leader_rec():
         reconcile_time = None
 
         if my_id != LEADER_ID:
-            to_new_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "stash",
-                             "data": REQUEST_STASH}
-            sock.send(json.dumps(to_new_leader))
 
+            while len(REQUEST_STASH) > 0:
+                stash = []
+                counter = 0
+                for request in REQUEST_STASH:
+                    if counter > 10:
+                        break
+                    stash.append(REQUEST_STASH[request].getMessage())
+                    counter += 1
+
+                for r in stash:
+                    REQUEST_STASH.pop(r["MID"])
+                to_new_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "stash",
+                                     "data": stash}
+                sock.send(json.dumps(to_new_leader))
 
     else:
         reconcile_time = time.time()
