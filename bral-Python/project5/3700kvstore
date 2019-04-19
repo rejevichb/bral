@@ -31,7 +31,7 @@ store = {}
 replica_ids.append(my_id)
 messageLog = {}
 rollback_temp = None
-quorum_cutoff = .3
+quorum_cutoff = .8
 heartbeat_cutoff = .6
 election_cutoff = .3
 COMMIT_IDX = 0
@@ -48,12 +48,11 @@ def initial_election():
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
 LEADER_ALIVE = True
-heartbeat = time.time()
+
 is_election = False
 election_time = None
 
 REQUEST_STASH = []
-
 
 
 class messageLogEntry():
@@ -61,6 +60,7 @@ class messageLogEntry():
         self.timestamp = timestamp
         self.listOfRepAcks = set()
         self.message = message
+        self.acked = False
 
     def addRepAck(self, rep):
         self.listOfRepAcks.add(rep)
@@ -74,13 +74,18 @@ class messageLogEntry():
     def getMessage(self):
         return self.message
 
+    def setToAcked(self):
+        self.acked = True
+
+    def getAcked(self):
+        return self.acked
 
 def call_election():
-    global is_election
+    global is_election, election_time
 
     is_election = True
-
-    to_all = {"src": my_id, "dst": "FFFF", "leader": LEADER_ID, "type": "election"}
+    election_time = time.time()
+    to_all = {"src": my_id, "dst": "FFFF", "leader": LEADER_ID, "type": "election", "by_leader": IS_LEADER}
     sock.send(json.dumps(to_all))
 
 
@@ -97,9 +102,22 @@ def send_heartbeat(dst):
     sock.send(json.dumps(to_leader))
 
 
-
 def send_redirect(msg, leader=LEADER_ID):
-    redirect_msg = {"src": msg['dst'], "dst": msg["src"], "leader": leader, "type": "redirect", "MID": msg['MID']}
+    global LEADER_ID
+    print("REDIRECTING")
+    redirect_msg = {"src": msg['dst'], "dst": LEADER_ID, "leader": LEADER_ID, "type": "leader_redirect", "MID": msg['MID'], "target": msg["src"]}
+
+    # redirect_msg = {"src": msg['dst'], "dst": msg["src"], "leader": leader, "type": "redirect", "MID": msg['MID']}
+    sock.send(json.dumps(redirect_msg))
+
+
+
+def leader_send_redirect(msg):
+    if msg["type"] == "leader_redirect":
+        redirect_msg = {"src": msg['dst'], "dst": msg["target"], "leader": my_id, "type": "redirect", "MID": msg['MID']}
+    else:
+        redirect_msg = {"src": msg['dst'], "dst": msg["src"], "leader": my_id, "type": "redirect", "MID": msg['MID']}
+
     sock.send(json.dumps(redirect_msg))
 
 
@@ -122,7 +140,7 @@ def answer_get(msg):
 
 
 def answer_put(msg):
-    global COMMIT_IDX, rollback_temp
+    global COMMIT_IDX, rollback_temp, heartbeat
 
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
@@ -142,6 +160,16 @@ def answer_put(msg):
         to_leader = {"src": my_id, 'dst': LEADER_ID, "leader": LEADER_ID, "type": "ok", "MID": msg['MID'], "origin": msg["origin"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_leader))
 
+    elif msg["src"] == msg["leader"] and msg["leader"] != LEADER_ID:
+        call_election()
+        msg["origin"] = msg["src"]
+        REQUEST_STASH.append(msg)
+        # to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
+        # sock.send(json.dumps(to_client))
+        print("HERE")
+        print(msg)
+
+
 
 
 def quorum_timeout(start_time):
@@ -155,14 +183,19 @@ def quorum(mid):
 
 def send_rollback(msg):
 
-    for src in messageLog[msg["MID"]].getListOfRepAck():
-        rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
-        sock.send(json.dumps(rollback_msg))
+    if quorum(messageLog[msg["MID"]].getListOfRepAck()):
+        quorum_reached(msg)
 
-    to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
-    sock.send(json.dumps(to_client))
+    else:
+        for src in messageLog[msg["MID"]].getListOfRepAck():
+            rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
+            sock.send(json.dumps(rollback_msg))
+
+        to_client = {"src": LEADER_ID, "dst": msg["src"], "leader": LEADER_ID, "type": "fail", "MID": msg['MID']}
+        sock.send(json.dumps(to_client))
 
     messageLog.pop(msg["MID"])
+
 
 def answer_rollback(msg):
     global COMMIT_IDX
@@ -179,7 +212,7 @@ def quorum_reached(msg):
 
     to_client = {"src": LEADER_ID, 'dst': msg["origin"], "leader": LEADER_ID, "type": "ok", "MID": msg['MID']}
     sock.send(json.dumps(to_client))
-    messageLog.pop(msg["MID"])
+    # messageLog.pop(msg["MID"])
     # This needs to be changed we should only commit to the store when we know all replicas have the change
     # We need to have this become a distributed commit
     # commit_to_store(msg)
@@ -189,11 +222,11 @@ def quorum_reached(msg):
 
 
 def receive_acks(msg):
-    #print(quorum_timeout(start_time))
     if msg["MID"] in messageLog.keys():
         messageLog[msg["MID"]].addRepAck(msg["src"])
         if quorum(messageLog[msg['MID']].getListOfRepAck()):
             quorum_reached(msg)
+
 
 def handle_msg_to_leader(msg):
     if msg['type'] == 'get':
@@ -208,32 +241,64 @@ def handle_msg_to_leader(msg):
     elif msg["type"] == "heartbeat":
         send_heartbeat(msg["src"])
 
+    elif msg["type"] == "leader_redirect":
+        leader_send_redirect(msg)
+
+
 def handle_msg_from_leader(msg):
-    global LEADER_ALIVE, heartbeat
+    global LEADER_ALIVE, heartbeat, is_election
 
     if msg["type"] == 'put':
         answer_put(msg)
+        #print("{} answered a put from {}".format(my_id, LEADER_ID))
 
     elif msg["type"] == 'rollback':
         answer_rollback(msg)
+        #print("{} answered a rollback from {}".format(my_id, LEADER_ID))
 
     elif msg["type"] == "heartbeat":
+        #print("{} answered a rollback from {}".format(my_id, LEADER_ID))
         LEADER_ALIVE = True
-        heartbeat = time.time()
+        is_election = False
+
+    heartbeat = time.time()
+
 
 def handle_msg_from_rep(msg):
-    global LEADER_ID, is_election, election_time
+    global LEADER_ID, is_election, election_time, heartbeat, LEADER_ALIVE, ELECTION_RESULTS, COMMIT_IDX
 
     if msg["type"] == "election":
         if is_election:
+            heartbeat = None
             return
-        # LEADER_ID = ""
-        send_election_bid()
-        is_election = True
-        election_time = time.time()
+        if msg["by_leader"]:
+            if IS_LEADER:
+                send_election_bid()
+                is_election = True
+                election_time = time.time()
+        else:
+            # LEADER_ID = ""
+            send_election_bid()
+            is_election = True
+            election_time = time.time()
+
+    elif msg["type"] == "bid":
+        ELECTION_RESULTS[msg["src"]] = msg["commitIdx"]
+        ELECTION_RESULTS[my_id] = COMMIT_IDX
+
+    elif msg["type"] == "kill":
+        # Full reset
+        print("{} got kill from {}".format(my_id, msg["src"]))
+        LEADER_ID = msg["leader"]
+        is_election = False
+        LEADER_ALIVE = True
+        election_time = None
+
+    heartbeat = None
+
 
 def handle_bid_or_kill_from_rep(msg):
-    global LEADER_ID, is_election, election_time, LEADER_ALIVE, heartbeat
+    global LEADER_ID, is_election, election_time, LEADER_ALIVE, heartbeat, ELECTION_RESULTS, COMMIT_IDX
 
     if msg["type"] == "bid":
         ELECTION_RESULTS[msg["src"]] = msg["commitIdx"]
@@ -241,49 +306,63 @@ def handle_bid_or_kill_from_rep(msg):
 
     elif msg["type"] == "kill":
         # Full reset
+        print("{} got kill from {}".format(my_id, msg["src"]))
+
         LEADER_ID = msg["leader"]
+        send_kill = {"src": my_id, 'dst': "FFFF", "leader": LEADER_ID, "type": "kill"}
+        sock.send(json.dumps(send_kill))
         is_election = False
         LEADER_ALIVE = True
-        heartbeat = time.time()
+        election_time = None
+
+    heartbeat = None
+
 
 def check_messageLog():
     for v in messageLog.values():
-        if time.time() - v.getTimestamp() >= quorum_cutoff:
-            send_rollback(v.getMessage())
+        if not v.getAcked():
+            if time.time() - v.getTimestamp() >= quorum_cutoff:
+                send_rollback(v.getMessage())
+
 
 def determine_election_result():
-    global LEADER_ALIVE, is_election, LEADER_ID
+    global LEADER_ALIVE, is_election, LEADER_ID, election_time
 
     winners = {int(x, 16): x for x in ELECTION_RESULTS if ELECTION_RESULTS[x] == max(ELECTION_RESULTS.values())}
-    LEADER_ID = winners[max(winners.keys())]
-    print("{} and {}".format(winners, LEADER_ID))
+    if len(winners) > 0:
+        LEADER_ID = winners[max(winners.keys())]
 
-    if LEADER_ID == my_id:
-        LEADER_ID = my_id
-        send_kill = {"src": my_id, 'dst': "FFFF", "leader": my_id, "type": "kill"}
-        print(send_kill)
-        sock.send(json.dumps(send_kill))
+        if LEADER_ID == my_id:
+            LEADER_ID = my_id
+            send_kill = {"src": my_id, 'dst': "FFFF", "leader": my_id, "type": "kill"}
+            #print(send_kill)
+            sock.send(json.dumps(send_kill))
 
-    LEADER_ALIVE = True
-    is_election = False
+        is_election = False
+        LEADER_ALIVE = True
+        election_time = None
 
 
 def handle_stash():
-    global REQUEST_STASH
+    global REQUEST_STASH, messageLog
+
 
     print("HANDLING STASH")
     for request in REQUEST_STASH:
-        send_redirect(request)
+        print(request)
+        if request["dst"] == LEADER_ID:
+            handle_msg_to_leader(request)
+            if quorum(messageLog(request["MID"]).getListOfRepAck()):
+                messageLog[request["MID"]].setToAcked()
+                REQUEST_STASH.pop(request["MID"])
 
-    REQUEST_STASH = []
+        #if request["leader"] != LEADER_ID:
+            leader_send_redirect(request)
 
 
 
 
-
-
-
-
+heartbeat = None
 
 #####################################################
 #                   Main Function                   #
@@ -291,8 +370,11 @@ def handle_stash():
 
 
 while True:
+    IS_LEADER = LEADER_ID == my_id
+
     ready = select.select([sock], [], [], 0.1)[0]
 
+    # print("{}: {}".format(my_id, is_election))
     if sock in ready:
         msg_raw = sock.recv(32768)
 
@@ -300,23 +382,25 @@ while True:
         msg = json.loads(msg_raw)
         # print(msg)
 
-
         if IS_LEADER:
             if not is_election:
                 handle_msg_to_leader(msg)
                 check_messageLog()
                 if len(REQUEST_STASH) > 0:
+
                     handle_stash()
 
             else:
                 LEADER_ID = "FFFF"
-                print("Leader is rogue")
-                continue
+                send_election_bid()
+                is_election = True
+                election_time = time.time()
+
 
         # IS DEFINITELY REPLICA
         else:
-            #print("I AM {}, I THINK {}".format(my_id, LEADER_ID))
             if not is_election:
+                election_time = None
                 if msg["src"] in replica_ids and msg["src"] != LEADER_ID:
                     handle_msg_from_rep(msg)
 
@@ -324,38 +408,45 @@ while True:
                 elif msg["src"] == LEADER_ID:
                     handle_msg_from_leader(msg)
 
-
-                elif time.time() - heartbeat >= heartbeat_cutoff:
+                elif heartbeat and time.time() - heartbeat >= heartbeat_cutoff:
                     if LEADER_ALIVE:
                         send_heartbeat(LEADER_ID)
                         LEADER_ALIVE = False
+                        heartbeat = time.time()
 
                     else:
+                        print("THIS IS A HEARTBEAT TIMEOUT for {}".format(my_id))
                         is_election = True
-                        election_time = time.time()
                         call_election()
                         send_election_bid()
+                        heartbeat = None
 
-                    # Figure timers the fuck out
-                    heartbeat = time.time()
-
-
-                else:
+                elif msg["src"] not in replica_ids:
                     send_redirect(msg)
 
+                else:
+                    print(msg)
+
             else:
-                if msg["src"] in replica_ids and msg["src"] != LEADER_ID:
+                heartbeat = None
+                if msg["src"] in replica_ids: #and msg["src"] != LEADER_ID:
                     handle_bid_or_kill_from_rep(msg)
                     # TODO: add function to confirm kill auth
 
-                elif time.time() - election_time >= election_cutoff:
+                if election_time and time.time() - election_time >= election_cutoff:
                     determine_election_result()
+                    heartbeat = None
 
-                    # Figure this the fuck out
-                    heartbeat = time.time()
+
+                elif msg["src"] not in replica_ids:
+                    msg["origin"] = msg["src"]
+                    REQUEST_STASH.append(msg)
 
                 else:
-                    REQUEST_STASH.append(msg)
+                    pass
+
+
+
 
 
 
