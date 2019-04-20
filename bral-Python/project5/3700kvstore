@@ -2,19 +2,11 @@
 
 
 ######################TODO LIST############################
-
-
-
-
-#TODO Next we need to add in timers and election processes
-
-#TODO Add in full message log with time series so that we can reconcile partitions
-
 #TODO Optimize
 
 
 from collections import OrderedDict
-import sys, socket, select, time, json, random
+import sys, socket, select, time, json
 
 # Your ID number
 my_id = sys.argv[1]
@@ -39,6 +31,7 @@ reconcile_cutoff = .3
 COMMIT_IDX = 0
 ELECTION_RESULTS = {}
 
+
 def initial_election():
     ranks = {x: int(x, 16) for x in replica_ids}
     min_id = min(ranks.values())
@@ -46,6 +39,7 @@ def initial_election():
     for replica in ranks:
         if ranks[replica] == min_id:
             return replica
+
 
 LEADER_ID = initial_election()
 IS_LEADER = LEADER_ID == my_id
@@ -61,29 +55,29 @@ REQUEST_STASH = OrderedDict()
 LEADER_REC = set()
 
 
-class messageLogEntry():
+class MessageLogEntry:
     def __init__(self, timestamp, message):
         self.timestamp = timestamp
         self.listOfRepAcks = set()
         self.message = message
         self.wasFromStash = False
 
-    def addRepAck(self, rep):
+    def add_rep_ack(self, rep):
         self.listOfRepAcks.add(rep)
 
-    def getListOfRepAck(self):
+    def get_rep_ack_list(self):
         return self.listOfRepAcks
 
-    def getTimestamp(self):
+    def get_timestamp(self):
         return self.timestamp
 
-    def getMessage(self):
+    def get_message(self):
         return self.message
 
-    def getWasFromStash(self):
+    def get_was_from_stash(self):
         return self.wasFromStash
 
-    def setWasFromStash(self, stash):
+    def set_was_from_stash(self, stash):
         self.wasFromStash = stash
 
 
@@ -97,7 +91,6 @@ def call_election():
 
 
 def send_election_bid():
-
     to_all = {"src": my_id, "dst": "FFFF", "leader": LEADER_ID, "type": "bid", "commitIdx": COMMIT_IDX}
     sock.send(json.dumps(to_all))
 
@@ -111,12 +104,11 @@ def send_heartbeat(dst):
 
 def send_redirect(msg, leader=LEADER_ID):
     global LEADER_ID
-    print("REDIRECTING")
+    # x1x1 print("REDIRECTING")
     redirect_msg = {"src": msg['dst'], "dst": LEADER_ID, "leader": LEADER_ID, "type": "leader_redirect", "MID": msg['MID'], "target": msg["src"]}
 
     # redirect_msg = {"src": msg['dst'], "dst": msg["src"], "leader": leader, "type": "redirect", "MID": msg['MID']}
     sock.send(json.dumps(redirect_msg))
-
 
 
 def leader_send_redirect(msg):
@@ -129,7 +121,6 @@ def leader_send_redirect(msg):
 
 
 def answer_get(msg):
-
     if msg['key'] in store:
         return_msg = {"src": LEADER_ID,
                       "dst": msg['src'],
@@ -153,7 +144,7 @@ def answer_put(msg):
     # if leader, broadcast to followers
     if msg["dst"] == LEADER_ID:
         msg["origin"] = msg["src"]
-        messageLog[msg["MID"]] = messageLogEntry(time.time(), msg)
+        messageLog[msg["MID"]] = MessageLogEntry(time.time(), msg)
         to_followers = {"src": LEADER_ID, 'dst': "FFFF", "leader": LEADER_ID, "type": "put", "MID": msg['MID'], "origin": msg["src"], 'key': msg['key'], 'value': msg['value']}
         sock.send(json.dumps(to_followers))
 
@@ -180,7 +171,6 @@ def answer_put(msg):
         # sock.send(json.dumps(to_client))
 
 
-
 def start_leader_reconciliation():
     global COMMIT_IDX, IS_LEADER, reconcile_time
     reconcile_time = time.time()
@@ -188,13 +178,12 @@ def start_leader_reconciliation():
     sock.send(json.dumps(to_all))
 
 
-
 def handle_reconcile(msg):
     global reconcile_time, LEADER_REC
     if reconcile_time is None:
         reconcile_time = time.time()
-
     LEADER_REC.add((msg["src"], msg["src"] == msg["leader"], msg["commitIdx"]))
+
 
 def quorum_timeout(start_time):
     return time.time() - start_time >= quorum_cutoff
@@ -205,8 +194,7 @@ def quorum(mid):
 
 
 def send_rollback(msg):
-
-    for src in messageLog[msg["MID"]].getListOfRepAck():
+    for src in messageLog[msg["MID"]].get_rep_ack_list():
         rollback_msg = {"src": LEADER_ID, "dst": src, "leader": LEADER_ID, "type": "rollback", "MID": msg['MID'], "key": msg['key']}
         sock.send(json.dumps(rollback_msg))
 
@@ -220,11 +208,12 @@ def answer_rollback(msg):
     global COMMIT_IDX
 
     COMMIT_IDX -= 1
-    print("rolling back")
+    # x1x1 print("rolling back")
     if rollback_temp is not None:
         store[msg["key"]] = rollback_temp
     else:
         store.pop(msg["key"])
+
 
 def quorum_reached(msg):
     global COMMIT_IDX, messageLog
@@ -237,15 +226,12 @@ def quorum_reached(msg):
     store[msg["key"]] = msg['value']
 
 
-def receive_acks(msg):
+def receive_ack(msg):
 
     if msg["MID"] in messageLog.keys():
-        messageLog[msg["MID"]].addRepAck(msg["src"])
-        if quorum(messageLog[msg['MID']].getListOfRepAck()):
+        messageLog[msg["MID"]].add_rep_ack(msg["src"])
+        if quorum(messageLog[msg['MID']].get_rep_ack_list()):
             quorum_reached(msg)
-
-
-
 
 
 def handle_msg_to_leader(msg):
@@ -257,7 +243,7 @@ def handle_msg_to_leader(msg):
         answer_put(msg)
 
     elif msg["type"] == "ok":
-        receive_acks(msg)
+        receive_ack(msg)
 
     elif msg["type"] == "heartbeat":
         send_heartbeat(msg["src"])
@@ -270,11 +256,9 @@ def handle_msg_to_leader(msg):
 
     elif msg["type"] == "stash":
         for req in msg["data"]:
-            messageFromStash = messageLogEntry(time.time(), req)
-            messageFromStash.setWasFromStash(True)
-
-            messageLog[req["MID"]] = messageFromStash
-
+            message_from_stash = MessageLogEntry(time.time(), req)
+            message_from_stash.set_was_from_stash(True)
+            messageLog[req["MID"]] = message_from_stash
 
 
 def handle_msg_from_leader(msg):
@@ -283,10 +267,8 @@ def handle_msg_from_leader(msg):
     if msg["type"] == 'put':
         answer_put(msg)
 
-
     elif msg["type"] == 'rollback':
         answer_rollback(msg)
-
 
     elif msg["type"] == "heartbeat":
         LEADER_ALIVE = True
@@ -322,7 +304,7 @@ def handle_msg_from_rep(msg):
 
     elif msg["type"] == "kill":
         # Full reset
-        print("{} got kill from {}".format(my_id, msg["src"]))
+        # x1x1 print("{} got kill from {}".format(my_id, msg["src"]))
         LEADER_ID = msg["leader"]
         is_election = False
         LEADER_ALIVE = True
@@ -344,7 +326,7 @@ def handle_bid_or_kill_from_rep(msg):
 
     elif msg["type"] == "kill":
         # Full reset
-        print("{} got kill from {}".format(my_id, msg["src"]))
+        # x1x1 print("{} got kill from {}".format(my_id, msg["src"]))
 
         LEADER_ID = msg["leader"]
         send_kill = {"src": my_id, 'dst': "FFFF", "leader": LEADER_ID, "type": "kill"}
@@ -357,26 +339,26 @@ def handle_bid_or_kill_from_rep(msg):
     heartbeat = None
 
 
-def check_messageLog():
+def check_message_log():
     # for each messageLogEntry object in the log
     for v in messageLog.values():
 
-        if v.getWasFromStash():
-            print("Message from Stash")
-            v.getMessage()["dst"] = my_id
-            v.getMessage()["leader"] = my_id
-            handle_msg_to_leader(v.getMessage())
-            v.setWasFromStash(False)
+        if v.get_was_from_stash():
+            # x1x1 print("Message from Stash")
+            v.get_message()["dst"] = my_id
+            v.get_message()["leader"] = my_id
+            handle_msg_to_leader(v.get_message())
+            v.set_was_from_stash(False)
 
             # check if timeout is reached
-        if time.time() - v.getTimestamp() >= quorum_cutoff:
+        if time.time() - v.get_timestamp() >= quorum_cutoff:
             # check for quorum, and if yes, set acked to True
-            if quorum(v.getListOfRepAck()):
-                quorum_reached(v.getMessage())
+            if quorum(v.get_rep_ack_list()):
+                quorum_reached(v.get_message())
 
             # if timeout reached and no quorum, send rollback
             else:
-                send_rollback(v.getMessage())
+                send_rollback(v.get_message())
 
 
 def determine_election_result():
@@ -448,7 +430,7 @@ def finalize_leader_rec():
                 for request in REQUEST_STASH:
                     if counter > 10:
                         break
-                    stash.append(REQUEST_STASH[request].getMessage())
+                    stash.append(REQUEST_STASH[request].get_message())
                     counter += 1
 
                 for r in stash:
@@ -480,15 +462,14 @@ while True:
 
         if len(msg_raw) == 0: continue
         msg = json.loads(msg_raw)
-        # print(msg)
 
         if reconcile_time and time.time() - reconcile_time >= reconcile_cutoff:
             # Hit the reconcile timeout
-            #opponents = filter(lambda x: x[1], LEADER_REC)
-            #print(LEADER_REC)
+            # opponents = filter(lambda x: x[1], LEADER_REC)
+            # print(LEADER_REC)
             finalize_leader_rec()
             if msg["src"] not in replica_ids:
-                 REQUEST_STASH[msg["MID"]] = messageLogEntry(time.time(), msg)
+                 REQUEST_STASH[msg["MID"]] = MessageLogEntry(time.time(), msg)
             continue
 
         elif reconcile_time and time.time() - reconcile_time < reconcile_cutoff:
@@ -499,13 +480,13 @@ while True:
             elif msg["type"] == "kill":
                 handle_bid_or_kill_from_rep(msg)
             elif msg["src"] not in replica_ids:
-                REQUEST_STASH[msg["MID"]] = messageLogEntry(time.time(), msg)
+                REQUEST_STASH[msg["MID"]] = MessageLogEntry(time.time(), msg)
             continue
 
         if IS_LEADER:
             if not is_election:
                 handle_msg_to_leader(msg)
-                check_messageLog()
+                check_message_log()
                 if len(REQUEST_STASH) > 0:
                     handle_stash()
 
@@ -514,7 +495,6 @@ while True:
                 send_election_bid()
                 is_election = True
                 election_time = time.time()
-
 
         # IS DEFINITELY REPLICA
         else:
@@ -536,7 +516,7 @@ while True:
                         heartbeat = time.time()
 
                     else:
-                        print("THIS IS A HEARTBEAT TIMEOUT for {}".format(my_id))
+                        # x1x1 print("THIS IS A HEARTBEAT TIMEOUT for {}".format(my_id))
                         is_election = True
                         call_election()
                         send_election_bid()
@@ -546,7 +526,7 @@ while True:
                     send_redirect(msg)
 
                 else:
-                    #print(msg)
+                    # print(msg)
                     pass
 
             else:
@@ -557,7 +537,7 @@ while True:
 
                 else:
                     msg["origin"] = msg["src"]
-                    REQUEST_STASH[msg["MID"]] = messageLogEntry(time.time(), msg)
+                    REQUEST_STASH[msg["MID"]] = MessageLogEntry(time.time(), msg)
 
                 if election_time and time.time() - election_time >= election_cutoff:
                     determine_election_result()
